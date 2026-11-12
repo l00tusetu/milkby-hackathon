@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
+import { Language } from '../types';
 
 interface SeoHeadProps {
   title: string;
   description: string;
   canonicalHash?: string;
 }
+
+const HREFLANG_LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
 
 export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalHash }) => {
   const { language } = useLanguage();
@@ -33,13 +36,37 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalH
     setMeta('meta[property="og:description"]', 'content', description);
 
     if (canonicalHash !== undefined) {
-      let link = document.querySelector('link[rel="canonical"]');
-      if (!link) {
-        link = document.createElement('link');
-        link.setAttribute('rel', 'canonical');
-        document.head.appendChild(link);
+      const normalizedPath = canonicalHash.startsWith('/') ? canonicalHash : `/${canonicalHash}`;
+
+      let canonicalLink = document.querySelector('link[rel="canonical"]');
+      if (!canonicalLink) {
+        canonicalLink = document.createElement('link');
+        canonicalLink.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalLink);
       }
-      link.setAttribute('href', `https://milk.by/#${canonicalHash}`);
+      canonicalLink.setAttribute('href', `https://milk.by/#/${language}${normalizedPath === '/' ? '' : normalizedPath}`);
+
+      const upsertAlternate = (hreflang: string, href: string) => {
+        let alt = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
+        if (!alt) {
+          alt = document.createElement('link');
+          alt.setAttribute('rel', 'alternate');
+          alt.setAttribute('hreflang', hreflang);
+          document.head.appendChild(alt);
+        }
+        alt.setAttribute('href', href);
+      };
+
+      HREFLANG_LANGS.forEach((langCode) => {
+        upsertAlternate(
+          langCode,
+          `https://milk.by/#/${langCode}${normalizedPath === '/' ? '' : normalizedPath}`
+        );
+      });
+      upsertAlternate(
+        'x-default',
+        `https://milk.by/#/ru${normalizedPath === '/' ? '' : normalizedPath}`
+      );
     }
   }, [title, description, canonicalHash, language]);
 

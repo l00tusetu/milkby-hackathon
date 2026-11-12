@@ -13,7 +13,7 @@ export function downloadProductB2BSpec(
     '============================================================',
     'OAO "MOLOCHNY MIR" (milk.by) — B2B / EXPORT PRODUCT SPEC SHEET',
     '28 Gaspadarchaya St, Grodno 230005, Republic of Belarus',
-    'Quality Systems: FSSC 22000 | ISO 9001 | HACCP | Halal',
+    'Quality Systems: FSSC 22000 | ISO 9001 | HACCP',
     '============================================================',
     '',
     `PRODUCT: ${name}`,

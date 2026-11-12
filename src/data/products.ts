@@ -1050,7 +1050,7 @@ export const products: Product[] = [
       ru: 'Распылительной сушки, категория Medium Heat / Low Heat. Высокая растворимость, содержание белка не менее 34%. Поставляется в 4-слойных крафт-мешках с полиэтиленовым вкладышем для международного экспорта.',
       be: 'Распыляльнай сушкі, утрыманне бялку не менш за 34%. Пастаўляецца ў крафт-мяшках па 25 кг для міжнароднага экспарту.',
       en: 'Spray-dried Skimmed Milk Powder (Medium/Low Heat) with ≥34% dairy protein. Packed in 25 kg multi-wall kraft bags for international food manufacturing and B2B export.',
-      zh: '喷雾干燥工艺脱脂奶粉（中热/低热型），乳蛋白含量 ≥34%，25公斤多层牛皮纸袋包装，符合国际食品工业及出口清真认证标准。',
+      zh: '喷雾干燥工艺脱脂奶粉（中热/低热型），乳蛋白含量 ≥34%，25公斤多层牛皮纸袋包装，符合国际食品工业及出口质量标准。',
     },
     image: ASSETS.newsDairyFacility,
     fatContent: 1.5,
@@ -1074,7 +1074,7 @@ export const products: Product[] = [
     characteristics: {
       grade: { ru: 'ГОСТ 33629-2015 / ADPI Extra Grade', be: 'ДАСТ 33629-2015 / Extra Grade', en: 'ADPI Extra Grade / GOST 33629', zh: 'ADPI 特级 / GOST 33629' },
       moisture: { ru: 'Не более 4,0%', be: 'Не больш за 4,0%', en: 'Max 4.0%', zh: '≤ 4.0%' },
-      certifications: { ru: 'FSSC 22000, ISO 9001, Halal, Китай (GACC)', be: 'FSSC 22000, ISO 9001, Halal, GACC', en: 'FSSC 22000, ISO 9001, Halal, China GACC', zh: 'FSSC 22000, ISO 9001, 清真认证, 中国海关GACC注册' },
+      certifications: { ru: 'FSSC 22000, ISO 9001, Китай (GACC)', be: 'FSSC 22000, ISO 9001, GACC', en: 'FSSC 22000, ISO 9001, China GACC', zh: 'FSSC 22000, ISO 9001, 中国海关GACC注册' },
     },
     useCases: ['export', 'b2b', 'high-protein'],
     relatedIds: ['butter-825', 'goroden-aged'],
@@ -1086,10 +1086,10 @@ export const products: Product[] = [
         zh: '出口级脱脂奶粉 (SMP) 25公斤装 | Molochny Mir',
       },
       description: {
-        ru: 'Экспортные поставки СОМ в мешках 25 кг: 34% белка, сертификация FSSC 22000, Halal и регистрация GACC для поставок в Китай и страны Азии.',
-        be: 'Экспартныя пастаўкі САМ у мяшках 25 кг: сертыфікацыя Halal і GACC.',
-        en: 'Spray-dried SMP in 25kg kraft bags with 34% protein, Halal, FSSC 22000, and China GACC registration.',
-        zh: '白俄罗斯优质喷雾干燥脱脂奶粉，蛋白含量34%，拥有中国GACC注册及清真认证。',
+        ru: 'Экспортные поставки СОМ в мешках 25 кг: 34% белка, сертификация FSSC 22000, ISO 9001 и регистрация GACC для поставок в Китай и страны Азии.',
+        be: 'Экспартныя пастаўкі САМ у мяшках 25 кг: сертыфікацыя FSSC 22000, ISO 9001 і GACC.',
+        en: 'Spray-dried SMP in 25kg kraft bags with 34% protein, ISO 9001, FSSC 22000, and China GACC registration.',
+        zh: '白俄罗斯优质喷雾干燥脱脂奶粉，蛋白含量34%，拥有中国GACC注册及FSSC 22000质量认证。',
       },
       h1: {
         ru: 'Молоко сухое обезжиренное (СОМ) экспортное',

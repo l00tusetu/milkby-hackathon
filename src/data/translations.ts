@@ -51,10 +51,10 @@ export const defaultTranslations: Record<string, LocalizedText> = {
     zh: '联系销售',
   },
   heroKicker: {
-    ru: 'ОАО «Молочный Мир» · Гродно, Беларусь · Сертификация FSSC 22000 & Halal',
-    be: 'ААТ «Малочны Мір» · Гродна, Беларусь · Сертыфікацыя FSSC 22000 & Halal',
-    en: 'Molochny Mir JSC · Grodno, Belarus · FSSC 22000 & Halal Certified',
-    zh: 'Molochny Mir 股份公司 · 白俄罗斯格罗德诺 · FSSC 22000 与清真认证',
+    ru: 'ОАО «Молочный Мир» · Гродно, Беларусь · Сертификация FSSC 22000 & ISO 9001',
+    be: 'ААТ «Малочны Мір» · Гродна, Беларусь · Сертыфікацыя FSSC 22000 & ISO 9001',
+    en: 'Molochny Mir JSC · Grodno, Belarus · FSSC 22000 & ISO 9001 Certified',
+    zh: 'Molochny Mir 股份公司 · 白俄罗斯格罗德诺 · FSSC 22000 与 ISO 9001 认证',
   },
   heroTitle: {
     ru: 'Белорусская молочная продукция для дома, HoReCa и глобального экспорта',

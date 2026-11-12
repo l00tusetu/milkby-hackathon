@@ -426,8 +426,8 @@ export const categories: Category[] = [
       description: {
         ru: 'Экспортные поставки сухого обезжиренного молока в мешках по 25 кг с полным пакетом ветеринарных и ISO сертификатов.',
         be: 'Экспартныя пастаўкі сухога абястлушчанага малака ў мяшках па 25 кг.',
-        en: 'Export-grade SMP in 25 kg multi-wall kraft bags with full veterinary and Halal/ISO documentation.',
-        zh: '25公斤牛皮纸袋装出口级脱脂奶粉，提供完整清真及ISO质量认证。',
+        en: 'Export-grade SMP in 25 kg multi-wall kraft bags with full veterinary and FSSC 22000/ISO documentation.',
+        zh: '25公斤牛皮纸袋装出口级脱脂奶粉，提供完整FSSC 22000及ISO质量认证。',
       },
     },
   },

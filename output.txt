@@ -1,0 +1,4320 @@
+`/home/july/Projects/milkby-hackathon/src/App.tsx`:
+```
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useEffect } from 'react';
+import { HashRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { LanguageProvider } from './hooks/useLanguage';
+import { CatalogStoreProvider } from './hooks/useCatalogStore';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { Home } from './pages/Home';
+import { Catalog } from './pages/Catalog';
+import { Category } from './pages/Category';
+import { Product } from './pages/Product';
+import { News } from './pages/News';
+import { NewsArticle } from './pages/NewsArticle';
+import { Export } from './pages/Export';
+import { Partners } from './pages/Partners';
+import { About } from './pages/About';
+import { Contacts } from './pages/Contacts';
+import { Admin } from './pages/Admin';
+import { SitemapPage } from './pages/SitemapPage';
+
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+const NotFound: React.FC = () => (
+  <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4">
+    <h1 className="font-display text-3xl font-bold text-slate-900">404 — Страница не найдена</h1>
+    <p className="text-sm text-slate-600">
+      Запрошенный адрес не существует. Воспользуйтесь каталогом продукции или вернитесь на главную.
+    </p>
+    <div className="flex justify-center gap-3 pt-2">
+      <Link
+        to="/"
+        className="px-4 py-2 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494]"
+      >
+        На главную
+      </Link>
+      <Link
+        to="/catalog"
+        className="px-4 py-2 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200"
+      >
+        Каталог продукции
+      </Link>
+    </div>
+  </div>
+);
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <CatalogStoreProvider>
+        <HashRouter>
+          <ScrollToTop />
+          <div className="min-h-screen flex flex-col bg-white text-slate-900">
+            <Header />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/catalog" element={<Catalog />} />
+                <Route path="/catalog/:category" element={<Category />} />
+                <Route path="/product/:id" element={<Product />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/news/:id" element={<NewsArticle />} />
+                <Route path="/export" element={<Export />} />
+                <Route path="/partners" element={<Partners />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/sitemap" element={<SitemapPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </HashRouter>
+      </CatalogStoreProvider>
+    </LanguageProvider>
+  );
+}
+```
+
+`/home/july/Projects/milkby-hackathon/src/index.css`:
+```
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-brand: #0057b8;
+  --color-brand-dark: #004494;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+```
+
+`/home/july/Projects/milkby-hackathon/src/main.tsx`:
+```
+import {createRoot} from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(<App />);
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/About.tsx`:
+```
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
+import { ASSETS } from '../data/assets';
+import { SeoHead } from '../components/SeoHead';
+import { ImageWithFallback } from '../components/ImageWithFallback';
+
+export const About: React.FC = () => {
+  const { language, t } = useLanguage();
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
+      <SeoHead
+        title={`${t('navAbout')} — ${t('brandName')} (milk.by)`}
+        description="О предприятии ОАО «Молочный Мир»: история с 1938 года, производственные площадки, контроль качества и экспорт."
+        canonicalHash="/about"
+      />
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="lg:col-span-6 space-y-4 flex flex-col justify-center">
+          <p className="text-xs font-semibold text-[#0057B8]">
+            {language === 'ru' ? 'Основано в 1938 году · г. Гродно' : 'Established 1938 · Grodno, Belarus'}
+          </p>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+            {language === 'ru'
+              ? 'ОАО «Молочный Мир» — один из лидеров молочной отрасли Беларуси'
+              : language === 'be'
+              ? 'ААТ «Малочны Мір» — адзін з лідараў малочнай галіны Беларусі'
+              : language === 'zh'
+              ? 'Molochny Mir — 白俄罗斯领先乳制品生产企业'
+              : 'Molochny Mir — Leading Belarusian Dairy Producer'}
+          </h1>
+          <p className="text-base text-slate-600 leading-relaxed">
+            {language === 'ru'
+              ? 'Предприятие объединяет современные производственные площадки в Гродно, Щучине, Берестовице и Слониме, перерабатывая свыше 1 500 тонн свежего молока ежесуточно и выпуская более 142 наименований продукции.'
+              : 'Operating modern plants across Grodno, Shchuchin, Berestovitsa, and Slonim, the company processes over 1,500 tons of raw milk daily across 142+ dairy SKUs.'}
+          </p>
+          <div className="pt-2 flex flex-wrap gap-3">
+            <Link
+              to="/catalog"
+              className="px-4 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+            >
+              {t('heroPrimaryCta')}
+            </Link>
+            <Link
+              to="/contacts"
+              className="px-4 py-2.5 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+            >
+              {t('ctaContact')}
+            </Link>
+          </div>
+        </div>
+
+        <div className="lg:col-span-6">
+          <div className="h-full min-h-[260px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+            <ImageWithFallback
+              src={ASSETS.newsDairyFacility}
+              alt={t('brandName')}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200">
+        {[
+          {
+            metric: '1 500+ т/сут',
+            title: language === 'ru' ? 'Переработка молока' : 'Daily Milk Intake',
+            desc:
+              language === 'ru'
+                ? 'Сырьё исключительно высшего и сорта «Экстра» с собственных и партнёрских ферм.'
+                : 'Extra-grade raw milk sourced from audited farms within a strict cold radius.',
+          },
+          {
+            metric: '142 SKU',
+            title: language === 'ru' ? 'Широкий ассортимент' : 'Product Portfolio',
+            desc:
+              language === 'ru'
+                ? 'От цельномолочной продукции и йогуртов до выдержанных сыров, масла и сухих ингредиентов.'
+                : 'From fresh milk and yogurts to aged cheeses, sweet cream butter, and dry dairy.',
+          },
+          {
+            metric: '25+ стран',
+            title: language === 'ru' ? 'География экспорта' : 'Global Presence',
+            desc:
+              language === 'ru'
+                ? 'Регулярные отгрузки в страны СНГ, Китай, Ближний Восток и Юго-Восточную Азию.'
+                : 'Regular shipments to CIS, China, Middle East, and Southeast Asia.',
+          },
+        ].map((box) => (
+          <div key={box.metric} className="border border-slate-200 rounded-xl p-6 space-y-2">
+            <div className="font-display text-2xl font-bold text-[#0057B8] tabular-nums">
+              {box.metric}
+            </div>
+            <h2 className="font-display text-base font-semibold text-slate-900">{box.title}</h2>
+            <p className="text-sm text-slate-600 leading-relaxed">{box.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Admin.tsx`:
+```
+import React, { useState, useMemo } from 'react';
+import { Plus, Eye, EyeOff, Trash2, RotateCcw, Edit3, Check } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { ASSETS } from '../data/assets';
+import { Language, NewsArticle, Product } from '../types';
+import { SeoHead } from '../components/SeoHead';
+
+export const Admin: React.FC = () => {
+  const { language, localize, t, translations, updateTranslation, resetTranslations } = useLanguage();
+  const {
+    products,
+    categories,
+    news,
+    addProduct,
+    updateProduct,
+    toggleProductVisibility,
+    deleteProduct,
+    addNews,
+    toggleNewsPublished,
+    deleteNews,
+    resetDemoData,
+  } = useCatalogStore();
+
+  const [activeTab, setActiveTab] = useState<'products' | 'news' | 'translations'>('products');
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [showAddProduct, setShowAddProduct] = useState(false);
+  const [showAddNews, setShowAddNews] = useState(false);
+
+  // Add Product Form State
+  const [newNameRu, setNewNameRu] = useState('');
+  const [newNameEn, setNewNameEn] = useState('');
+  const [newCategory, setNewCategory] = useState('cheese');
+  const [newFat, setNewFat] = useState('45');
+  const [newProtein, setNewProtein] = useState('20');
+  const [newDescRu, setNewDescRu] = useState('');
+  const [newWeight, setNewWeight] = useState('250 г');
+  const [newShelfLife, setNewShelfLife] = useState('30 суток');
+  const [newSeoTitle, setNewSeoTitle] = useState('');
+
+  // Add News Form State
+  const [newsTitleRu, setNewsTitleRu] = useState('');
+  const [newsExcerptRu, setNewsExcerptRu] = useState('');
+  const [newsCat, setNewsCat] = useState<NewsArticle['categoryId']>('company');
+
+  // Translation Completeness Audit across RU / BE / EN / ZH
+  const completenessStats = useMemo(() => {
+    const langs: Language[] = ['ru', 'be', 'en', 'zh'];
+    return langs.map((lang) => {
+      let total = 0;
+      let filled = 0;
+      for (const p of products) {
+        total += 2;
+        if (p.name[lang]?.trim()) filled++;
+        if (p.description[lang]?.trim()) filled++;
+      }
+      for (const n of news) {
+        total += 2;
+        if (n.title[lang]?.trim()) filled++;
+        if (n.excerpt[lang]?.trim()) filled++;
+      }
+      for (const key of Object.keys(translations)) {
+        total += 1;
+        if (translations[key]?.[lang]?.trim()) filled++;
+      }
+      const pct = total > 0 ? Math.round((filled / total) * 100) : 100;
+      return { lang, filled, total, pct };
+    });
+  }, [products, news, translations]);
+
+  const handleCreateProduct = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newNameRu.trim()) return;
+    const slugBase = `custom-${Date.now().toString(36)}`;
+    const product: Product = {
+      id: slugBase,
+      slug: slugBase,
+      category: newCategory,
+      subcategory: categories.find((c) => c.id === newCategory)?.subcategories[0]?.id || 'default',
+      name: {
+        ru: newNameRu.trim(),
+        be: newNameRu.trim(),
+        en: newNameEn.trim() || newNameRu.trim(),
+        zh: newNameEn.trim() || newNameRu.trim(),
+      },
+      description: {
+        ru: newDescRu.trim() || 'Новый продукт в каталоге ОАО «Молочный Мир».',
+        be: newDescRu.trim() || 'Новы прадукт у каталогу ААТ «Малочны Мір».',
+        en: newDescRu.trim() || 'New dairy product in Molochny Mir catalog.',
+        zh: newDescRu.trim() || 'Molochny Mir 目录新品。',
+      },
+      image: ASSETS.productAgedCheese,
+      fatContent: Number(newFat) || 0,
+      proteinContent: Number(newProtein) || 0,
+      lactoseFree: false,
+      exportReady: true,
+      featured: true,
+      visible: true,
+      packages: [
+        {
+          id: `${slugBase}-pkg`,
+          weight: newWeight.trim() || '250 г',
+          weightGrams: 250,
+          shelfLife: { ru: newShelfLife, be: newShelfLife, en: newShelfLife, zh: newShelfLife },
+          storage: { ru: '+2…+6 °C', be: '+2…+6 °C', en: '+2…+6 °C', zh: '+2…+6 °C' },
+          packagingType: { ru: 'Герметичная упаковка', be: 'Герметычная ўпакоўка', en: 'Sealed pack', zh: '密封包装' },
+          unitsPerBox: 12,
+          gtin: '4810268099999',
+        },
+      ],
+      characteristics: {
+        milkBase: { ru: 'Коровье молоко', be: 'Каровіна малако', en: 'Cow milk', zh: '鲜牛奶' },
+      },
+      useCases: ['daily'],
+      relatedIds: ['mozzarella'],
+      seo: {
+        title: {
+          ru: newSeoTitle.trim() || `${newNameRu.trim()} — Молочный Мир`,
+          be: `${newNameRu.trim()} — Малочны Мір`,
+          en: `${newNameEn.trim() || newNameRu.trim()} — Molochny Mir`,
+          zh: `${newNameEn.trim() || newNameRu.trim()} — Molochny Mir`,
+        },
+        description: {
+          ru: newDescRu.trim() || `${newNameRu.trim()} от ОАО «Молочный Мир».`,
+          be: newDescRu.trim() || `${newNameRu.trim()} ад ААТ «Малочны Мір».`,
+          en: newDescRu.trim() || `${newNameEn.trim() || newNameRu.trim()} by Molochny Mir.`,
+          zh: newDescRu.trim() || `${newNameEn.trim() || newNameRu.trim()} — Molochny Mir.`,
+        },
+        h1: {
+          ru: newNameRu.trim(),
+          be: newNameRu.trim(),
+          en: newNameEn.trim() || newNameRu.trim(),
+          zh: newNameEn.trim() || newNameRu.trim(),
+        },
+      },
+    };
+    addProduct(product);
+    setNewNameRu('');
+    setNewNameEn('');
+    setNewDescRu('');
+    setNewSeoTitle('');
+    setShowAddProduct(false);
+  };
+
+  const handleSaveEditProduct = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+    updateProduct(editingProduct);
+    setEditingProduct(null);
+  };
+
+  const handleCreateNews = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsTitleRu.trim()) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const id = `news-${Date.now().toString(36)}`;
+    addNews({
+      id,
+      slug: id,
+      date: today,
+      year: new Date().getFullYear(),
+      categoryId: newsCat,
+      title: {
+        ru: newsTitleRu.trim(),
+        be: newsTitleRu.trim(),
+        en: newsTitleRu.trim(),
+        zh: newsTitleRu.trim(),
+      },
+      excerpt: {
+        ru: newsExcerptRu.trim() || 'Оперативное сообщение пресс-службы ОАО «Молочный Мир».',
+        be: newsExcerptRu.trim() || 'Паведамленне прэс-службы ААТ «Малочны Мір».',
+        en: newsExcerptRu.trim() || 'Corporate press update from Molochny Mir.',
+        zh: newsExcerptRu.trim() || 'Molochny Mir 企业新闻通告。',
+      },
+      content: {
+        ru: newsExcerptRu.trim() || newsTitleRu.trim(),
+        be: newsExcerptRu.trim() || newsTitleRu.trim(),
+        en: newsExcerptRu.trim() || newsTitleRu.trim(),
+        zh: newsExcerptRu.trim() || newsTitleRu.trim(),
+      },
+      image: ASSETS.newsDairyFacility,
+      published: true,
+      relatedIds: [],
+      seo: {
+        title: {
+          ru: `${newsTitleRu.trim()} — Новости Молочный Мир`,
+          be: `${newsTitleRu.trim()} — Навіны Малочны Мір`,
+          en: `${newsTitleRu.trim()} — Molochny Mir News`,
+          zh: `${newsTitleRu.trim()} — Molochny Mir 新闻`,
+        },
+        description: {
+          ru: newsExcerptRu.trim() || newsTitleRu.trim(),
+          be: newsExcerptRu.trim() || newsTitleRu.trim(),
+          en: newsExcerptRu.trim() || newsTitleRu.trim(),
+          zh: newsExcerptRu.trim() || newsTitleRu.trim(),
+        },
+      },
+    });
+    setNewsTitleRu('');
+    setNewsExcerptRu('');
+    setShowAddNews(false);
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+      <SeoHead
+        title={`${t('adminTitle')} — ${t('brandName')}`}
+        description="Административная панель для управления каталогом, фасовками, новостями, SEO и переводами."
+        canonicalHash="/admin"
+      />
+
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+            {t('adminTitle')}
+          </h1>
+          <p className="text-sm text-slate-600 mt-1">
+            {language === 'ru'
+              ? 'Управление каталогом, фасовками, SEO-тегами, новостями и 4 языковыми версиями без участия программиста.'
+              : 'No-code management for products, packaging variants, SEO metadata, newsroom, and 4-language translations.'}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            resetDemoData();
+            resetTranslations();
+          }}
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap shrink-0"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+          <span>{language === 'ru' ? 'Сбросить демо-данные' : 'Reset Demo Data'}</span>
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="inline-flex items-center gap-1 p-1 bg-slate-100 rounded-lg border border-slate-200">
+        <button
+          type="button"
+          onClick={() => setActiveTab('products')}
+          className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
+            activeTab === 'products' ? 'bg-white text-[#0057B8] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          {language === 'ru' ? `Продукция (${products.length})` : `Products (${products.length})`}
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('news')}
+          className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
+            activeTab === 'news' ? 'bg-white text-[#0057B8] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          {language === 'ru' ? `Новости (${news.length})` : `News (${news.length})`}
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('translations')}
+          className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
+            activeTab === 'translations' ? 'bg-white text-[#0057B8] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          {language === 'ru' ? 'Языки и переводы' : 'Languages & Translations'}
+        </button>
+      </div>
+
+      {/* TAB 1: PRODUCTS CMS */}
+      {activeTab === 'products' && (
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="font-display text-lg font-semibold text-slate-900">
+              {language === 'ru' ? 'Позиции каталога' : 'Catalog Items'}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setShowAddProduct((v) => !v)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{language === 'ru' ? 'Добавить товар' : 'Add Product'}</span>
+            </button>
+          </div>
+
+          {showAddProduct && (
+            <form
+              onSubmit={handleCreateProduct}
+              className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+            >
+              <h3 className="font-display text-base font-semibold text-slate-900">
+                {language === 'ru' ? 'Новый товар' : 'Create Product'}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Название (RU) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={newNameRu}
+                    onChange={(e) => setNewNameRu(e.target.value)}
+                    placeholder="Сыр Сулугуни"
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Name (EN)</label>
+                  <input
+                    type="text"
+                    value={newNameEn}
+                    onChange={(e) => setNewNameEn(e.target.value)}
+                    placeholder="Suluguni Cheese"
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Категория</label>
+                  <select
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  >
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {localize(c.name)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Жирность (%)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={newFat}
+                    onChange={(e) => setNewFat(e.target.value)}
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Белок (г/100 г)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={newProtein}
+                    onChange={(e) => setNewProtein(e.target.value)}
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Фасовка / Срок</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newWeight}
+                      onChange={(e) => setNewWeight(e.target.value)}
+                      placeholder="250 г"
+                      className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      value={newShelfLife}
+                      onChange={(e) => setNewShelfLife(e.target.value)}
+                      placeholder="30 суток"
+                      className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Описание (RU)</label>
+                  <input
+                    type="text"
+                    value={newDescRu}
+                    onChange={(e) => setNewDescRu(e.target.value)}
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">SEO Title (RU)</label>
+                  <input
+                    type="text"
+                    value={newSeoTitle}
+                    onChange={(e) => setNewSeoTitle(e.target.value)}
+                    placeholder="Уникальный SEO заголовок"
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddProduct(false)}
+                  className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+                >
+                  Сохранить в каталог
+                </button>
+              </div>
+            </form>
+          )}
+
+          {editingProduct && (
+            <form
+              onSubmit={handleSaveEditProduct}
+              className="border border-[#0057B8]/40 rounded-xl p-5 bg-blue-50/40 space-y-4"
+            >
+              <div className="flex justify-between items-center">
+                <h3 className="font-display text-base font-semibold text-slate-900">
+                  Редактирование: {localize(editingProduct.name)}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setEditingProduct(null)}
+                  className="text-xs text-slate-500 hover:text-slate-900"
+                >
+                  Закрыть
+                </button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    Название ({language.toUpperCase()})
+                  </label>
+                  <input
+                    type="text"
+                    value={editingProduct.name[language]}
+                    onChange={(e) =>
+                      setEditingProduct({
+                        ...editingProduct,
+                        name: { ...editingProduct.name, [language]: e.target.value },
+                      })
+                    }
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    SEO Title ({language.toUpperCase()})
+                  </label>
+                  <input
+                    type="text"
+                    value={editingProduct.seo.title[language]}
+                    onChange={(e) =>
+                      setEditingProduct({
+                        ...editingProduct,
+                        seo: {
+                          ...editingProduct.seo,
+                          title: { ...editingProduct.seo.title, [language]: e.target.value },
+                        },
+                      })
+                    }
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    SEO Description ({language.toUpperCase()})
+                  </label>
+                  <input
+                    type="text"
+                    value={editingProduct.seo.description[language]}
+                    onChange={(e) =>
+                      setEditingProduct({
+                        ...editingProduct,
+                        seo: {
+                          ...editingProduct.seo,
+                          description: {
+                            ...editingProduct.seo.description,
+                            [language]: e.target.value,
+                          },
+                        },
+                      })
+                    }
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Применить изменения</span>
+                </button>
+              </div>
+            </form>
+          )}
+
+          <div className="border border-slate-200 rounded-xl overflow-x-auto bg-white">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
+                  <th className="py-3 px-4">Товар</th>
+                  <th className="py-3 px-4">Категория</th>
+                  <th className="py-3 px-4">Фасовки</th>
+                  <th className="py-3 px-4">Статус</th>
+                  <th className="py-3 px-4 text-right">Действия</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 tabular-nums">
+                {products.map((prod) => {
+                  const cat = categories.find((c) => c.id === prod.category);
+                  return (
+                    <tr key={prod.id} className="hover:bg-slate-50/70">
+                      <td className="py-3 px-4">
+                        <div className="font-medium text-slate-900">{localize(prod.name)}</div>
+                        <div className="text-xs text-slate-500 font-mono">/{prod.slug}</div>
+                      </td>
+                      <td className="py-3 px-4 text-slate-600">
+                        {cat ? localize(cat.name) : prod.category}
+                      </td>
+                      <td className="py-3 px-4 text-slate-600 text-xs">
+                        {prod.packages.map((p) => p.weight).join(', ')}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span
+                          className={`text-xs font-medium ${
+                            prod.visible ? 'text-[#0057B8]' : 'text-slate-400'
+                          }`}
+                        >
+                          {prod.visible
+                            ? language === 'ru'
+                              ? 'Опубликован'
+                              : 'Visible'
+                            : language === 'ru'
+                            ? 'Скрыт'
+                            : 'Hidden'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="inline-flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setEditingProduct(prod)}
+                            title="Edit"
+                            className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 hover:text-[#0057B8]"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => toggleProductVisibility(prod.id)}
+                            title={prod.visible ? 'Hide' : 'Show'}
+                            className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                          >
+                            {prod.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => deleteProduct(prod.id)}
+                            title="Delete"
+                            className="p-1.5 rounded-md text-slate-500 hover:bg-red-50 hover:text-red-600"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 2: NEWS CMS */}
+      {activeTab === 'news' && (
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="font-display text-lg font-semibold text-slate-900">
+              {language === 'ru' ? 'Публикации и новости' : 'Newsroom Items'}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setShowAddNews((v) => !v)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494]"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{language === 'ru' ? 'Добавить новость' : 'Add News'}</span>
+            </button>
+          </div>
+
+          {showAddNews && (
+            <form
+              onSubmit={handleCreateNews}
+              className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Заголовок *</label>
+                  <input
+                    type="text"
+                    required
+                    value={newsTitleRu}
+                    onChange={(e) => setNewsTitleRu(e.target.value)}
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">Рубрика</label>
+                  <select
+                    value={newsCat}
+                    onChange={(e) => setNewsCat(e.target.value as NewsArticle['categoryId'])}
+                    className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+                  >
+                    <option value="company">Компания</option>
+                    <option value="export">Экспорт</option>
+                    <option value="products">Продукция</option>
+                    <option value="awards">Награды</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-700 mb-1">Краткий анонс</label>
+                <textarea
+                  rows={2}
+                  value={newsExcerptRu}
+                  onChange={(e) => setNewsExcerptRu(e.target.value)}
+                  className="w-full p-3 text-sm bg-white border border-slate-200 rounded-lg"
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddNews(false)}
+                  className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+                >
+                  Опубликовать
+                </button>
+              </div>
+            </form>
+          )}
+
+          <div className="border border-slate-200 rounded-xl overflow-x-auto bg-white">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
+                  <th className="py-3 px-4">Заголовок</th>
+                  <th className="py-3 px-4">Дата</th>
+                  <th className="py-3 px-4">Статус</th>
+                  <th className="py-3 px-4 text-right">Действия</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 tabular-nums">
+                {news.map((item) => (
+                  <tr key={item.id} className="hover:bg-slate-50/70">
+                    <td className="py-3 px-4 font-medium text-slate-900">{localize(item.title)}</td>
+                    <td className="py-3 px-4 text-xs font-mono text-slate-500">{item.date}</td>
+                    <td className="py-3 px-4 text-xs">
+                      <span className={item.published ? 'text-[#0057B8] font-medium' : 'text-slate-400'}>
+                        {item.published ? 'Опубликована' : 'Снята'}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="inline-flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => toggleNewsPublished(item.id)}
+                          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100"
+                        >
+                          {item.published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteNews(item.id)}
+                          className="p-1.5 rounded-md text-slate-500 hover:bg-red-50 hover:text-red-600"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: TRANSLATIONS & LANGUAGE COMPLETENESS */}
+      {activeTab === 'translations' && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {completenessStats.map((stat) => (
+              <div key={stat.lang} className="border border-slate-200 rounded-xl p-4 bg-white space-y-2">
+                <div className="flex items-center justify-between text-xs font-semibold text-slate-900">
+                  <span>{stat.lang.toUpperCase()}</span>
+                  <span className="font-mono text-[#0057B8] tabular-nums">{stat.pct}%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#0057B8]"
+                    style={{ width: `${stat.pct}%` }}
+                  />
+                </div>
+                <div className="text-xs text-slate-500 tabular-nums">
+                  {stat.filled} / {stat.total} полей заполнено
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="border border-slate-200 rounded-xl overflow-x-auto bg-white">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600">
+                  <th className="py-3 px-4">Ключ интерфейса</th>
+                  <th className="py-3 px-4">RU</th>
+                  <th className="py-3 px-4">BE</th>
+                  <th className="py-3 px-4">EN</th>
+                  <th className="py-3 px-4">ZH</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {Object.entries(translations).slice(0, 12).map(([key, val]) => (
+                  <tr key={key}>
+                    <td className="py-2.5 px-4 font-mono text-slate-500">{key}</td>
+                    {(['ru', 'be', 'en', 'zh'] as Language[]).map((lang) => (
+                      <td key={lang} className="py-2 px-2">
+                        <input
+                          type="text"
+                          value={val[lang] || ''}
+                          onChange={(e) => updateTranslation(key, lang, e.target.value)}
+                          className="w-full min-w-[140px] h-8 px-2 text-xs border border-slate-200 rounded focus:outline-none focus:border-[#0057B8]"
+                        />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Catalog.tsx`:
+```
+import React, { useMemo, useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { SeoHead } from '../components/SeoHead';
+import { SearchBar } from '../components/SearchBar';
+import { Filters, CatalogFilterState } from '../components/Filters';
+import { ProductGrid } from '../components/ProductGrid';
+import { SmartFinder } from '../components/SmartFinder';
+
+interface CatalogProps {
+  initialCategorySlug?: string;
+}
+
+const DEFAULT_FILTERS: CatalogFilterState = {
+  categoryId: 'all',
+  subcategoryId: 'all',
+  fatRange: 'all',
+  lactoseFreeOnly: false,
+  highProteinOnly: false,
+  exportReadyOnly: false,
+  sortBy: 'featured',
+};
+
+export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
+  const { language, localize, t } = useLanguage();
+  const { products, categories } = useCatalogStore();
+  const [searchParams] = useSearchParams();
+
+  const [query, setQuery] = useState(() => searchParams.get('q') || '');
+  const [filterState, setFilterState] = useState<CatalogFilterState>(() => ({
+    ...DEFAULT_FILTERS,
+    categoryId: initialCategorySlug || 'all',
+  }));
+
+  useEffect(() => {
+    setFilterState((prev) => ({
+      ...prev,
+      categoryId: initialCategorySlug || 'all',
+      subcategoryId: 'all',
+    }));
+  }, [initialCategorySlug]);
+
+  const activeCategory = categories.find((c) => c.id === filterState.categoryId);
+
+  const filteredProducts = useMemo(() => {
+    const q = query.trim().toLowerCase();
+
+    const list = products
+      .filter((p) => p.visible)
+      .filter((p) => {
+        if (filterState.categoryId !== 'all' && p.category !== filterState.categoryId) {
+          return false;
+        }
+        if (filterState.subcategoryId !== 'all' && p.subcategory !== filterState.subcategoryId) {
+          return false;
+        }
+        if (filterState.fatRange !== 'all') {
+          const fat = p.fatContent ?? 0;
+          if (filterState.fatRange === 'low' && fat > 5) return false;
+          if (filterState.fatRange === 'medium' && (fat < 15 || fat > 35)) return false;
+          if (filterState.fatRange === 'high' && fat < 45) return false;
+        }
+        if (filterState.lactoseFreeOnly && !p.lactoseFree) return false;
+        if (filterState.highProteinOnly && (p.proteinContent ?? 0) < 8) return false;
+        if (filterState.exportReadyOnly && !p.exportReady) return false;
+
+        if (q) {
+          const cat = categories.find((c) => c.id === p.category);
+          const haystack = [
+            p.name.ru,
+            p.name.be,
+            p.name.en,
+            p.name.zh,
+            p.description.ru,
+            p.description.en,
+            cat?.name.ru || '',
+            cat?.name.be || '',
+            cat?.name.en || '',
+            cat?.name.zh || '',
+            p.useCases.join(' '),
+          ]
+            .join(' ')
+            .toLowerCase();
+          if (!haystack.includes(q)) return false;
+        }
+        return true;
+      });
+
+    const sorted = [...list];
+    sorted.sort((a, b) => {
+      if (filterState.sortBy === 'fat-asc') return (a.fatContent ?? 0) - (b.fatContent ?? 0);
+      if (filterState.sortBy === 'fat-desc') return (b.fatContent ?? 0) - (a.fatContent ?? 0);
+      if (filterState.sortBy === 'protein-desc')
+        return (b.proteinContent ?? 0) - (a.proteinContent ?? 0);
+      if (filterState.sortBy === 'name')
+        return localize(a.name).localeCompare(localize(b.name), language);
+      return Number(Boolean(b.featured)) - Number(Boolean(a.featured));
+    });
+
+    return sorted;
+  }, [products, categories, filterState, query, localize, language]);
+
+  const handleReset = () => {
+    setQuery('');
+    setFilterState({
+      ...DEFAULT_FILTERS,
+      categoryId: initialCategorySlug || 'all',
+    });
+  };
+
+  const pageH1 = activeCategory
+    ? localize(activeCategory.name)
+    : t('navCatalog');
+
+  const pageDesc = activeCategory
+    ? localize(activeCategory.description)
+    : language === 'ru'
+    ? 'Полный ассортимент молочной продукции ОАО «Молочный Мир»: фильтрация по категориям, жирности, белку, отсутствию лактозы и формату упаковки.'
+    : language === 'be'
+    ? 'Поўны асартымент малочнай прадукцыі ААТ «Малочны Мір».'
+    : language === 'zh'
+    ? 'Molochny Mir 乳制品完整目录：按品类、乳脂含量、蛋白质、无乳糖及包装规格筛选。'
+    : 'Complete dairy catalog with dynamic filtering by category, fat content, protein, lactose-free status, and packaging format.';
+
+  const seoTitle = activeCategory
+    ? localize(activeCategory.seo.title)
+    : `${t('navCatalog')} — ${t('brandName')} (milk.by)`;
+
+  const seoDesc = activeCategory
+    ? localize(activeCategory.seo.description)
+    : pageDesc;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+      <SeoHead
+        title={seoTitle}
+        description={seoDesc}
+        canonicalHash={activeCategory ? `/catalog/${activeCategory.slug}` : '/catalog'}
+      />
+
+      {/* Breadcrumbs & Page Heading */}
+      <div className="space-y-3">
+        <nav className="text-xs text-slate-500 flex items-center gap-2" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-[#0057B8]">
+            {language === 'ru' ? 'Главная' : language === 'be' ? 'Галоўная' : language === 'zh' ? '首页' : 'Home'}
+          </Link>
+          <span aria-hidden="true">/</span>
+          {activeCategory ? (
+            <>
+              <Link to="/catalog" className="hover:text-[#0057B8]">
+                {t('navCatalog')}
+              </Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-slate-900 font-medium">{localize(activeCategory.name)}</span>
+            </>
+          ) : (
+            <span className="text-slate-900 font-medium">{t('navCatalog')}</span>
+          )}
+        </nav>
+
+        <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+          {pageH1}
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 max-w-3xl">
+          {pageDesc}
+        </p>
+      </div>
+
+      {/* Category quick tabs */}
+      <div className="flex flex-wrap gap-2">
+        <Link
+          to="/catalog"
+          className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap ${
+            !activeCategory
+              ? 'bg-[#0057B8] text-white border-[#0057B8]'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+          }`}
+        >
+          {language === 'ru' ? 'Все' : language === 'be' ? 'Усе' : language === 'zh' ? '全部' : 'All'}
+        </Link>
+        {categories.map((cat) => {
+          const active = activeCategory?.id === cat.id;
+          return (
+            <Link
+              key={cat.id}
+              to={`/catalog/${cat.slug}`}
+              className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap ${
+                active
+                  ? 'bg-[#0057B8] text-white border-[#0057B8]'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+              }`}
+            >
+              {localize(cat.name)}
+            </Link>
+          );
+        })}
+      </div>
+
+      <SearchBar value={query} onChange={setQuery} />
+
+      <Filters
+        categories={categories}
+        state={filterState}
+        onChange={setFilterState}
+        onReset={handleReset}
+        totalCount={filteredProducts.length}
+      />
+
+      <ProductGrid products={filteredProducts} onResetFilters={handleReset} />
+
+      <div className="pt-4">
+        <SmartFinder />
+      </div>
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Category.tsx`:
+```
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { Catalog } from './Catalog';
+
+export const Category: React.FC = () => {
+  const { category } = useParams<{ category: string }>();
+  return <Catalog initialCategorySlug={category} />;
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Contacts.tsx`:
+```
+import React, { useState } from 'react';
+import { Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { SeoHead } from '../components/SeoHead';
+
+export const Contacts: React.FC = () => {
+  const { language, t } = useLanguage();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [department, setDepartment] = useState('sales');
+  const [message, setMessage] = useState('');
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !email.includes('@') || !message.trim()) return;
+    setSent(true);
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+      <SeoHead
+        title={`${t('ctaContact')} — ${t('brandName')}`}
+        description="Контакты ОАО «Молочный Мир»: приёмная, отдел оптовых продаж, отдел экспорта и пресс-служба."
+        canonicalHash="/contacts"
+      />
+
+      <div className="space-y-3">
+        <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+          {t('ctaContact')}
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 max-w-2xl">
+          {t('footerLegal')}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-5 space-y-4">
+          {[
+            {
+              title: language === 'ru' ? 'Отдел оптовых продаж (РБ / HoReCa)' : 'Domestic Wholesale & HoReCa',
+              phone: '+375 (152) 44-55-01',
+              email: 'sales@milk.by',
+            },
+            {
+              title: language === 'ru' ? 'Отдел внешнеэкономической деятельности (Экспорт)' : 'International Export Department',
+              phone: '+375 (152) 44-55-12',
+              email: 'export@milk.by',
+            },
+            {
+              title: language === 'ru' ? 'Приёмная и пресс-служба' : 'Corporate Office & Press',
+              phone: '+375 (152) 44-55-00',
+              email: 'info@milk.by',
+            },
+          ].map((dept) => (
+            <div key={dept.email} className="border border-slate-200 rounded-xl p-5 space-y-2 bg-slate-50/60">
+              <h2 className="font-display text-base font-semibold text-slate-900">{dept.title}</h2>
+              <div className="text-sm text-slate-600 space-y-1 font-mono tabular-nums">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-[#0057B8]" />
+                  <span>{dept.phone}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-3.5 h-3.5 text-[#0057B8]" />
+                  <span>{dept.email}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <div className="border border-slate-200 rounded-xl p-5 space-y-1.5 text-sm text-slate-600">
+            <div className="flex items-center gap-2 font-semibold text-slate-900">
+              <MapPin className="w-4 h-4 text-[#0057B8]" />
+              <span>{language === 'ru' ? 'Адрес головного предприятия' : 'Headquarters'}</span>
+            </div>
+            <p>{t('footerLegal')}</p>
+          </div>
+        </div>
+
+        <div className="lg:col-span-7 border border-slate-200 rounded-2xl p-6 sm:p-8 bg-white">
+          {sent ? (
+            <div className="py-10 text-center space-y-3">
+              <CheckCircle2 className="w-10 h-10 text-[#0057B8] mx-auto" />
+              <h2 className="font-display text-xl font-semibold text-slate-900">
+                {language === 'ru' ? 'Сообщение отправлено' : 'Message Sent'}
+              </h2>
+              <p className="text-sm text-slate-600">
+                {language === 'ru'
+                  ? 'Благодарим за обращение. Специалист свяжется с вами в рабочее время.'
+                  : 'Thank you for reaching out. Our team will respond shortly.'}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSent(false);
+                  setMessage('');
+                }}
+                className="px-4 py-2 text-xs font-semibold text-[#0057B8] bg-blue-50 rounded-lg"
+              >
+                {language === 'ru' ? 'Отправить ещё одно сообщение' : 'Send another message'}
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <h2 className="font-display text-xl font-semibold text-slate-900">
+                {language === 'ru' ? 'Обратная связь' : language === 'zh' ? '在线联系表单' : 'Direct Inquiry Form'}
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    {language === 'ru' ? 'Имя / Организация *' : 'Name / Company *'}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    E-mail *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-700 mb-1">
+                  {language === 'ru' ? 'Подразделение' : 'Department'}
+                </label>
+                <select
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-[#0057B8]"
+                >
+                  <option value="sales">{language === 'ru' ? 'Отдел оптовых продаж' : 'Wholesale Sales'}</option>
+                  <option value="export">{language === 'ru' ? 'Отдел экспорта (ВЭД)' : 'International Export'}</option>
+                  <option value="quality">{language === 'ru' ? 'Служба качества' : 'Quality Control'}</option>
+                  <option value="press">{language === 'ru' ? 'Пресс-служба' : 'Press & Media'}</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-700 mb-1">
+                  {language === 'ru' ? 'Сообщение *' : 'Message *'}
+                </label>
+                <textarea
+                  rows={4}
+                  required
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full p-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+              >
+                {language === 'ru' ? 'Отправить сообщение' : 'Send Message'}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Export.tsx`:
+```
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Download, MessageSquare, ShieldCheck, Globe2 } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { SeoHead } from '../components/SeoHead';
+import { B2BInquiryModal } from '../components/B2BInquiryModal';
+import { downloadProductB2BSpec } from '../utils/specExport';
+import { Product } from '../types';
+
+export const Export: React.FC = () => {
+  const { language, localize, t } = useLanguage();
+  const { products, categories } = useCatalogStore();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
+
+  const exportProducts = products.filter((p) => p.visible && p.exportReady);
+
+  const title =
+    language === 'ru'
+      ? 'Экспорт и международное партнёрство'
+      : language === 'be'
+      ? 'Экспарт і міжнароднае партнёрства'
+      : language === 'zh'
+      ? '国际出口与全球合作伙伴专区'
+      : 'Global Export & International B2B';
+
+  const subtitle =
+    language === 'ru'
+      ? 'Полный ассортимент экспортной продукции ОАО «Молочный Мир» с характеристиками, вариантами фасовки, сроками годности и прямым контактом отдела ВЭД.'
+      : language === 'be'
+      ? 'Поўны асартымент экспартнай прадукцыі ААТ «Малочны Мір» са спецыфікацыямі і кантактамі.'
+      : language === 'zh'
+      ? '白俄罗斯 Molochny Mir 出口专供乳制品目录：涵盖规格参数、保质期、大宗包装及国际外贸部门直连。'
+      : 'Export-certified dairy catalog with packaging formats, shelf-life specs, downloadable B2B data sheets, and direct export desk contact.';
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
+      <SeoHead
+        title={`${title} — ${t('brandName')}`}
+        description={subtitle}
+        canonicalHash="/export"
+      />
+
+      {/* Export Hero */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-slate-200 pb-10">
+        <div className="lg:col-span-8 space-y-4">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#0057B8]">
+            <Globe2 className="w-4 h-4" />
+            <span>FSSC 22000 · ISO 9001 · Halal · China GACC</span>
+          </div>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+            {title}
+          </h1>
+          <p className="text-base text-slate-600 leading-relaxed max-w-3xl">
+            {subtitle}
+          </p>
+        </div>
+
+        <div className="lg:col-span-4 bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
+          <div className="text-sm font-semibold text-slate-900">
+            {language === 'ru'
+              ? 'Отдел внешнеэкономической деятельности'
+              : language === 'zh'
+              ? '国际外贸出口部门'
+              : 'Export Sales Department'}
+          </div>
+          <div className="text-xs text-slate-600 space-y-1 font-mono tabular-nums">
+            <div>export@milk.by</div>
+            <div>+375 (152) 44-55-12</div>
+            <div>Incoterms: FCA / DAP / FOB / CIF</div>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedProduct(undefined);
+              setModalOpen(true);
+            }}
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span>{t('requestSalesBtn')}</span>
+          </button>
+        </div>
+      </section>
+
+      {/* Export Catalog Specification Table */}
+      <section className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+          <h2 className="font-display text-2xl font-bold text-slate-900">
+            {language === 'ru'
+              ? 'Экспортная матрица продукции и фасовок'
+              : language === 'be'
+              ? 'Экспартная матрыца прадукцыі і фасовак'
+              : language === 'zh'
+              ? '出口产品规格与包装矩阵'
+              : 'Export Product & Packaging Matrix'}
+          </h2>
+          <span className="text-xs text-slate-500 tabular-nums">
+            {exportProducts.length}{' '}
+            {language === 'ru' ? 'позиций готово к отгрузке' : language === 'zh' ? '款产品可供出口' : 'export-ready items'}
+          </span>
+        </div>
+
+        <div className="border border-slate-200 rounded-xl overflow-x-auto bg-white">
+          <table className="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
+                <th className="py-3.5 px-4">{language === 'ru' ? 'Продукт' : language === 'zh' ? '产品名称' : 'Product'}</th>
+                <th className="py-3.5 px-4">{language === 'ru' ? 'Жир / Белок' : language === 'zh' ? '乳脂 / 蛋白' : 'Fat / Protein'}</th>
+                <th className="py-3.5 px-4">{language === 'ru' ? 'Фасовки и короб' : language === 'zh' ? '规格与装箱' : 'Pack & Box'}</th>
+                <th className="py-3.5 px-4">{language === 'ru' ? 'Срок и хранение' : language === 'zh' ? '保质期与储运' : 'Shelf Life & Storage'}</th>
+                <th className="py-3.5 px-4 text-right">{language === 'ru' ? 'B2B-действие' : language === 'zh' ? '操作' : 'B2B Action'}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 tabular-nums">
+              {exportProducts.map((prod) => {
+                const cat = categories.find((c) => c.id === prod.category);
+                const mainPkg = prod.packages[prod.packages.length - 1] || prod.packages[0];
+                return (
+                  <tr key={prod.id} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="py-3.5 px-4">
+                      <Link
+                        to={`/product/${prod.slug}`}
+                        className="font-semibold text-slate-900 hover:text-[#0057B8]"
+                      >
+                        {localize(prod.name)}
+                      </Link>
+                      <div className="text-xs text-slate-500">
+                        {cat ? localize(cat.name) : prod.category}
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700">
+                      {prod.fatContent ?? '—'}% / {prod.proteinContent ?? '—'} г
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700">
+                      <div>{prod.packages.map((p) => p.weight).join(', ')}</div>
+                      {mainPkg && (
+                        <div className="text-xs text-slate-500">
+                          {mainPkg.unitsPerBox} шт/кор · {localize(mainPkg.packagingType)}
+                        </div>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700">
+                      {mainPkg ? (
+                        <>
+                          <div>{localize(mainPkg.shelfLife)}</div>
+                          <div className="text-xs text-slate-500">{localize(mainPkg.storage)}</div>
+                        </>
+                      ) : (
+                        '—'
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="inline-flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => downloadProductB2BSpec(prod, cat, language)}
+                          title={t('downloadSpecBtn')}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 rounded-md hover:bg-slate-200 transition-colors whitespace-nowrap"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Spec</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedProduct(prod);
+                            setModalOpen(true);
+                          }}
+                          className="px-2.5 py-1.5 text-xs font-semibold text-white bg-[#0057B8] rounded-md hover:bg-[#004494] transition-colors whitespace-nowrap"
+                        >
+                          {language === 'ru' ? 'Запрос' : language === 'zh' ? '询价' : 'Quote'}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Compliance / Certifications */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          {
+            title: 'FSSC 22000 & ISO 9001',
+            desc:
+              language === 'ru'
+                ? 'Международный менеджмент безопасности пищевой продукции на всех этапах приёмки и переработки молока.'
+                : 'Certified food safety management across raw milk intake, processing, and aseptic packaging.',
+          },
+          {
+            title: 'Halal & GACC China',
+            desc:
+              language === 'ru'
+                ? 'Аккредитация для поставок сухого молока, масла и сыров в Китай, страны Персидского залива и Юго-Восточную Азию.'
+                : 'Export registration for SMP, butter, and cheeses into China, GCC, and Southeast Asia.',
+          },
+          {
+            title: 'Multimodal Cold Logistics',
+            desc:
+              language === 'ru'
+                ? 'Контейнерные рефрижераторные перевозки, авторефрижераторы и полный пакет ветеринарных сертификатов.'
+                : 'Reefer container and cold-truck fulfillment with full veterinary and customs documentation.',
+          },
+        ].map((item) => (
+          <div key={item.title} className="border border-slate-200 rounded-xl p-5 space-y-2 bg-slate-50/60">
+            <ShieldCheck className="w-5 h-5 text-[#0057B8]" />
+            <h3 className="font-display text-base font-semibold text-slate-900">{item.title}</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      <B2BInquiryModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        product={selectedProduct}
+        defaultChannel="export"
+      />
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Home.tsx`:
+```
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, Globe2, Building2, ShoppingBag, Newspaper } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { ASSETS } from '../data/assets';
+import { SeoHead } from '../components/SeoHead';
+import { ImageWithFallback } from '../components/ImageWithFallback';
+import { SearchBar } from '../components/SearchBar';
+import { ProductGrid } from '../components/ProductGrid';
+import { SmartFinder } from '../components/SmartFinder';
+
+export const Home: React.FC = () => {
+  const { t, language, localize } = useLanguage();
+  const { products, categories, news } = useCatalogStore();
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const featuredProducts = products.filter((p) => p.visible && p.featured).slice(0, 6);
+  const latestNews = news.filter((n) => n.published).slice(0, 3);
+
+  const seoTitle =
+    language === 'ru'
+      ? 'ОАО «Молочный Мир» (milk.by) — Каталог молочной продукции, экспорт и B2B'
+      : language === 'be'
+      ? 'ААТ «Малочны Мір» (milk.by) — Каталог малочнай прадукцыі, экспарт і B2B'
+      : language === 'zh'
+      ? 'Molochny Mir (milk.by) — 乳制品目录、国际出口与B2B合作'
+      : 'Molochny Mir (milk.by) — Dairy Catalog, Export & B2B Portal';
+
+  const seoDesc = t('heroSubtitle');
+
+  const roleCards = [
+    {
+      to: '/catalog',
+      icon: ShoppingBag,
+      title: t('roleConsumerTitle'),
+      desc: t('roleConsumerDesc'),
+    },
+    {
+      to: '/partners',
+      icon: Building2,
+      title: t('roleB2BTitle'),
+      desc: t('roleB2BDesc'),
+    },
+    {
+      to: '/export',
+      icon: Globe2,
+      title: t('roleExportTitle'),
+      desc: t('roleExportDesc'),
+    },
+    {
+      to: '/news',
+      icon: Newspaper,
+      title: t('roleMediaTitle'),
+      desc: t('roleMediaDesc'),
+    },
+  ];
+
+  const stats = [
+    {
+      value: '142+',
+      label:
+        language === 'ru'
+          ? 'Наименований продукции в ассортименте'
+          : language === 'be'
+          ? 'Найменняў прадукцыі ў асартыменце'
+          : language === 'zh'
+          ? '在售乳制品SKU品类'
+          : 'Dairy SKUs in full catalog',
+    },
+    {
+      value: '25+',
+      label:
+        language === 'ru'
+          ? 'Стран регулярных экспортных поставок'
+          : language === 'be'
+          ? 'Краін рэгулярных экспартных паставак'
+          : language === 'zh'
+          ? '长期稳定出口国家与地区'
+          : 'Export destination countries',
+    },
+    {
+      value: '4 200',
+      label:
+        language === 'ru'
+          ? 'Паллетомест с контролем холодовой цепи'
+          : language === 'be'
+          ? 'Палетамесцаў з кантролем халадовага ланцуга'
+          : language === 'zh'
+          ? '智能温控冷链仓储托盘位'
+          : 'Cold-chain automated pallet slots',
+    },
+    {
+      value: 'FSSC 22000',
+      label:
+        language === 'ru'
+          ? 'Международная сертификация и Halal'
+          : language === 'be'
+          ? 'Міжнародная сертыфікацыя і Halal'
+          : language === 'zh'
+          ? 'FSSC 22000 与清真国际认证'
+          : 'Food safety & Halal compliance',
+    },
+  ];
+
+  return (
+    <div className="space-y-16 sm:space-y-20">
+      <SeoHead title={seoTitle} description={seoDesc} canonicalHash="/" />
+
+      {/* Section 1: Hero + 4-column Audience Routing Strip */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+          <div className="lg:col-span-6 flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <p className="text-xs font-medium text-slate-500">
+                {t('heroKicker')}
+              </p>
+              <h1
+                className="font-display font-bold text-slate-900 tracking-tight leading-[1.12]"
+                style={{ fontSize: 'clamp(2rem, 3.6vw, 3.1rem)' }}
+              >
+                {t('heroTitle')}
+              </h1>
+              <p className="text-base text-slate-600 leading-relaxed max-w-xl">
+                {t('heroSubtitle')}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <SearchBar
+                value={searchQuery}
+                onChange={setSearchQuery}
+                onSubmitSearch={(q) => navigate(`/catalog?q=${encodeURIComponent(q)}`)}
+              />
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  to="/catalog"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap shrink-0"
+                >
+                  <span>{t('heroPrimaryCta')}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  to="/export"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap shrink-0"
+                >
+                  <span>{t('heroSecondaryCta')}</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-6">
+            <div className="h-full min-h-[260px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+              <ImageWithFallback
+                src={ASSETS.heroDairyShowcase}
+                alt={t('brandName')}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Full-width 4-column role navigation strip */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {roleCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <Link
+                key={card.to}
+                to={card.to}
+                className="group p-4 bg-white border border-slate-200 rounded-xl hover:border-[#0057B8]/50 hover:bg-slate-50/60 transition-colors flex items-start gap-3.5"
+              >
+                <div className="w-9 h-9 rounded-lg bg-slate-100 text-[#0057B8] flex items-center justify-center shrink-0 group-hover:bg-[#0057B8] group-hover:text-white transition-colors">
+                  <Icon className="w-4 h-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors">
+                    {card.title}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-0.5 leading-snug">
+                    {card.desc}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Section 2: Categories + Featured Dairy Collection + Smart Finder */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-4">
+          <div>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+              {t('featuredHeading')}
+            </h2>
+          </div>
+          <Link
+            to="/catalog"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] whitespace-nowrap shrink-0"
+          >
+            <span>{t('allProductsLink')}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* Category quick links */}
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              to={`/catalog/${cat.slug}`}
+              className="px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg hover:border-[#0057B8] hover:text-[#0057B8] transition-colors whitespace-nowrap"
+            >
+              {localize(cat.name)}
+            </Link>
+          ))}
+        </div>
+
+        <ProductGrid products={featuredProducts} />
+
+        <SmartFinder />
+      </section>
+
+      {/* Section 3: Production Scale & Export Proof */}
+      <section className="bg-slate-50 border-y border-slate-200 py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-5 space-y-4">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+                {language === 'ru'
+                  ? 'Качество сырья и прозрачная логистика для B2B и экспорта'
+                  : language === 'be'
+                  ? 'Якасць сыравіны і празрыстая лагістыка для B2B і экспарту'
+                  : language === 'zh'
+                  ? '严控奶源品质与透明冷链，服务全球 B2B 与出口伙伴'
+                  : 'Verified milk quality and cold-chain logistics for global B2B'}
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                {language === 'ru'
+                  ? 'Прямые контракты с сертифицированными хозяйствами, собственные лаборатории и автоматизированная упаковка позволяют обеспечивать стабильные отгрузки для торговых сетей, HoReCa и зарубежных импортёров.'
+                  : language === 'be'
+                  ? 'Прамыя кантракты з гаспадаркамі і ўласныя лабараторыі забяспечваюць стабільныя адгрузкі для сетак і экспарту.'
+                  : language === 'zh'
+                  ? '自有认证牧场直供生牛乳、全自动无菌加工与GACC/清真国际认证，确保零售商超、餐饮连锁及海外进口商的稳定交付。'
+                  : 'Direct farm sourcing, in-house accredited laboratories, and automated packaging support retail chains, HoReCa operators, and international importers.'}
+              </p>
+              <div className="pt-2 flex flex-wrap gap-3">
+                <Link
+                  to="/export"
+                  className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+                >
+                  {t('navExport')}
+                </Link>
+                <Link
+                  to="/partners"
+                  className="px-4 py-2 text-xs font-semibold text-slate-800 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors"
+                >
+                  {t('navPartners')}
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 grid grid-cols-2 gap-4">
+              {stats.map((stat) => (
+                <div
+                  key={stat.value}
+                  className="bg-white border border-slate-200 rounded-xl p-5 space-y-1.5"
+                >
+                  <div className="font-display text-2xl sm:text-3xl font-bold text-slate-900 tabular-nums">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs sm:text-sm text-slate-600 leading-snug">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: Latest Newsroom */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="flex items-end justify-between border-b border-slate-200 pb-4">
+          <h2 className="font-display text-2xl font-bold text-slate-900">
+            {t('navNews')}
+          </h2>
+          <Link
+            to="/news"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] whitespace-nowrap shrink-0"
+          >
+            <span>
+              {language === 'ru'
+                ? 'Все новости'
+                : language === 'be'
+                ? 'Усе навіны'
+                : language === 'zh'
+                ? '全部新闻'
+                : 'All news'}
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {latestNews.map((item) => (
+            <Link
+              key={item.id}
+              to={`/news/${item.slug}`}
+              className="group bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-150"
+            >
+              <div className="aspect-[16/10] bg-slate-50 overflow-hidden border-b border-slate-100">
+                <ImageWithFallback
+                  src={item.image}
+                  alt={localize(item.title)}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                <div className="space-y-2">
+                  <div className="text-xs text-slate-500 font-mono tabular-nums">
+                    {item.date} · {item.categoryId.toUpperCase()}
+                  </div>
+                  <h3 className="font-display text-base font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors leading-snug">
+                    {localize(item.title)}
+                  </h3>
+                  <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
+                    {localize(item.excerpt)}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/News.tsx`:
+```
+import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Search } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { SeoHead } from '../components/SeoHead';
+import { ImageWithFallback } from '../components/ImageWithFallback';
+
+const NEWS_CATEGORIES = [
+  { id: 'all', label: { ru: 'Все рубрики', be: 'Усе рубрыкі', en: 'All topics', zh: '全部栏目' } },
+  { id: 'export', label: { ru: 'Экспорт', be: 'Экспарт', en: 'Export', zh: '国际出口' } },
+  { id: 'products', label: { ru: 'Продукция', be: 'Прадукцыя', en: 'Products', zh: '新品发布' } },
+  { id: 'company', label: { ru: 'Компания', be: 'Кампанія', en: 'Company', zh: '企业动态' } },
+  { id: 'awards', label: { ru: 'Награды', be: 'Узнагароды', en: 'Awards', zh: '荣誉奖项' } },
+];
+
+export const News: React.FC = () => {
+  const { language, localize, t } = useLanguage();
+  const { news } = useCatalogStore();
+
+  const [query, setQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedYear, setSelectedYear] = useState<string>('all');
+
+  const years = useMemo(() => {
+    const set = new Set<number>(news.filter((n) => n.published).map((n) => n.year));
+    return Array.from(set).sort((a, b) => b - a);
+  }, [news]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return news
+      .filter((n) => n.published)
+      .filter((n) => {
+        if (selectedCategory !== 'all' && n.categoryId !== selectedCategory) return false;
+        if (selectedYear !== 'all' && String(n.year) !== selectedYear) return false;
+        if (q) {
+          const text = [
+            n.title.ru,
+            n.title.be,
+            n.title.en,
+            n.title.zh,
+            n.excerpt.ru,
+            n.excerpt.en,
+          ]
+            .join(' ')
+            .toLowerCase();
+          if (!text.includes(q)) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => b.date.localeCompare(a.date));
+  }, [news, query, selectedCategory, selectedYear]);
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+      <SeoHead
+        title={`${t('navNews')} — ${t('brandName')} (milk.by)`}
+        description={
+          language === 'ru'
+            ? 'Новости ОАО «Молочный Мир»: модернизация производства, экспортные контракты, новинки ассортимента и отраслевые награды.'
+            : 'Latest production, export, and corporate news from Molochny Mir.'
+        }
+        canonicalHash="/news"
+      />
+
+      <div className="space-y-3">
+        <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+          {t('navNews')}
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 max-w-2xl">
+          {language === 'ru'
+            ? 'Архив корпоративных публикаций, экспортных событий и запусков новых производственных линий.'
+            : language === 'be'
+            ? 'Архіў карпаратыўных публікацый і падзей прадпрыемства.'
+            : language === 'zh'
+            ? '企业新闻、新产线投产与全球出口动态存档。'
+            : 'Corporate announcements, export milestones, and product line launches.'}
+        </p>
+      </div>
+
+      {/* Filters & Search */}
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-4">
+        <div className="flex flex-col md:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={
+                language === 'ru'
+                  ? 'Поиск по новостям…'
+                  : language === 'zh'
+                  ? '搜索新闻标题或内容…'
+                  : 'Search newsroom…'
+              }
+              className="w-full h-10 pl-10 pr-4 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+            />
+          </div>
+
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            aria-label="Filter by year"
+            className="h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg text-slate-800 focus:outline-none focus:border-[#0057B8] tabular-nums"
+          >
+            <option value="all">
+              {language === 'ru' ? 'Все годы' : language === 'zh' ? '全部年份' : 'All years'}
+            </option>
+            {years.map((y) => (
+              <option key={y} value={String(y)}>
+                {y}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {NEWS_CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-3.5 py-1.5 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap ${
+                selectedCategory === cat.id
+                  ? 'bg-[#0057B8] text-white border-[#0057B8]'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+              }`}
+            >
+              {localize(cat.label)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Articles Grid */}
+      {filtered.length === 0 ? (
+        <div className="border border-slate-200 rounded-xl p-10 text-center text-sm text-slate-500">
+          {language === 'ru'
+            ? 'По вашему запросу публикации не найдены.'
+            : 'No articles match your filters.'}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((article) => (
+            <Link
+              key={article.id}
+              to={`/news/${article.slug}`}
+              className="group bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col hover:-translate-y-0.5 hover:shadow-md transition-all duration-150"
+            >
+              <div className="aspect-[16/10] bg-slate-50 overflow-hidden border-b border-slate-100">
+                <ImageWithFallback
+                  src={article.image}
+                  alt={localize(article.title)}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                <div className="space-y-2">
+                  <div className="text-xs text-slate-500 font-mono tabular-nums">
+                    {article.date} · {article.categoryId.toUpperCase()}
+                  </div>
+                  <h2 className="font-display text-base font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors leading-snug">
+                    {localize(article.title)}
+                  </h2>
+                  <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed">
+                    {localize(article.excerpt)}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/NewsArticle.tsx`:
+```
+import React from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { SeoHead } from '../components/SeoHead';
+import { ImageWithFallback } from '../components/ImageWithFallback';
+
+export const NewsArticle: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { language, localize, t } = useLanguage();
+  const { news } = useCatalogStore();
+
+  const article = news.find((n) => n.slug === id || n.id === id);
+
+  if (!article) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-4">
+        <SeoHead title={`Материал не найден — ${t('brandName')}`} description="Новость не найдена." />
+        <h1 className="font-display text-2xl font-bold text-slate-900">
+          {language === 'ru' ? 'Публикация не найдена' : 'Article not found'}
+        </h1>
+        <Link
+          to="/news"
+          className="inline-flex px-4 py-2 text-sm font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
+          {t('navNews')}
+        </Link>
+      </div>
+    );
+  }
+
+  const related = news.filter((n) => n.published && article.relatedIds.includes(n.id));
+
+  return (
+    <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+      <SeoHead
+        title={localize(article.seo.title)}
+        description={localize(article.seo.description)}
+        canonicalHash={`/news/${article.slug}`}
+      />
+
+      <div className="space-y-4">
+        <Link
+          to="/news"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-[#0057B8]"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>{t('navNews')}</span>
+        </Link>
+
+        <div className="text-xs text-slate-500 font-mono tabular-nums">
+          {article.date} · {article.categoryId.toUpperCase()}
+        </div>
+
+        <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
+          {localize(article.title)}
+        </h1>
+
+        <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          {localize(article.excerpt)}
+        </p>
+      </div>
+
+      <div className="aspect-[16/9] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+        <ImageWithFallback
+          src={article.image}
+          alt={localize(article.title)}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      <div className="text-base text-slate-800 leading-relaxed space-y-4 max-w-[70ch]">
+        <p>{localize(article.content)}</p>
+      </div>
+
+      {related.length > 0 && (
+        <section className="pt-8 border-t border-slate-200 space-y-4">
+          <h2 className="font-display text-xl font-bold text-slate-900">
+            {language === 'ru'
+              ? 'Связанные материалы'
+              : language === 'be'
+              ? 'Звязаныя матэрыялы'
+              : language === 'zh'
+              ? '相关新闻'
+              : 'Related News'}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {related.map((item) => (
+              <Link
+                key={item.id}
+                to={`/news/${item.slug}`}
+                className="p-4 border border-slate-200 rounded-xl hover:border-[#0057B8]/50 transition-colors space-y-1.5"
+              >
+                <div className="text-xs font-mono text-slate-500 tabular-nums">{item.date}</div>
+                <div className="text-sm font-semibold text-slate-900 hover:text-[#0057B8]">
+                  {localize(item.title)}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+    </article>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Partners.tsx`:
+```
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Truck, PackageCheck, FileSpreadsheet } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { SeoHead } from '../components/SeoHead';
+import { B2BInquiryModal } from '../components/B2BInquiryModal';
+
+export const Partners: React.FC = () => {
+  const { language, t } = useLanguage();
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const title = t('navPartners');
+
+  const steps = [
+    {
+      num: '01.',
+      title:
+        language === 'ru'
+          ? 'Подбор продукции и фасовок'
+          : language === 'zh'
+          ? '选择产品与商用规格'
+          : 'Select Products & Packaging',
+      desc:
+        language === 'ru'
+          ? 'Выберите позиции в каталоге по жирности, сроку годности и формату (розница или HoReCa 1–20 кг).'
+          : 'Filter catalog items by fat content, shelf life, and retail or HoReCa packaging formats.',
+    },
+    {
+      num: '02.',
+      title:
+        language === 'ru'
+          ? 'Спецификация и коммерческие условия'
+          : language === 'zh'
+          ? '获取技术规格与报价'
+          : 'Specifications & Commercial Terms',
+      desc:
+        language === 'ru'
+          ? 'Скачайте техническую карточку товара или отправьте запрос на прайс-лист с учётом объёма партии.'
+          : 'Download B2B product spec sheets or request volume-based wholesale pricing.',
+    },
+    {
+      num: '03.',
+      title:
+        language === 'ru'
+          ? 'Холодовая логистика и отгрузка'
+          : language === 'zh'
+          ? '冷链配送与稳定交付'
+          : 'Cold-Chain Fulfillment',
+      desc:
+        language === 'ru'
+          ? 'Комплектация с автоматизированного склада в Гродно (4 200 паллетомест) с телеметрией температуры.'
+          : 'Dispatched from our 4,200-pallet automated cold hub in Grodno with continuous temperature logging.',
+    },
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
+      <SeoHead
+        title={`${title} — ${t('brandName')}`}
+        description="Условия сотрудничества для оптовых покупателей, торговых сетей и сегмента HoReCa."
+        canonicalHash="/partners"
+      />
+
+      <div className="max-w-3xl space-y-4">
+        <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+          {language === 'ru'
+            ? 'Для оптовых покупателей, ритейла и HoReCa'
+            : language === 'be'
+            ? 'Для аптовых пакупнікоў, рытэйла і HoReCa'
+            : language === 'zh'
+            ? '面向大宗批发、商超零售与餐饮渠道'
+            : 'For Wholesale Buyers, Retail & HoReCa'}
+        </h1>
+        <p className="text-base text-slate-600 leading-relaxed">
+          {language === 'ru'
+            ? 'Прямые поставки молочной продукции ОАО «Молочный Мир» для федеральных и региональных сетей, пиццерий, пекарен и дистрибьюторов.'
+            : 'Direct dairy supply from Molochny Mir for retail chains, pizzerias, industrial bakeries, and distributors.'}
+        </p>
+        <div className="pt-2 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => setModalOpen(true)}
+            className="px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+          >
+            {t('requestSalesBtn')}
+          </button>
+          <Link
+            to="/catalog"
+            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+          >
+            <span>{t('heroPrimaryCta')}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {steps.map((s) => (
+          <div key={s.num} className="border border-slate-200 rounded-xl p-6 space-y-2 bg-white">
+            <div className="font-mono text-xs font-semibold text-[#0057B8]">{s.num}</div>
+            <h2 className="font-display text-lg font-semibold text-slate-900">{s.title}</h2>
+            <p className="text-sm text-slate-600 leading-relaxed">{s.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-2">
+          <PackageCheck className="w-5 h-5 text-[#0057B8]" />
+          <h3 className="font-display text-base font-semibold text-slate-900">
+            {language === 'ru' ? 'Форматы HoReCa' : 'HoReCa Packaging'}
+          </h3>
+          <p className="text-sm text-slate-600">
+            {language === 'ru'
+              ? 'Моцарелла для пиццы 1 кг и 2,5 кг, сливки 33% 1 л, масло монолит 20 кг, СОМ 25 кг.'
+              : 'Pizza mozzarella 1kg/2.5kg, whipping cream 33% 1L, butter 20kg blocks, SMP 25kg bags.'}
+          </p>
+        </div>
+        <div className="space-y-2">
+          <Truck className="w-5 h-5 text-[#0057B8]" />
+          <h3 className="font-display text-base font-semibold text-slate-900">
+            {language === 'ru' ? 'Собственный автопарк' : 'Dedicated Fleet'}
+          </h3>
+          <p className="text-sm text-slate-600">
+            {language === 'ru'
+              ? 'Ежедневная доставка рефрижераторным транспортом с соблюдением режима +2…+6 °C.'
+              : 'Daily chilled deliveries maintaining strict +2…+6 °C cold chain integrity.'}
+          </p>
+        </div>
+        <div className="space-y-2">
+          <FileSpreadsheet className="w-5 h-5 text-[#0057B8]" />
+          <h3 className="font-display text-base font-semibold text-slate-900">
+            {language === 'ru' ? 'EDI и документооборот' : 'Digital EDI & Docs'}
+          </h3>
+          <p className="text-sm text-slate-600">
+            {language === 'ru'
+              ? 'Электронные накладные, GTIN-маркировка и декларации соответствия ЕАЭС.'
+              : 'Electronic invoices, GS1 GTIN barcodes, and full quality declarations.'}
+          </p>
+        </div>
+      </section>
+
+      <B2BInquiryModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        defaultChannel="wholesale"
+      />
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/Product.tsx`:
+```
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Download, MessageSquare, Package, Thermometer, Clock, Layers } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { SeoHead } from '../components/SeoHead';
+import { ImageWithFallback } from '../components/ImageWithFallback';
+import { ProductGrid } from '../components/ProductGrid';
+import { B2BInquiryModal } from '../components/B2BInquiryModal';
+import { downloadProductB2BSpec } from '../utils/specExport';
+
+export const Product: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { language, localize, t } = useLanguage();
+  const { products, categories } = useCatalogStore();
+
+  const product = products.find((p) => p.slug === id || p.id === id);
+  const [selectedPkgId, setSelectedPkgId] = useState<string>('');
+  const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (product && product.packages.length > 0) {
+      setSelectedPkgId(product.packages[0].id);
+    }
+  }, [product]);
+
+  if (!product) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-4">
+        <SeoHead
+          title={`Товар не найден — ${t('brandName')}`}
+          description="Запрошенный продукт не найден в каталоге."
+        />
+        <h1 className="font-display text-2xl font-bold text-slate-900">
+          {language === 'ru'
+            ? 'Продукт не найден'
+            : language === 'zh'
+            ? '未找到该产品'
+            : 'Product not found'}
+        </h1>
+        <Link
+          to="/catalog"
+          className="inline-flex px-4 py-2 text-sm font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
+          {t('heroPrimaryCta')}
+        </Link>
+      </div>
+    );
+  }
+
+  const category = categories.find((c) => c.id === product.category);
+  const activePackage =
+    product.packages.find((pkg) => pkg.id === selectedPkgId) || product.packages[0];
+
+  const relatedProducts = products.filter(
+    (p) => p.visible && product.relatedIds.includes(p.id)
+  );
+
+  const labels = {
+    home: language === 'ru' ? 'Главная' : language === 'be' ? 'Галоўная' : language === 'zh' ? '首页' : 'Home',
+    packagesTitle:
+      language === 'ru'
+        ? 'Выберите вариант фасовки'
+        : language === 'be'
+        ? 'Выберыце варыянт фасоўкі'
+        : language === 'zh'
+        ? '选择包装规格'
+        : 'Select Packaging Variant',
+    weight: language === 'ru' ? 'Масса / объём' : language === 'be' ? 'Маса / аб’ём' : language === 'zh' ? '净重 / 容量' : 'Net Weight / Volume',
+    shelfLife: language === 'ru' ? 'Срок годности' : language === 'be' ? 'Тэрмін прыдатнасці' : language === 'zh' ? '保质期' : 'Shelf Life',
+    storage: language === 'ru' ? 'Условия хранения' : language === 'be' ? 'Умовы захоўвання' : language === 'zh' ? '储存条件' : 'Storage',
+    packagingType: language === 'ru' ? 'Тип упаковки' : language === 'be' ? 'Тып упакоўкі' : language === 'zh' ? '包装形式' : 'Packaging',
+    unitsPerBox: language === 'ru' ? 'Единиц в тарном месте' : language === 'be' ? 'Адзінак у тарным месцы' : language === 'zh' ? '每箱数量' : 'Units per Box',
+    specsTitle:
+      language === 'ru'
+        ? 'Характеристики продукта'
+        : language === 'be'
+        ? 'Характарыстыкі прадукту'
+        : language === 'zh'
+        ? '产品技术参数'
+        : 'Product Specifications',
+    fat: language === 'ru' ? 'Массовая доля жира' : language === 'be' ? 'Масавая доля тлушчу' : language === 'zh' ? '乳脂含量' : 'Fat Content',
+    protein: language === 'ru' ? 'Белок на 100 г' : language === 'be' ? 'Бялок на 100 г' : language === 'zh' ? '蛋白质 / 100克' : 'Protein / 100g',
+    lactose: language === 'ru' ? 'Лактоза' : language === 'be' ? 'Лактоза' : language === 'zh' ? '乳糖' : 'Lactose',
+    related:
+      language === 'ru'
+        ? 'Связанные позиции каталога'
+        : language === 'be'
+        ? 'Звязаныя пазіцыі каталога'
+        : language === 'zh'
+        ? '相关推荐产品'
+        : 'Related Products',
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-14">
+      <SeoHead
+        title={localize(product.seo.title)}
+        description={localize(product.seo.description)}
+        canonicalHash={`/product/${product.slug}`}
+      />
+
+      {/* Breadcrumbs */}
+      <nav className="text-xs text-slate-500 flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+        <Link to="/" className="hover:text-[#0057B8]">
+          {labels.home}
+        </Link>
+        <span aria-hidden="true">/</span>
+        <Link to="/catalog" className="hover:text-[#0057B8]">
+          {t('navCatalog')}
+        </Link>
+        {category && (
+          <>
+            <span aria-hidden="true">/</span>
+            <Link to={`/catalog/${category.slug}`} className="hover:text-[#0057B8]">
+              {localize(category.name)}
+            </Link>
+          </>
+        )}
+        <span aria-hidden="true">/</span>
+        <span className="text-slate-900 font-medium">{localize(product.name)}</span>
+      </nav>
+
+      {/* Contiguous Product Module: Sticky Gallery Left + Packaging & Specs Right */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="lg:col-span-6 lg:sticky lg:top-24">
+          <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+            <ImageWithFallback
+              src={product.image}
+              alt={localize(product.name)}
+              fallbackTitle={localize(product.name)}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="lg:col-span-6 space-y-6">
+          <div className="space-y-3">
+            <div className="text-xs text-slate-500 flex flex-wrap items-center gap-2 tabular-nums">
+              {category && (
+                <Link to={`/catalog/${category.slug}`} className="font-semibold text-[#0057B8] hover:underline">
+                  {localize(category.name)}
+                </Link>
+              )}
+              {product.fatContent !== undefined && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{product.fatContent}%</span>
+                </>
+              )}
+              {product.exportReady && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>Export B2B</span>
+                </>
+              )}
+            </div>
+
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+              {localize(product.seo.h1) || localize(product.name)}
+            </h1>
+
+            <p className="text-base text-slate-600 leading-relaxed">
+              {localize(product.description)}
+            </p>
+          </div>
+
+          {/* Multi-Packaging Variant Selector */}
+          {product.packages.length > 0 && (
+            <div className="space-y-3 pt-2 border-t border-slate-200">
+              <div className="text-xs font-semibold text-slate-900">
+                {labels.packagesTitle}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {product.packages.map((pkg) => {
+                  const isSelected = activePackage?.id === pkg.id;
+                  return (
+                    <button
+                      key={pkg.id}
+                      type="button"
+                      onClick={() => setSelectedPkgId(pkg.id)}
+                      className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors tabular-nums whitespace-nowrap ${
+                        isSelected
+                          ? 'bg-[#0057B8] text-white border-[#0057B8]'
+                          : 'bg-white text-slate-800 border-slate-200 hover:border-[#0057B8]/50'
+                      }`}
+                    >
+                      {pkg.weight}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {activePackage && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm tabular-nums">
+                  <div className="flex items-start gap-2.5">
+                    <Package className="w-4 h-4 text-[#0057B8] shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-xs text-slate-500">{labels.weight}</div>
+                      <div className="font-semibold text-slate-900">{activePackage.weight}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Clock className="w-4 h-4 text-[#0057B8] shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-xs text-slate-500">{labels.shelfLife}</div>
+                      <div className="font-semibold text-slate-900">{localize(activePackage.shelfLife)}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Thermometer className="w-4 h-4 text-[#0057B8] shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-xs text-slate-500">{labels.storage}</div>
+                      <div className="font-semibold text-slate-900">{localize(activePackage.storage)}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Layers className="w-4 h-4 text-[#0057B8] shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-xs text-slate-500">{labels.unitsPerBox}</div>
+                      <div className="font-semibold text-slate-900">
+                        {activePackage.unitsPerBox} · GTIN {activePackage.gtin}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2 pt-2 border-t border-slate-200/80 text-xs text-slate-600">
+                    <span className="text-slate-500">{labels.packagingType}: </span>
+                    <span className="font-medium text-slate-800">{localize(activePackage.packagingType)}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* B2B Actions */}
+          <div className="flex flex-wrap gap-3 pt-1">
+            <button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>{t('requestSalesBtn')}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => downloadProductB2BSpec(product, category, language)}
+              className="inline-flex items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
+            >
+              <Download className="w-4 h-4" />
+              <span>{t('downloadSpecBtn')}</span>
+            </button>
+          </div>
+
+          {/* Dynamic Category-Specific Characteristics Table */}
+          <div className="space-y-3 pt-4 border-t border-slate-200">
+            <h2 className="font-display text-lg font-semibold text-slate-900">
+              {labels.specsTitle}
+            </h2>
+            <dl className="divide-y divide-slate-200 border border-slate-200 rounded-xl overflow-hidden text-sm tabular-nums">
+              {product.fatContent !== undefined && (
+                <div className="px-4 py-3 flex justify-between gap-4 bg-white">
+                  <dt className="text-slate-500">{labels.fat}</dt>
+                  <dd className="font-medium text-slate-900">{product.fatContent}%</dd>
+                </div>
+              )}
+              {product.proteinContent !== undefined && (
+                <div className="px-4 py-3 flex justify-between gap-4 bg-slate-50/50">
+                  <dt className="text-slate-500">{labels.protein}</dt>
+                  <dd className="font-medium text-slate-900">{product.proteinContent} г</dd>
+                </div>
+              )}
+              <div className="px-4 py-3 flex justify-between gap-4 bg-white">
+                <dt className="text-slate-500">{labels.lactose}</dt>
+                <dd className="font-medium text-slate-900">
+                  {product.lactoseFree
+                    ? language === 'ru'
+                      ? 'Без лактозы (< 0,01%)'
+                      : language === 'zh'
+                      ? '无乳糖 (< 0.01%)'
+                      : 'Lactose-Free (< 0.01%)'
+                    : language === 'ru'
+                    ? 'Природная молочная'
+                    : language === 'zh'
+                    ? '含天然乳糖'
+                    : 'Natural dairy lactose'}
+                </dd>
+              </div>
+
+              {Object.entries(product.characteristics).map(([key, value], idx) => {
+                const schemaItem = category?.characteristicSchema.find((f) => f.key === key);
+                const label = schemaItem ? localize(schemaItem.label) : key;
+                return (
+                  <div
+                    key={key}
+                    className={`px-4 py-3 flex justify-between gap-4 ${
+                      idx % 2 === 0 ? 'bg-slate-50/50' : 'bg-white'
+                    }`}
+                  >
+                    <dt className="text-slate-500">{label}</dt>
+                    <dd className="font-medium text-slate-900 text-right">{localize(value)}</dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <section className="space-y-6 pt-6 border-t border-slate-200">
+          <h2 className="font-display text-2xl font-bold text-slate-900">
+            {labels.related}
+          </h2>
+          <ProductGrid products={relatedProducts} />
+        </section>
+      )}
+
+      <B2BInquiryModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        product={product}
+        selectedPackageId={activePackage?.id}
+        defaultChannel={product.exportReady ? 'export' : 'wholesale'}
+      />
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/pages/SitemapPage.tsx`:
+```
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { Download, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { legacyRedirects } from '../data/products';
+import { generateXmlSitemap } from '../utils/specExport';
+import { SeoHead } from '../components/SeoHead';
+
+export const SitemapPage: React.FC = () => {
+  const { language, t } = useLanguage();
+  const { products, categories, news } = useCatalogStore();
+
+  const xmlContent = useMemo(
+    () => generateXmlSitemap(products, categories, news),
+    [products, categories, news]
+  );
+
+  const seoAudit = useMemo(() => {
+    const visibleProducts = products.filter((p) => p.visible);
+    const titles = visibleProducts.map((p) => p.seo.title[language]);
+    const uniqueTitles = new Set(titles);
+    return {
+      totalProducts: visibleProducts.length,
+      uniqueTitlesCount: uniqueTitles.size,
+      noDuplicates: titles.length === uniqueTitles.size,
+    };
+  }, [products, language]);
+
+  const handleDownloadXml = () => {
+    const blob = new Blob([xmlContent], { type: 'application/xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sitemap.xml';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-10">
+      <SeoHead
+        title={`XML Sitemap & SEO Audit — ${t('brandName')}`}
+        description="Автоматически обновляемый sitemap.xml, hreflang-связи 4 языковых версий и таблица 301-редиректов со старых URL milk.by."
+        canonicalHash="/sitemap"
+      />
+
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+            {language === 'ru'
+              ? 'XML-карта сайта, SEO-аудит и 301-редиректы'
+              : 'XML Sitemap, SEO Audit & 301 Redirects'}
+          </h1>
+          <p className="text-sm text-slate-600 mt-1">
+            {language === 'ru'
+              ? 'Автоматическая генерация ЧПУ-структуры с поддержкой hreflang (RU / BE / EN / ZH) и отсутствием дублей.'
+              : 'Auto-generated clean URL sitemap with 4-language hreflang links and legacy 301 redirects.'}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleDownloadXml}
+          className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap shrink-0"
+        >
+          <Download className="w-4 h-4" />
+          <span>Download sitemap.xml</span>
+        </button>
+      </div>
+
+      {/* SEO Health Summary */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 tabular-nums">
+        <div className="border border-slate-200 rounded-xl p-4 bg-white">
+          <div className="text-xs text-slate-500">Уникальность SEO Title</div>
+          <div className="mt-1 flex items-center gap-2 font-display text-lg font-bold text-slate-900">
+            <CheckCircle2 className="w-4 h-4 text-[#0057B8]" />
+            <span>
+              {seoAudit.uniqueTitlesCount} / {seoAudit.totalProducts}{' '}
+              {seoAudit.noDuplicates ? '(Без дублей)' : ''}
+            </span>
+          </div>
+        </div>
+        <div className="border border-slate-200 rounded-xl p-4 bg-white">
+          <div className="text-xs text-slate-500">Языковые версии (hreflang)</div>
+          <div className="mt-1 font-display text-lg font-bold text-slate-900">
+            4 (RU · BE · EN · ZH)
+          </div>
+        </div>
+        <div className="border border-slate-200 rounded-xl p-4 bg-white">
+          <div className="text-xs text-slate-500">Настроено 301-редиректов</div>
+          <div className="mt-1 font-display text-lg font-bold text-slate-900">
+            {legacyRedirects.length} правил
+          </div>
+        </div>
+      </div>
+
+      {/* 301 Redirect Map */}
+      <section className="space-y-3">
+        <h2 className="font-display text-lg font-semibold text-slate-900">
+          {language === 'ru'
+            ? 'Карта 301-редиректов со старых URL milk.by'
+            : 'Legacy URL 301 Redirect Mapping'}
+        </h2>
+        <div className="border border-slate-200 rounded-xl overflow-x-auto bg-white">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600">
+                <th className="py-3 px-4">Старый URL (milk.by)</th>
+                <th className="py-3 px-4">Код</th>
+                <th className="py-3 px-4">Новый канонический URL</th>
+                <th className="py-3 px-4">Примечание</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              {legacyRedirects.map((rule) => (
+                <tr key={rule.from}>
+                  <td className="py-2.5 px-4 font-mono text-slate-600">{rule.from}</td>
+                  <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">{rule.code}</td>
+                  <td className="py-2.5 px-4 font-mono">
+                    <Link to={rule.to.replace('#', '')} className="text-[#0057B8] hover:underline">
+                      {rule.to}
+                    </Link>
+                  </td>
+                  <td className="py-2.5 px-4 text-slate-600">{rule.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* XML Output Preview */}
+      <section className="space-y-3">
+        <h2 className="font-display text-lg font-semibold text-slate-900">
+          sitemap.xml (Live Preview)
+        </h2>
+        <pre className="p-4 bg-slate-950 text-slate-100 rounded-xl overflow-x-auto text-xs font-mono leading-relaxed max-h-[420px]">
+          {xmlContent}
+        </pre>
+      </section>
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/B2BInquiryModal.tsx`:
+```
+import React, { useState, useEffect } from 'react';
+import { X, CheckCircle2 } from 'lucide-react';
+import { Product } from '../types';
+import { useLanguage } from '../hooks/useLanguage';
+
+interface B2BInquiryModalProps {
+  open: boolean;
+  onClose: () => void;
+  product?: Product;
+  selectedPackageId?: string;
+  defaultChannel?: 'export' | 'wholesale' | 'general';
+}
+
+export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
+  open,
+  onClose,
+  product,
+  selectedPackageId,
+  defaultChannel = 'wholesale',
+}) => {
+  const { language, localize } = useLanguage();
+  const [company, setCompany] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [country, setCountry] = useState('Беларусь');
+  const [volume, setVolume] = useState('1–5 тонн / партия');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setSubmitted(false);
+      setError('');
+      if (product) {
+        const pkg = product.packages.find((p) => p.id === selectedPackageId) || product.packages[0];
+        const prefix =
+          language === 'ru'
+            ? `Запрос спецификации и коммерческого предложения: ${localize(product.name)} (${pkg?.weight || ''})`
+            : language === 'be'
+            ? `Запыт спецыфікацыі і прапановы: ${localize(product.name)} (${pkg?.weight || ''})`
+            : language === 'zh'
+            ? `产品规格与商业报价咨询: ${localize(product.name)} (${pkg?.weight || ''})`
+            : `Commercial quote & spec request: ${localize(product.name)} (${pkg?.weight || ''})`;
+        setMessage(prefix);
+      }
+    }
+  }, [open, product, selectedPackageId, language, localize]);
+
+  if (!open) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!company.trim() || !contactName.trim() || !email.includes('@')) {
+      setError(
+        language === 'ru'
+          ? 'Укажите название компании, контактное лицо и корректный e-mail.'
+          : language === 'be'
+          ? 'Укажыце кампанію, кантактную асобу і карэктны e-mail.'
+          : language === 'zh'
+          ? '请填写公司名称、联系人及有效的电子邮箱。'
+          : 'Please provide company name, contact person, and a valid email.'
+      );
+      return;
+    }
+    setError('');
+    setSubmitted(true);
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h2 className="font-display text-lg font-semibold text-slate-900">
+              {defaultChannel === 'export'
+                ? language === 'ru'
+                  ? 'Запрос в отдел экспорта'
+                  : language === 'zh'
+                  ? '国际出口部门咨询'
+                  : 'Export Department Inquiry'
+                : language === 'ru'
+                ? 'Связаться с отделом продаж B2B'
+                : language === 'be'
+                ? 'Звязацца з аддзелам продажаў B2B'
+                : language === 'zh'
+                ? '联系 B2B 销售部门'
+                : 'B2B Sales Department Inquiry'}
+            </h2>
+            <p className="text-xs text-slate-500">
+              export@milk.by · sales@milk.by
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close modal"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="p-6">
+          {submitted ? (
+            <div className="py-6 text-center space-y-4">
+              <CheckCircle2 className="w-12 h-12 text-[#0057B8] mx-auto" strokeWidth={1.5} />
+              <div className="space-y-1">
+                <h3 className="font-display text-lg font-semibold text-slate-900">
+                  {language === 'ru'
+                    ? 'Заявка зарегистрирована'
+                    : language === 'be'
+                    ? 'Заяўка зарэгістравана'
+                    : language === 'zh'
+                    ? '您的询盘已成功提交'
+                    : 'Inquiry Submitted'}
+                </h3>
+                <p className="text-sm text-slate-600">
+                  {language === 'ru'
+                    ? `Специалист отдела продаж свяжется с ${company} (${email}) в течение 1 рабочего дня.`
+                    : `Our sales specialist will reply to ${company} (${email}) within 1 business day.`}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+              >
+                {language === 'ru' ? 'Закрыть' : language === 'zh' ? '关闭' : 'Close'}
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="p-3 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg">
+                  {error}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    {language === 'ru' ? 'Компания *' : language === 'zh' ? '公司名称 *' : 'Company *'}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="ООО «Партнёр Трейд»"
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    {language === 'ru' ? 'Контактное лицо *' : language === 'zh' ? '联系人 *' : 'Contact Person *'}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={contactName}
+                    onChange={(e) => setContactName(e.target.value)}
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    E-mail *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="buyer@company.com"
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    {language === 'ru' ? 'Телефон' : language === 'zh' ? '联系电话' : 'Phone'}
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+375 ..."
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    {language === 'ru' ? 'Страна поставки' : language === 'zh' ? '目的国/地区' : 'Destination Country'}
+                  </label>
+                  <input
+                    type="text"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-700 mb-1">
+                    {language === 'ru' ? 'Плановый объём' : language === 'zh' ? '预计采购量' : 'Estimated Volume'}
+                  </label>
+                  <input
+                    type="text"
+                    value={volume}
+                    onChange={(e) => setVolume(e.target.value)}
+                    className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-700 mb-1">
+                  {language === 'ru' ? 'Комментарий к запросу' : language === 'zh' ? '咨询详情' : 'Message'}
+                </label>
+                <textarea
+                  rows={3}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full p-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+                />
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+                >
+                  {language === 'ru' ? 'Отмена' : language === 'zh' ? '取消' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+                >
+                  {language === 'ru' ? 'Отправить запрос' : language === 'zh' ? '提交咨询' : 'Submit Inquiry'}
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/Filters.tsx`:
+```
+import React from 'react';
+import { RotateCcw } from 'lucide-react';
+import { Category } from '../types';
+import { useLanguage } from '../hooks/useLanguage';
+
+export interface CatalogFilterState {
+  categoryId: string;
+  subcategoryId: string;
+  fatRange: 'all' | 'low' | 'medium' | 'high';
+  lactoseFreeOnly: boolean;
+  highProteinOnly: boolean;
+  exportReadyOnly: boolean;
+  sortBy: 'featured' | 'fat-asc' | 'fat-desc' | 'protein-desc' | 'name';
+}
+
+interface FiltersProps {
+  categories: Category[];
+  state: CatalogFilterState;
+  onChange: (next: CatalogFilterState) => void;
+  onReset: () => void;
+  totalCount: number;
+}
+
+export const Filters: React.FC<FiltersProps> = ({
+  categories,
+  state,
+  onChange,
+  onReset,
+  totalCount,
+}) => {
+  const { language, localize } = useLanguage();
+  const activeCategory = categories.find((c) => c.id === state.categoryId);
+
+  const labels = {
+    category: language === 'ru' ? 'Категория' : language === 'be' ? 'Катэгорыя' : language === 'zh' ? '产品分类' : 'Category',
+    allCategories: language === 'ru' ? 'Все категории' : language === 'be' ? 'Усе катэгорыі' : language === 'zh' ? '全部分类' : 'All categories',
+    subcategory: language === 'ru' ? 'Подкатегория' : language === 'be' ? 'Падкатэгорыя' : language === 'zh' ? '细分系列' : 'Subcategory',
+    allSubs: language === 'ru' ? 'Все виды' : language === 'be' ? 'Усе віды' : language === 'zh' ? '全部子项' : 'All types',
+    fat: language === 'ru' ? 'Жирность' : language === 'be' ? 'Тлустасць' : language === 'zh' ? '乳脂含量' : 'Fat content',
+    fatAll: language === 'ru' ? 'Любая' : language === 'be' ? 'Любая' : language === 'zh' ? '不限' : 'Any',
+    fatLow: language === 'ru' ? 'До 5% (лёгкие)' : language === 'be' ? 'Да 5%' : language === 'zh' ? '≤ 5% 低脂' : 'Up to 5%',
+    fatMed: language === 'ru' ? '15% – 35%' : language === 'be' ? '15% – 35%' : language === 'zh' ? '15% – 35%' : '15% – 35%',
+    fatHigh: language === 'ru' ? '45%+ (сыры и масло)' : language === 'be' ? '45%+ (сыры і масла)' : language === 'zh' ? '≥ 45% 奶酪黄油' : '45%+ (cheese & butter)',
+    lactoseFree: language === 'ru' ? 'Без лактозы' : language === 'be' ? 'Без лактозы' : language === 'zh' ? '无乳糖' : 'Lactose-free',
+    highProtein: language === 'ru' ? 'Высокий белок (≥8 г)' : language === 'be' ? 'Высокі бялок (≥8 г)' : language === 'zh' ? '高蛋白 (≥8克)' : 'High protein (≥8g)',
+    exportReady: language === 'ru' ? 'Экспорт / B2B' : language === 'be' ? 'Экспарт / B2B' : language === 'zh' ? '支持出口 / B2B' : 'Export / B2B ready',
+    sort: language === 'ru' ? 'Сортировка' : language === 'be' ? 'Сартаванне' : language === 'zh' ? '排序' : 'Sort by',
+    sortFeatured: language === 'ru' ? 'Популярные' : language === 'be' ? 'Папулярныя' : language === 'zh' ? '默认推荐' : 'Featured',
+    sortFatAsc: language === 'ru' ? 'Жирность: по возрастанию' : language === 'be' ? 'Тлустасць ↑' : language === 'zh' ? '脂肪含量 ↑' : 'Fat: Low to High',
+    sortFatDesc: language === 'ru' ? 'Жирность: по убыванию' : language === 'be' ? 'Тлустасць ↓' : language === 'zh' ? '脂肪含量 ↓' : 'Fat: High to Low',
+    sortProtein: language === 'ru' ? 'Больше белка' : language === 'be' ? 'Больш бялку' : language === 'zh' ? '蛋白质从高到低' : 'Highest protein',
+    sortName: language === 'ru' ? 'По алфавиту' : language === 'be' ? 'Па алфавіце' : language === 'zh' ? '按名称' : 'Alphabetical',
+    found: language === 'ru' ? 'Позиций:' : language === 'be' ? 'Пазіцый:' : language === 'zh' ? '产品数:' : 'Items:',
+    reset: language === 'ru' ? 'Сбросить' : language === 'be' ? 'Скінуць' : language === 'zh' ? '重置' : 'Reset',
+  };
+
+  // Dynamic category-dependent visibility of attribute checkboxes
+  const showLactoseFilter = !activeCategory || activeCategory.filterKeys.includes('lactoseFree');
+  const showProteinFilter = !activeCategory || activeCategory.filterKeys.includes('highProtein');
+  const showExportFilter = !activeCategory || activeCategory.filterKeys.includes('exportReady');
+
+  return (
+    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+            {labels.category}
+          </label>
+          <select
+            value={state.categoryId}
+            onChange={(e) =>
+              onChange({
+                ...state,
+                categoryId: e.target.value,
+                subcategoryId: 'all',
+              })
+            }
+            className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:border-[#0057B8]"
+          >
+            <option value="all">{labels.allCategories}</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {localize(cat.name)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+            {labels.subcategory}
+          </label>
+          <select
+            value={state.subcategoryId}
+            disabled={!activeCategory || activeCategory.subcategories.length === 0}
+            onChange={(e) => onChange({ ...state, subcategoryId: e.target.value })}
+            className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 disabled:bg-slate-100 disabled:text-slate-400 focus:outline-none focus:border-[#0057B8]"
+          >
+            <option value="all">{labels.allSubs}</option>
+            {activeCategory?.subcategories.map((sub) => (
+              <option key={sub.id} value={sub.id}>
+                {localize(sub.name)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+            {labels.fat}
+          </label>
+          <select
+            value={state.fatRange}
+            onChange={(e) =>
+              onChange({ ...state, fatRange: e.target.value as CatalogFilterState['fatRange'] })
+            }
+            className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:border-[#0057B8]"
+          >
+            <option value="all">{labels.fatAll}</option>
+            <option value="low">{labels.fatLow}</option>
+            <option value="medium">{labels.fatMed}</option>
+            <option value="high">{labels.fatHigh}</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">
+            {labels.sort}
+          </label>
+          <select
+            value={state.sortBy}
+            onChange={(e) =>
+              onChange({ ...state, sortBy: e.target.value as CatalogFilterState['sortBy'] })
+            }
+            className="w-full h-10 px-3 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:border-[#0057B8]"
+          >
+            <option value="featured">{labels.sortFeatured}</option>
+            <option value="fat-asc">{labels.sortFatAsc}</option>
+            <option value="fat-desc">{labels.sortFatDesc}</option>
+            <option value="protein-desc">{labels.sortProtein}</option>
+            <option value="name">{labels.sortName}</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="pt-3 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-slate-700">
+          {showLactoseFilter && (
+            <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={state.lactoseFreeOnly}
+                onChange={(e) => onChange({ ...state, lactoseFreeOnly: e.target.checked })}
+                className="w-4 h-4 rounded border-slate-300 text-[#0057B8] focus:ring-[#0057B8]"
+              />
+              <span>{labels.lactoseFree}</span>
+            </label>
+          )}
+
+          {showProteinFilter && (
+            <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={state.highProteinOnly}
+                onChange={(e) => onChange({ ...state, highProteinOnly: e.target.checked })}
+                className="w-4 h-4 rounded border-slate-300 text-[#0057B8] focus:ring-[#0057B8]"
+              />
+              <span>{labels.highProtein}</span>
+            </label>
+          )}
+
+          {showExportFilter && (
+            <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={state.exportReadyOnly}
+                onChange={(e) => onChange({ ...state, exportReadyOnly: e.target.checked })}
+                className="w-4 h-4 rounded border-slate-300 text-[#0057B8] focus:ring-[#0057B8]"
+              />
+              <span>{labels.exportReady}</span>
+            </label>
+          )}
+        </div>
+
+        <div className="flex items-center gap-4 text-xs text-slate-500 tabular-nums">
+          <span>
+            {labels.found} <strong className="text-slate-900">{totalCount}</strong>
+          </span>
+          <button
+            type="button"
+            onClick={onReset}
+            className="inline-flex items-center gap-1.5 text-slate-600 hover:text-[#0057B8] font-medium transition-colors whitespace-nowrap shrink-0"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            {labels.reset}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/Footer.tsx`:
+```
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
+import { LanguageSwitcher } from './LanguageSwitcher';
+
+export const Footer: React.FC = () => {
+  const { t, language } = useLanguage();
+
+  const labels = {
+    sections:
+      language === 'ru'
+        ? 'Разделы'
+        : language === 'be'
+        ? 'Раздзелы'
+        : language === 'zh'
+        ? '网站导航'
+        : 'Sections',
+    scenarios:
+      language === 'ru'
+        ? 'Сценарии'
+        : language === 'be'
+        ? 'Сцэнарыі'
+        : language === 'zh'
+        ? '业务通道'
+        : 'Audience Paths',
+    tools:
+      language === 'ru'
+        ? 'Управление и SEO'
+        : language === 'be'
+        ? 'Кіраванне і SEO'
+        : language === 'zh'
+        ? '系统管理与SEO'
+        : 'Management & SEO',
+    cms:
+      language === 'ru'
+        ? 'CMS-панель маркетолога'
+        : language === 'be'
+        ? 'CMS-панэль маркетолага'
+        : language === 'zh'
+        ? 'CMS 内容管理后台'
+        : 'Marketing CMS Panel',
+    sitemap:
+      language === 'ru'
+        ? 'XML-карта сайта и 301-редиректы'
+        : language === 'be'
+        ? 'XML-карта сайта і 301-рэдырэкты'
+        : language === 'zh'
+        ? 'XML 站点地图与301重定向'
+        : 'XML Sitemap & 301 Audit',
+  };
+
+  return (
+    <footer className="bg-slate-50 border-t border-slate-200 mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-200">
+          <div className="space-y-4">
+            <Link to="/" className="font-display text-lg font-bold text-slate-900 inline-block">
+              {t('brandName')}
+            </Link>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              {t('footerLegal')}
+            </p>
+            <div>
+              <LanguageSwitcher />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-semibold text-slate-900 mb-3">
+              {labels.sections}
+            </h3>
+            <ul className="space-y-2 text-sm text-slate-600">
+              <li>
+                <Link to="/catalog" className="hover:text-[#0057B8] transition-colors">
+                  {t('navCatalog')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/news" className="hover:text-[#0057B8] transition-colors">
+                  {t('navNews')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="hover:text-[#0057B8] transition-colors">
+                  {t('navAbout')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/contacts" className="hover:text-[#0057B8] transition-colors">
+                  {t('ctaContact')}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-semibold text-slate-900 mb-3">
+              {labels.scenarios}
+            </h3>
+            <ul className="space-y-2 text-sm text-slate-600">
+              <li>
+                <Link to="/catalog/cheese" className="hover:text-[#0057B8] transition-colors">
+                  {t('roleConsumerTitle')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/partners" className="hover:text-[#0057B8] transition-colors">
+                  {t('roleB2BTitle')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/export" className="hover:text-[#0057B8] transition-colors">
+                  {t('roleExportTitle')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/news" className="hover:text-[#0057B8] transition-colors">
+                  {t('roleMediaTitle')}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xs font-semibold text-slate-900 mb-3">
+              {labels.tools}
+            </h3>
+            <ul className="space-y-2 text-sm text-slate-600">
+              <li>
+                <Link to="/admin" className="hover:text-[#0057B8] transition-colors">
+                  {labels.cms}
+                </Link>
+              </li>
+              <li>
+                <Link to="/sitemap" className="hover:text-[#0057B8] transition-colors">
+                  {labels.sitemap}
+                </Link>
+              </li>
+              <li className="font-mono text-xs text-slate-500 pt-1 tabular-nums">
+                export@milk.by · +375 (152) 44-55-12
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-500">
+          <span>© 2026 ОАО «Молочный Мир» (milk.by)</span>
+          <span>FSSC 22000 · ISO 9001 · HACCP · Halal</span>
+        </div>
+      </div>
+    </footer>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/Header.tsx`:
+```
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { LanguageSwitcher } from './LanguageSwitcher';
+
+export const Header: React.FC = () => {
+  const { t, language } = useLanguage();
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navItems = [
+    { to: '/catalog', label: t('navCatalog') },
+    { to: '/export', label: t('navExport') },
+    { to: '/partners', label: t('navPartners') },
+    { to: '/news', label: t('navNews') },
+    { to: '/about', label: t('navAbout') },
+  ];
+
+  const isActive = (path: string) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+  const adminLabel =
+    language === 'ru'
+      ? 'CMS Админ'
+      : language === 'be'
+      ? 'CMS Адмін'
+      : language === 'zh'
+      ? 'CMS 管理'
+      : 'CMS Admin';
+
+  return (
+    <>
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+          {/* Zone 1: Single-element brand wordmark */}
+          <Link
+            to="/"
+            onClick={() => setMobileOpen(false)}
+            className="font-display text-lg sm:text-xl font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0 hover:text-[#0057B8] transition-colors"
+          >
+            {t('brandName')}
+          </Link>
+
+          {/* Zone 2: 5 concise single-line nav links */}
+          <nav
+            className="hidden lg:flex items-center gap-6 text-sm font-medium"
+            aria-label="Main navigation"
+          >
+            {navItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`whitespace-nowrap shrink-0 py-1 border-b-2 transition-colors duration-150 ${
+                  isActive(item.to)
+                    ? 'text-[#0057B8] border-[#0057B8]'
+                    : 'text-slate-600 border-transparent hover:text-slate-900 hover:border-slate-300'
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Zone 3: 1 primary action on desktop + mobile toggle */}
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              to="/contacts"
+              className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0057B8]"
+            >
+              {t('ctaContact')}
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMobileOpen((prev) => !prev)}
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+              aria-expanded={mobileOpen}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile drawer */}
+        {mobileOpen && (
+          <div className="lg:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-4">
+            <nav className="flex flex-col space-y-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setMobileOpen(false)}
+                  className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    isActive(item.to)
+                      ? 'bg-blue-50 text-[#0057B8]'
+                      : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link
+                to="/contacts"
+                onClick={() => setMobileOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                {t('ctaContact')}
+              </Link>
+              <Link
+                to="/admin"
+                onClick={() => setMobileOpen(false)}
+                className="px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                {adminLabel}
+              </Link>
+            </nav>
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-xs text-slate-500">Language / Язык</span>
+              <LanguageSwitcher compact />
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Non-sticky workspace utility bar (Language Switcher + CMS Admin) keeping Top Bar strictly 3 zones */}
+      <div className="hidden lg:block bg-slate-50 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-10 flex items-center justify-between text-xs text-slate-500">
+          <div className="flex items-center gap-4">
+            <span>milk.by</span>
+            <span aria-hidden="true">·</span>
+            <Link to="/sitemap" className="hover:text-slate-900 transition-colors">
+              Sitemap &amp; SEO
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link to="/admin" className="hover:text-[#0057B8] font-medium text-slate-700 transition-colors">
+              {adminLabel}
+            </Link>
+          </div>
+          <LanguageSwitcher />
+        </div>
+      </div>
+    </>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/ImageWithFallback.tsx`:
+```
+import React, { useState } from 'react';
+import { Milk } from 'lucide-react';
+
+interface ImageWithFallbackProps {
+  src: string;
+  alt: string;
+  className?: string;
+  fallbackTitle?: string;
+}
+
+export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
+  src,
+  alt,
+  className = '',
+  fallbackTitle,
+}) => {
+  const [failed, setFailed] = useState(false);
+
+  if (failed || !src) {
+    return (
+      <div
+        className={`flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50/50 text-slate-400 p-4 text-center ${className}`}
+        role="img"
+        aria-label={alt}
+      >
+        <Milk className="w-8 h-8 text-[#0057B8]/40 mb-2" strokeWidth={1.5} />
+        {fallbackTitle && (
+          <span className="text-xs font-medium text-slate-500 max-w-[18ch] truncate">
+            {fallbackTitle}
+          </span>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      referrerPolicy="no-referrer"
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className={className}
+    />
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/LanguageSwitcher.tsx`:
+```
+import React from 'react';
+import { LANGUAGES } from '../data/translations';
+import { useLanguage } from '../hooks/useLanguage';
+
+interface LanguageSwitcherProps {
+  compact?: boolean;
+}
+
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ compact = false }) => {
+  const { language, setLanguage } = useLanguage();
+
+  return (
+    <div
+      className="inline-flex items-center gap-0.5 p-0.5 bg-slate-100 rounded-lg border border-slate-200/80"
+      role="group"
+      aria-label="Language selector"
+    >
+      {LANGUAGES.map((item) => {
+        const active = language === item.code;
+        return (
+          <button
+            key={item.code}
+            type="button"
+            onClick={() => setLanguage(item.code)}
+            title={item.nativeName}
+            className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0057B8] ${
+              active
+                ? 'bg-white text-[#0057B8] shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            {compact ? item.label : item.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/ProductCard.tsx`:
+```
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
+import { Product } from '../types';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { ImageWithFallback } from './ImageWithFallback';
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { language, localize } = useLanguage();
+  const { categories } = useCatalogStore();
+
+  const category = categories.find((c) => c.id === product.category);
+  const categoryName = category ? localize(category.name) : product.category;
+  const productName = localize(product.name);
+  const productDesc = localize(product.description);
+
+  const packCountLabel =
+    language === 'ru'
+      ? `${product.packages.length} фас.`
+      : language === 'be'
+      ? `${product.packages.length} фас.`
+      : language === 'zh'
+      ? `${product.packages.length} 种包装`
+      : `${product.packages.length} packs`;
+
+  const viewLabel =
+    language === 'ru'
+      ? 'Подробнее'
+      : language === 'be'
+      ? 'Падрабязней'
+      : language === 'zh'
+      ? '查看详情'
+      : 'Details';
+
+  return (
+    <Link
+      to={`/product/${product.slug}`}
+      className="group flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden hover:-translate-y-0.5 hover:shadow-md transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0057B8]"
+    >
+      <div className="aspect-[4/3] w-full bg-slate-50 overflow-hidden border-b border-slate-100">
+        <ImageWithFallback
+          src={product.image}
+          alt={productName}
+          fallbackTitle={productName}
+          className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
+        />
+      </div>
+
+      <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+        <div className="space-y-2">
+          {/* Unboxed metadata with typographic separators */}
+          <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 tabular-nums">
+            <span className="font-medium text-[#0057B8]">{categoryName}</span>
+            {product.fatContent !== undefined && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>{product.fatContent}%</span>
+              </>
+            )}
+            {product.lactoseFree && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>
+                  {language === 'ru'
+                    ? 'Без лактозы'
+                    : language === 'be'
+                    ? 'Без лактозы'
+                    : language === 'zh'
+                    ? '无乳糖'
+                    : 'Lactose-Free'}
+                </span>
+              </>
+            )}
+          </div>
+
+          <h3 className="font-display text-base font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors leading-snug">
+            {productName}
+          </h3>
+
+          <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
+            {productDesc}
+          </p>
+        </div>
+
+        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 tabular-nums">
+          <span>
+            {product.packages.map((p) => p.weight).slice(0, 3).join(' / ')}
+            {product.packages.length > 3 ? ` · ${packCountLabel}` : ''}
+          </span>
+          <span className="inline-flex items-center gap-1 font-medium text-slate-700 group-hover:text-[#0057B8] whitespace-nowrap shrink-0">
+            {viewLabel}
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/ProductGrid.tsx`:
+```
+import React from 'react';
+import { PackageSearch } from 'lucide-react';
+import { Product } from '../types';
+import { ProductCard } from './ProductCard';
+import { useLanguage } from '../hooks/useLanguage';
+
+interface ProductGridProps {
+  products: Product[];
+  onResetFilters?: () => void;
+}
+
+export const ProductGrid: React.FC<ProductGridProps> = ({ products, onResetFilters }) => {
+  const { language } = useLanguage();
+
+  if (products.length === 0) {
+    return (
+      <div className="border border-slate-200 rounded-xl bg-slate-50/70 p-10 text-center space-y-3">
+        <PackageSearch className="w-8 h-8 text-slate-400 mx-auto" strokeWidth={1.5} />
+        <h3 className="font-display text-base font-semibold text-slate-900">
+          {language === 'ru'
+            ? 'По выбранным параметрам товары не найдены'
+            : language === 'be'
+            ? 'Па выбраных параметрах тавары не знойдзены'
+            : language === 'zh'
+            ? '未找到符合筛选条件的产品'
+            : 'No products match the selected filters'}
+        </h3>
+        <p className="text-sm text-slate-600 max-w-md mx-auto">
+          {language === 'ru'
+            ? 'Попробуйте изменить диапазон жирности, сбросить фильтр категории или воспользоваться умным подбором.'
+            : language === 'be'
+            ? 'Паспрабуйце змяніць дыяпазон тлустасці або скінуць фільтр.'
+            : language === 'zh'
+            ? '请尝试调整乳脂范围或重置筛选条件。'
+            : 'Try adjusting the fat range, clearing category filters, or using the Smart Matcher.'}
+        </p>
+        {onResetFilters && (
+          <button
+            type="button"
+            onClick={onResetFilters}
+            className="inline-flex items-center px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+          >
+            {language === 'ru'
+              ? 'Сбросить фильтры'
+              : language === 'be'
+              ? 'Скінуць фільтры'
+              : language === 'zh'
+              ? '重置筛选'
+              : 'Reset filters'}
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/SearchBar.tsx`:
+```
+import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, X, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+
+interface SearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+  onSubmitSearch?: (value: string) => void;
+}
+
+export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitSearch }) => {
+  const { t, localize, language } = useLanguage();
+  const { products, categories } = useCatalogStore();
+  const [focused, setFocused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const suggestions = useMemo(() => {
+    const q = value.trim().toLowerCase();
+    if (!q) return [];
+    return products
+      .filter((p) => p.visible)
+      .filter((p) => {
+        const cat = categories.find((c) => c.id === p.category);
+        const searchIndex = [
+          p.name.ru,
+          p.name.be,
+          p.name.en,
+          p.name.zh,
+          p.description.ru,
+          p.description.en,
+          cat?.name.ru || '',
+          cat?.name.be || '',
+          cat?.name.en || '',
+          cat?.name.zh || '',
+          p.useCases.join(' '),
+        ]
+          .join(' ')
+          .toLowerCase();
+        return searchIndex.includes(q);
+      })
+      .slice(0, 6);
+  }, [value, products, categories]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && onSubmitSearch) {
+      setFocused(false);
+      onSubmitSearch(value);
+    }
+  };
+
+  return (
+    <div ref={containerRef} className="relative w-full">
+      <div className="relative flex items-center">
+        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => {
+            onChange(e.target.value);
+            setFocused(true);
+          }}
+          onFocus={() => setFocused(true)}
+          onKeyDown={handleKeyDown}
+          placeholder={t('searchPlaceholder')}
+          aria-label={t('searchPlaceholder')}
+          className="w-full h-11 pl-10 pr-10 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/15 transition-colors"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => {
+              onChange('');
+              setFocused(false);
+            }}
+            aria-label="Clear search"
+            className="absolute right-2.5 w-7 h-7 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      {focused && value.trim().length > 0 && (
+        <div className="absolute left-0 right-0 top-full mt-1.5 z-30 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+          {suggestions.length > 0 ? (
+            <ul className="divide-y divide-slate-100" role="listbox">
+              {suggestions.map((item) => {
+                const cat = categories.find((c) => c.id === item.category);
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFocused(false);
+                        navigate(`/product/${item.slug}`);
+                      }}
+                      className="w-full px-4 py-3 text-left flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-slate-900 truncate">
+                          {localize(item.name)}
+                        </div>
+                        <div className="text-xs text-slate-500 flex items-center gap-1.5 tabular-nums">
+                          <span>{cat ? localize(cat.name) : item.category}</span>
+                          {item.fatContent !== undefined && (
+                            <>
+                              <span aria-hidden="true">·</span>
+                              <span>{item.fatContent}%</span>
+                            </>
+                          )}
+                          <span aria-hidden="true">·</span>
+                          <span>{item.packages.map((p) => p.weight).join(', ')}</span>
+                        </div>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-slate-400 shrink-0" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div className="px-4 py-3 text-xs text-slate-500">
+              {language === 'ru'
+                ? 'Прямых совпадений не найдено — попробуйте «Умный подбор».'
+                : language === 'be'
+                ? 'Прамых супадзенняў не знойдзена.'
+                : language === 'zh'
+                ? '未找到直接匹配产品 — 请尝试智能选品助手。'
+                : 'No direct matches — try the Smart Product Matcher.'}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/SeoHead.tsx`:
+```
+import React, { useEffect } from 'react';
+import { useLanguage } from '../hooks/useLanguage';
+
+interface SeoHeadProps {
+  title: string;
+  description: string;
+  canonicalHash?: string;
+}
+
+export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalHash }) => {
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    document.title = title;
+    document.documentElement.lang = language;
+
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector);
+      if (!el) {
+        el = document.createElement('meta');
+        if (selector.includes('property=')) {
+          el.setAttribute('property', selector.match(/property="([^"]+)"/)?.[1] || '');
+        } else {
+          el.setAttribute('name', selector.match(/name="([^"]+)"/)?.[1] || '');
+        }
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    };
+
+    setMeta('meta[name="description"]', 'content', description);
+    setMeta('meta[property="og:title"]', 'content', title);
+    setMeta('meta[property="og:description"]', 'content', description);
+
+    if (canonicalHash !== undefined) {
+      let link = document.querySelector('link[rel="canonical"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        document.head.appendChild(link);
+      }
+      link.setAttribute('href', `https://milk.by/#${canonicalHash}`);
+    }
+  }, [title, description, canonicalHash, language]);
+
+  return null;
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/SmartFinder.tsx`:
+```
+import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Compass, ArrowRight, Check } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useCatalogStore } from '../hooks/useCatalogStore';
+import { runSmartProductMatch } from '../utils/smartMatch';
+import { ImageWithFallback } from './ImageWithFallback';
+
+const SAMPLE_PROMPTS = {
+  ru: [
+    'Мне нужен сыр для пиццы',
+    'Мне нужен продукт без лактозы',
+    'Мне нужен продукт с высоким содержанием белка',
+    'Мне нужен сыр для дегустации с вином',
+  ],
+  be: [
+    'Мне патрэбен сыр для піцы',
+    'Мне патрэбен прадукт без лактозы',
+    'Мне патрэбен прадукт з высокім утрыманнем бялку',
+    'Мне патрэбен сыр для дэгустацыі з віном',
+  ],
+  en: [
+    'I need cheese for pizza',
+    'I need a lactose-free product',
+    'I need a high-protein dairy product',
+    'I need aged cheese for wine tasting',
+  ],
+  zh: [
+    '我需要披萨专用奶酪',
+    '我需要无乳糖乳制品',
+    '我需要高蛋白乳制品',
+    '我需要配葡萄酒的奶酪',
+  ],
+};
+
+export const SmartFinder: React.FC = () => {
+  const { t, language, localize } = useLanguage();
+  const { products } = useCatalogStore();
+  const [query, setQuery] = useState('');
+
+  const matches = useMemo(
+    () => runSmartProductMatch(query, products, language),
+    [query, products, language]
+  );
+
+  const prompts = SAMPLE_PROMPTS[language] || SAMPLE_PROMPTS.ru;
+
+  return (
+    <section className="border border-slate-200 rounded-2xl bg-slate-50/70 p-6 sm:p-8 space-y-5">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#0057B8]">
+            <Compass className="w-4 h-4" />
+            <span>{t('smartFinderTitle')}</span>
+          </div>
+          <p className="text-sm text-slate-600 max-w-2xl">
+            {t('smartFinderSubtitle')}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-3">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={t('smartFinderPlaceholder')}
+          className="flex-1 h-11 px-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/15"
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery('')}
+            className="h-11 px-4 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0"
+          >
+            {language === 'ru' ? 'Очистить' : language === 'be' ? 'Ачысціць' : language === 'zh' ? '清空' : 'Clear'}
+          </button>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {prompts.map((sample) => (
+          <button
+            key={sample}
+            type="button"
+            onClick={() => setQuery(sample)}
+            className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors whitespace-nowrap ${
+              query === sample
+                ? 'bg-[#0057B8] text-white border-[#0057B8]'
+                : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:text-slate-900'
+            }`}
+          >
+            {sample}
+          </button>
+        ))}
+      </div>
+
+      {query.trim().length > 0 && (
+        <div className="pt-2">
+          {matches.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {matches.map(({ product, reasons }) => (
+                <Link
+                  key={product.id}
+                  to={`/product/${product.slug}`}
+                  className="group bg-white border border-slate-200 rounded-xl p-4 flex gap-4 hover:border-[#0057B8]/50 hover:shadow-sm transition-all"
+                >
+                  <div className="w-20 h-20 rounded-lg bg-slate-50 overflow-hidden shrink-0 border border-slate-100">
+                    <ImageWithFallback
+                      src={product.image}
+                      alt={localize(product.name)}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <div className="text-sm font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors truncate">
+                      {localize(product.name)}
+                    </div>
+                    <ul className="space-y-0.5">
+                      {reasons.slice(0, 2).map((reason, idx) => (
+                        <li
+                          key={idx}
+                          className="text-xs text-slate-600 flex items-start gap-1.5 leading-snug"
+                        >
+                          <Check className="w-3.5 h-3.5 text-[#0057B8] shrink-0 mt-0.5" />
+                          <span>{reason}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="pt-1 text-xs font-medium text-[#0057B8] inline-flex items-center gap-1">
+                      <span>{product.packages.map((p) => p.weight).slice(0, 2).join(' · ')}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-slate-600 bg-white border border-slate-200 rounded-lg p-4">
+              {language === 'ru'
+                ? 'Подходящих позиций по этому запросу не найдено. Попробуйте «сыр для пиццы», «без лактозы» или «высокий белок».'
+                : language === 'be'
+                ? 'Падыходзячых пазіцый не знойдзена.'
+                : language === 'zh'
+                ? '未找到匹配产品，请尝试“披萨奶酪”、“无乳糖”或“高蛋白”。'
+                : 'No exact match found. Try "pizza cheese", "lactose-free", or "high protein".'}
+            </p>
+          )}
+        </div>
+      )}
+    </section>
+  );
+};
+```
+
