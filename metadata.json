@@ -1,0 +1,6 @@
+{
+  "name": "Молочный Мир — Цифровая витрина (milk.by)",
+  "description": "Современная цифровая витрина ОАО «Молочный Мир»: каталог молочной продукции, B2B- и экспортный портал, новости, 4 языковые версии и CMS-панель управления.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
