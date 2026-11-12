@@ -1,0 +1,191 @@
+import { Language, LocalizedText } from '../types';
+
+export const LANGUAGES: { code: Language; label: string; nativeName: string }[] = [
+  { code: 'ru', label: 'RU', nativeName: 'Русский' },
+  { code: 'be', label: 'BE', nativeName: 'Беларуская' },
+  { code: 'en', label: 'EN', nativeName: 'English' },
+  { code: 'zh', label: 'ZH', nativeName: '中文' },
+];
+
+export const defaultTranslations: Record<string, LocalizedText> = {
+  brandName: {
+    ru: 'Молочный Мир',
+    be: 'Малочны Мір',
+    en: 'Molochny Mir',
+    zh: 'Molochny Mir',
+  },
+  navCatalog: {
+    ru: 'Продукция',
+    be: 'Прадукцыя',
+    en: 'Products',
+    zh: '产品目录',
+  },
+  navExport: {
+    ru: 'Экспорт',
+    be: 'Экспарт',
+    en: 'Export',
+    zh: '国际出口',
+  },
+  navPartners: {
+    ru: 'Партнёрам',
+    be: 'Партнёрам',
+    en: 'B2B Partners',
+    zh: '商业合作',
+  },
+  navNews: {
+    ru: 'Новости',
+    be: 'Навіны',
+    en: 'News',
+    zh: '新闻动态',
+  },
+  navAbout: {
+    ru: 'О компании',
+    be: 'Пра кампанію',
+    en: 'About',
+    zh: '关于我们',
+  },
+  ctaContact: {
+    ru: 'Связаться',
+    be: 'Звязацца',
+    en: 'Contact Sales',
+    zh: '联系销售',
+  },
+  heroKicker: {
+    ru: 'ОАО «Молочный Мир» · Гродно, Беларусь · Сертификация FSSC 22000 & Halal',
+    be: 'ААТ «Малочны Мір» · Гродна, Беларусь · Сертыфікацыя FSSC 22000 & Halal',
+    en: 'Molochny Mir JSC · Grodno, Belarus · FSSC 22000 & Halal Certified',
+    zh: 'Molochny Mir 股份公司 · 白俄罗斯格罗德诺 · FSSC 22000 与清真认证',
+  },
+  heroTitle: {
+    ru: 'Белорусская молочная продукция для дома, HoReCa и глобального экспорта',
+    be: 'Беларуская малочная прадукцыя для дома, HoReCa і глабальнага экспарту',
+    en: 'Belarusian dairy craftsmanship for retail, HoReCa, and global export',
+    zh: '面向家庭、餐饮与全球出口的白俄罗斯匠心乳品',
+  },
+  heroSubtitle: {
+    ru: 'Единая цифровая витрина ассортимента: быстрый подбор по характеристикам и фасовкам, прямые B2B-спецификации и 4 языковые версии.',
+    be: 'Адзіная лічбавая вітрына асартыменту: хуткі падбор па характарыстыках і фасоўках, прамыя B2B-спецыфікацыі.',
+    en: 'Unified digital product showcase with instant specification filtering, multi-pack selection, B2B export sheets, and four-language support.',
+    zh: '一体化数字化产品展厅：按规格与包装快速筛选、一键生成B2B出口规格书并支持四种语言切换。',
+  },
+  heroPrimaryCta: {
+    ru: 'Открыть каталог',
+    be: 'Адкрыць каталог',
+    en: 'Browse Catalog',
+    zh: '浏览产品目录',
+  },
+  heroSecondaryCta: {
+    ru: 'Экспортным партнёрам',
+    be: 'Экспартным партнёрам',
+    en: 'Export Portal',
+    zh: '国际出口专区',
+  },
+  roleConsumerTitle: {
+    ru: 'Потребителю',
+    be: 'Спажыўцу',
+    en: 'For Consumers',
+    zh: '终端消费者',
+  },
+  roleConsumerDesc: {
+    ru: 'Свежие сыры, молоко, йогурты и мороженое',
+    be: 'Свежыя сыры, малако, ёгурты і марозіва',
+    en: 'Fresh cheeses, milk, yogurts, and ice cream',
+    zh: '新鲜奶酪、纯牛奶、酸奶与冰淇淋',
+  },
+  roleB2BTitle: {
+    ru: 'Оптовому покупателю',
+    be: 'Аптоваму пакупніку',
+    en: 'Wholesale & HoReCa',
+    zh: '批发与餐饮客户',
+  },
+  roleB2BDesc: {
+    ru: 'Фасовки HoReCa, логистика и отдел продаж',
+    be: 'Фасоўкі HoReCa, лагістыка і аддзел продажаў',
+    en: 'HoReCa packs, cold-chain terms, direct sales',
+    zh: '餐饮大包装、冷链物流与销售对接',
+  },
+  roleExportTitle: {
+    ru: 'Зарубежному партнёру',
+    be: 'Замежнаму партнёру',
+    en: 'Global Export',
+    zh: '海外进口商',
+  },
+  roleExportDesc: {
+    ru: 'СОМ, масло, сыры, сертификаты и спецификации',
+    be: 'САМ, масла, сыры, сертыфікаты і спецыфікацыі',
+    en: 'SMP, butter, aged cheese, export specs',
+    zh: '脱脂奶粉、黄油、奶酪与出口认证',
+  },
+  roleMediaTitle: {
+    ru: 'СМИ и партнёрам',
+    be: 'СМІ і партнёрам',
+    en: 'Press & Corporate',
+    zh: '媒体与企业动态',
+  },
+  roleMediaDesc: {
+    ru: 'Новости производства, награды и история',
+    be: 'Навіны вытворчасці, узнагароды і гісторыя',
+    en: 'Production news, awards, and company facts',
+    zh: '工厂新闻、行业奖项与企业简介',
+  },
+  featuredHeading: {
+    ru: 'Ключевые позиции каталога',
+    be: 'Ключавыя пазіцыі каталога',
+    en: 'Featured Dairy Collection',
+    zh: '核心精选乳品',
+  },
+  allProductsLink: {
+    ru: 'Все продукты',
+    be: 'Усе прадукты',
+    en: 'View all products',
+    zh: '查看全部产品',
+  },
+  searchPlaceholder: {
+    ru: 'Поиск по названию, категории или ключевому слову (например: моцарелла)…',
+    be: 'Пошук па назве або катэгорыі (напрыклад: мацарэла)…',
+    en: 'Search by product name, category, or keyword (e.g., mozzarella)…',
+    zh: '按产品名称、分类或关键词搜索（例如：马苏里拉）…',
+  },
+  smartFinderTitle: {
+    ru: 'Умный подбор продукции',
+    be: 'Разумны падбор прадукцыі',
+    en: 'Smart Product Matcher',
+    zh: '智能选品助手',
+  },
+  smartFinderSubtitle: {
+    ru: 'Опишите задачу на естественном языке — система подберёт подходящие продукты из каталога',
+    be: 'Апішыце задачу — сістэма падабярэ падыходзячыя прадукты з каталога',
+    en: 'Describe your culinary or nutrition goal to match the best dairy items from our catalog',
+    zh: '输入您的烹饪或营养需求，系统将为您精准匹配目录中的乳制品',
+  },
+  smartFinderPlaceholder: {
+    ru: 'Например: «Мне нужен сыр для пиццы» или «продукт без лактозы»…',
+    be: 'Напрыклад: «Мне патрэбен сыр для піцы» або «прадукт без лактозы»…',
+    en: 'Try: "cheese for pizza", "lactose-free", "high protein", or "wine tasting"…',
+    zh: '例如：“披萨专用奶酪”、“无乳糖”、“高蛋白”或“配红酒奶酪”…',
+  },
+  requestSalesBtn: {
+    ru: 'Запросить информацию / Связаться с отделом продаж',
+    be: 'Запытаць інфармацыю / Звязацца з аддзелам продажаў',
+    en: 'Request Info / Contact Sales Department',
+    zh: '咨询产品信息 / 联系销售部门',
+  },
+  downloadSpecBtn: {
+    ru: 'Скачать B2B-спецификацию',
+    be: 'Спампаваць B2B-спецыфікацыю',
+    en: 'Download B2B Spec Sheet',
+    zh: '下载 B2B 产品规格书',
+  },
+  adminTitle: {
+    ru: 'CMS-панель управления контентом',
+    be: 'CMS-панэль кіравання кантэнтам',
+    en: 'Content & Catalog CMS',
+    zh: '内容与目录管理后台 (CMS)',
+  },
+  footerLegal: {
+    ru: 'ОАО «Молочный Мир» · УНП 500040357 · 230005, г. Гродно, ул. Гаспадарчая, 28',
+    be: 'ААТ «Малочны Мір» · УНП 500040357 · 230005, г. Гродна, вул. Гаспадарчая, 28',
+    en: 'Molochny Mir JSC · 28 Gaspadarchaya St, Grodno 230005, Belarus',
+    zh: 'Molochny Mir 股份公司 · 白俄罗斯格罗德诺市 Gaspadarchaya 街28号',
+  },
+};
