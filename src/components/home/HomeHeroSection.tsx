@@ -44,26 +44,26 @@ export const HomeHeroSection: React.FC = () => {
 
     return (
         <section className="space-y-6">
-        {/* Full-bleed atmospheric Hero from new layout (image wrapper clips bg, dropdown stays unclipped) */}
-        <div className="relative min-h-[448px] lg:min-h-[500px] flex items-center justify-center bg-slate-900">
+        {/* Full-bleed Hero with neutral scrim behind the blurred Header */}
+        <div className="relative min-h-[560px] lg:min-h-[620px] flex items-center justify-center bg-neutral-900">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <ImageWithFallback
         src={ASSETS.heroDairyShowcase}
         alt={t('brandName')}
         className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/65 via-slate-950/55 to-slate-950/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-neutral-950/65" />
         </div>
 
-        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center space-y-6">
+        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-14 sm:pt-32 sm:pb-16 lg:pt-36 lg:pb-20 text-center space-y-6">
         <div className="space-y-4">
-        <p className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-blue-100 bg-white/10 border border-white/20 backdrop-blur-xs">
+        <p className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-medium text-neutral-100 bg-white/10 border border-white/20 backdrop-blur-xs">
         {heroKickerText}
         </p>
         <h1 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.15]">
         {t('heroTitle')}
         </h1>
-        <p className="text-base sm:text-lg text-slate-100/90 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-neutral-100/90 max-w-2xl mx-auto leading-relaxed">
         {t('heroSubtitle')}
         </p>
         </div>

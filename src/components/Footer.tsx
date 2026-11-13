@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
@@ -57,18 +58,14 @@ export const Footer: React.FC = () => {
     <Link to="/" className="font-display text-lg font-bold text-slate-900 inline-block">
     {t('brandName')}
     </Link>
-    <p className="text-sm text-slate-600 leading-relaxed">
-    {t('footerLegal')}
-    </p>
+    <p className="text-sm text-slate-600 leading-relaxed">{t('footerLegal')}</p>
     <div>
     <LanguageSwitcher />
     </div>
     </div>
 
     <div>
-    <h3 className="text-xs font-semibold text-slate-900 mb-3">
-    {labels.sections}
-    </h3>
+    <h3 className="text-xs font-semibold text-slate-900 mb-3">{labels.sections}</h3>
     <ul className="space-y-2 text-sm text-slate-600">
     <li>
     <Link to="/catalog" className="hover:text-[#0057B8] transition-colors">
@@ -94,9 +91,7 @@ export const Footer: React.FC = () => {
     </div>
 
     <div>
-    <h3 className="text-xs font-semibold text-slate-900 mb-3">
-    {labels.scenarios}
-    </h3>
+    <h3 className="text-xs font-semibold text-slate-900 mb-3">{labels.scenarios}</h3>
     <ul className="space-y-2 text-sm text-slate-600">
     <li>
     <Link to="/catalog/cheese" className="hover:text-[#0057B8] transition-colors">
@@ -121,10 +116,9 @@ export const Footer: React.FC = () => {
     </ul>
     </div>
 
+    <div className="space-y-4">
     <div>
-    <h3 className="text-xs font-semibold text-slate-900 mb-3">
-    {labels.tools}
-    </h3>
+    <h3 className="text-xs font-semibold text-slate-900 mb-3">{labels.tools}</h3>
     <ul className="space-y-2 text-sm text-slate-600">
     <li>
     <Link to="/admin" className="hover:text-[#0057B8] transition-colors">
@@ -141,21 +135,30 @@ export const Footer: React.FC = () => {
     </li>
     </ul>
     </div>
+
+    <Link
+    to="/contacts"
+    className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+    >
+    <span>{t('ctaContact')}</span>
+    <ArrowRight className="w-3.5 h-3.5" />
+    </Link>
+    </div>
     </div>
 
     <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-500">
     <span>
-      {language === 'ru'
-        ? '© 2026 ОАО «Молочный Мир» (milk.by)'
-        : language === 'be'
-        ? '© 2026 ААТ «Малочны Мір» (milk.by)'
-        : language === 'zh'
-        ? '© 2026 Molochny Mir 股份公司 (milk.by)'
-    : '© 2026 Molochny Mir JSC (milk.by)'}
-    </span>
-    <span>FSSC 22000 · ISO 9001 · HACCP</span>
-    </div>
-    </div>
-    </footer>
+    {language === 'ru'
+      ? '© 2026 ОАО «Молочный Мир» (milk.by)'
+      : language === 'be'
+      ? '© 2026 ААТ «Малочны Мір» (milk.by)'
+      : language === 'zh'
+      ? '© 2026 Molochny Mir 股份公司 (milk.by)'
+  : '© 2026 Molochny Mir JSC (milk.by)'}
+  </span>
+  <span>FSSC 22000 · ISO 9001 · HACCP</span>
+  </div>
+  </div>
+  </footer>
   );
 };
