@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { SeoHead } from '../components/SeoHead';
@@ -7,6 +8,7 @@ import { SearchBar } from '../components/SearchBar';
 import { Filters, CatalogFilterState } from '../components/Filters';
 import { ProductGrid } from '../components/ProductGrid';
 import { SmartFinder } from '../components/SmartFinder';
+import { runSmartSearch } from '../utils/smartMatch';
 
 interface CatalogProps {
   initialCategorySlug?: string;
@@ -69,12 +71,22 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
 
   const activeCategory = categories.find((c) => c.id === filterState.categoryId);
 
+  const smartSearch = useMemo(() => {
+    const trimmed = query.trim();
+    if (!trimmed) return null;
+    return runSmartSearch(trimmed, products, categories, language);
+  }, [query, products, categories, language]);
+
   const filteredProducts = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const scoreMap = smartSearch
+    ? new Map(smartSearch.results.map((r) => [r.product.id, r.score]))
+    : null;
 
     const list = products
     .filter((p) => p.visible)
     .filter((p) => {
+      if (scoreMap && !scoreMap.has(p.id)) return false;
+
       if (filterState.categoryId !== 'all' && p.category !== filterState.categoryId) {
         return false;
       }
@@ -119,35 +131,14 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
         if (prodVal !== selectedVal) return false;
       }
 
-      if (q) {
-        const cat = categories.find((c) => c.id === p.category);
-        const haystack = [
-          p.name.ru,
-          p.name.be,
-          p.name.en,
-          p.name.zh,
-          p.description.ru,
-          p.description.be,
-          p.description.en,
-          p.description.zh,
-          cat?.name.ru || '',
-          cat?.name.be || '',
-          cat?.name.en || '',
-          cat?.name.zh || '',
-          p.packages.map((pkg) => pkg.weight).join(' '),
-            p.useCases.join(' '),
-            ...Object.values(p.characteristics).flatMap((c) => [c.ru, c.be, c.en, c.zh]),
-        ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-        if (!haystack.includes(q)) return false;
-      }
       return true;
     });
 
     const sorted = [...list];
     sorted.sort((a, b) => {
+      if (scoreMap && filterState.sortBy === 'featured') {
+        return (scoreMap.get(b.id) ?? 0) - (scoreMap.get(a.id) ?? 0);
+      }
       if (filterState.sortBy === 'fat-asc') return (a.fatContent ?? 0) - (b.fatContent ?? 0);
       if (filterState.sortBy === 'fat-desc') return (b.fatContent ?? 0) - (a.fatContent ?? 0);
       if (filterState.sortBy === 'protein-desc')
@@ -158,7 +149,7 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
     });
 
     return sorted;
-  }, [products, categories, filterState, query, localize, language]);
+  }, [products, smartSearch, filterState, localize, language]);
 
   const handleReset = () => {
     setQuery('');
@@ -187,6 +178,13 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   : `${t('navCatalog')} — ${t('brandName')} (milk.by)`;
 
   const seoDesc = activeCategory ? localize(activeCategory.seo.description) : pageDesc;
+
+  const smartBannerLabel = {
+    ru: 'Умный поиск распознал:',
+    be: 'Разумны пошук распазнаў:',
+    en: 'Smart search matched:',
+    zh: '智能搜索已识别:',
+  }[language];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
@@ -221,19 +219,17 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   )}
   </nav>
 
-  <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
-  {pageH1}
-  </h1>
+  <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">{pageH1}</h1>
   <p className="text-sm sm:text-base text-slate-600 max-w-3xl">{pageDesc}</p>
   </div>
 
   <div className="flex flex-wrap gap-2">
   <Link
   to="/catalog"
-  className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-colors ${
+  className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
     !activeCategory
     ? 'bg-[#0057B8] text-white border-[#0057B8]'
-    : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+    : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
   }`}
   >
   {language === 'ru'
@@ -250,10 +246,10 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
       <Link
       key={cat.id}
       to={`/catalog/${cat.slug}`}
-      className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-colors ${
+      className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
         active
         ? 'bg-[#0057B8] text-white border-[#0057B8]'
-        : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+        : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
       }`}
       >
       {localize(cat.name)}
@@ -262,7 +258,35 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   })}
   </div>
 
-  <SearchBar value={query} onChange={setQuery} />
+  <SearchBar
+  value={query}
+  onChange={setQuery}
+  onSubmitSearch={(val) => {
+    setQuery(val);
+    if (val) {
+      setSearchParams({ q: val }, { replace: true });
+    } else {
+      setSearchParams({}, { replace: true });
+    }
+  }}
+  />
+
+  {smartSearch && smartSearch.criteria.length > 0 && (
+    <div className="flex flex-wrap items-center gap-2 text-xs bg-blue-50/70 border border-blue-200/70 rounded-xl px-4 py-2.5">
+    <span className="inline-flex items-center gap-1.5 font-semibold text-[#0057B8]">
+    <Sparkles className="w-3.5 h-3.5 shrink-0" />
+    {smartBannerLabel}
+    </span>
+    {smartSearch.criteria.map((c) => (
+      <span
+      key={c.id}
+      className="px-2.5 py-0.5 rounded-md bg-white border border-blue-200 text-slate-800 font-medium"
+      >
+      {c.label}
+      </span>
+    ))}
+    </div>
+  )}
 
   <Filters
   categories={categories}

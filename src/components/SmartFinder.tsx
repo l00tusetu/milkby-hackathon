@@ -1,82 +1,139 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Compass, ArrowRight, Check } from 'lucide-react';
+import { Sparkles, ArrowRight, Check, Package } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
-import { runSmartProductMatch } from '../utils/smartMatch';
+import { runSmartSearch } from '../utils/smartMatch';
 import { ImageWithFallback } from './ImageWithFallback';
 
 const SAMPLE_PROMPTS = {
   ru: [
-    'Мне нужен сыр для пиццы',
-    'Мне нужен продукт без лактозы',
-    'Мне нужен продукт с высоким содержанием белка',
-    'Мне нужен сыр для дегустации с вином',
+    'Сыр для пиццы 1 кг',
+    'Продукт без лактозы',
+    'Высокий белок до 5% жира',
+    'Выдержанный сыр к вину',
+    'Для выпечки и кондитерки',
+    'На экспорт с долгим хранением',
   ],
   be: [
-    'Мне патрэбен сыр для піцы',
-    'Мне патрэбен прадукт без лактозы',
-    'Мне патрэбен прадукт з высокім утрыманнем бялку',
-    'Мне патрэбен сыр для дэгустацыі з віном',
+    'Сыр для піцы 1 кг',
+    'Прадукт без лактозы',
+    'Высокі бялок да 5% тлушчу',
+    'Вытрыманы сыр да віна',
+    'Для выпечкі і кандытаркі',
+    'На экспарт з доўгім захоўваннем',
   ],
   en: [
-    'I need cheese for pizza',
-    'I need a lactose-free product',
-    'I need a high-protein dairy product',
-    'I need aged cheese for wine tasting',
+    'Pizza cheese 1kg',
+    'Lactose-free dairy',
+    'High protein under 5% fat',
+    'Aged cheese for wine tasting',
+    'Butter or cream for baking',
+    'Long-shelf export products',
   ],
   zh: [
-    '我需要披萨专用奶酪',
-    '我需要无乳糖乳制品',
-    '我需要高蛋白乳制品',
-    '我需要配葡萄酒的奶酪',
+    '1公斤披萨专用奶酪',
+    '无乳糖乳制品',
+    '高蛋白低脂',
+    '配葡萄酒的陈年奶酪',
+    '烘焙用黄油与淡奶油',
+    '出口长保质期产品',
   ],
 };
 
 export const SmartFinder: React.FC = () => {
   const { t, language, localize } = useLanguage();
-  const { products } = useCatalogStore();
+  const { products, categories } = useCatalogStore();
   const [query, setQuery] = useState('');
 
-  const matches = useMemo(
-    () => runSmartProductMatch(query, products, language),
-                          [query, products, language]
+  const { results, criteria } = useMemo(
+    () => runSmartSearch(query, products, categories, language),
+                                        [query, products, categories, language]
   );
 
+  const matches = results.slice(0, 6);
   const prompts = SAMPLE_PROMPTS[language] || SAMPLE_PROMPTS.ru;
 
+  const copy = {
+    ru: {
+      submit: 'Подобрать',
+      clear: 'Очистить',
+      criteriaLabel: 'Распознанные параметры:',
+      packLabel: 'Рекомендуемая фасовка:',
+      openCatalog: 'Открыть подборку в каталоге',
+      empty: 'Подходящих позиций по этому запросу не найдено. Попробуйте «сыр для пиццы», «без лактозы», «высокий белок» или «масло 82.5».',
+    },
+    be: {
+      submit: 'Падабраць',
+      clear: 'Ачысціць',
+      criteriaLabel: 'Распазнаныя параметры:',
+      packLabel: 'Рэкамендаваная фасоўка:',
+      openCatalog: 'Адкрыць падборку ў каталогу',
+      empty: 'Падыходзячых пазіцый не знойдзена. Паспрабуйце «сыр для піцы», «без лактозы» ці «масла 82.5».',
+    },
+    en: {
+      submit: 'Match',
+      clear: 'Clear',
+      criteriaLabel: 'Understood criteria:',
+      packLabel: 'Best-fit pack:',
+      openCatalog: 'Open results in catalog',
+      empty: 'No exact match found. Try "pizza cheese", "lactose-free", "high protein", or "butter 82.5".',
+    },
+    zh: {
+      submit: '智能匹配',
+      clear: '清空',
+      criteriaLabel: '识别条件:',
+      packLabel: '推荐规格:',
+      openCatalog: '在目录中查看全部结果',
+      empty: '未找到匹配产品，请尝试“披萨奶酪”、“无乳糖”、“高蛋白”或“黄油 82.5”。',
+    },
+  }[language];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) {
+      setQuery(prompts[0]);
+    }
+  };
+
   return (
-    <section className="border border-slate-200 rounded-2xl bg-slate-50/70 p-5 sm:p-8 space-y-5 min-w-0">
+    <section className="border border-slate-200 rounded-2xl bg-slate-50/80 p-5 sm:p-8 space-y-5 min-w-0">
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
     <div className="space-y-1.5">
     <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#0057B8]">
-    <Compass className="w-4 h-4 shrink-0" />
+    <Sparkles className="w-4 h-4 shrink-0" />
     <span>{t('smartFinderTitle')}</span>
     </div>
-    <p className="text-sm text-slate-600 max-w-2xl">
-    {t('smartFinderSubtitle')}
-    </p>
+    <p className="text-sm text-slate-600 max-w-2xl">{t('smartFinderSubtitle')}</p>
     </div>
     </div>
 
-    <div className="flex flex-col sm:flex-row gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
     <input
     type="text"
     value={query}
     onChange={(e) => setQuery(e.target.value)}
     placeholder={t('smartFinderPlaceholder')}
-    className="flex-1 min-w-0 h-11 px-4 text-sm bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/15"
+    className="flex-1 min-w-0 h-11 px-4 text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/15 transition-all"
     />
+    <div className="flex items-center gap-2 shrink-0">
+    <button
+    type="submit"
+    className="h-11 px-5 text-xs font-semibold text-white bg-[#0057B8] rounded-xl hover:bg-[#004494] transition-colors whitespace-nowrap"
+    >
+    {copy.submit}
+    </button>
     {query && (
       <button
       type="button"
       onClick={() => setQuery('')}
-      className="h-11 px-4 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0"
+      className="h-11 px-4 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors whitespace-nowrap"
       >
-      {language === 'ru' ? 'Очистить' : language === 'be' ? 'Ачысціць' : language === 'zh' ? '清空' : 'Clear'}
+      {copy.clear}
       </button>
     )}
     </div>
+    </form>
 
     <div className="flex flex-wrap gap-2">
     {prompts.map((sample) => (
@@ -84,10 +141,10 @@ export const SmartFinder: React.FC = () => {
       key={sample}
       type="button"
       onClick={() => setQuery(sample)}
-      className={`max-w-full px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors text-left leading-snug ${
+      className={`max-w-full px-3.5 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200 text-left leading-snug ${
         query === sample
-        ? 'bg-[#0057B8] text-white border-[#0057B8]'
-        : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:text-slate-900'
+        ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
+        : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
       }`}
       >
       {sample}
@@ -96,20 +153,35 @@ export const SmartFinder: React.FC = () => {
     </div>
 
     {query.trim().length > 0 && (
-      <div className="pt-2">
+      <div className="pt-2 space-y-4">
+      {criteria.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+        <span className="text-slate-500 font-medium">{copy.criteriaLabel}</span>
+        {criteria.map((c) => (
+          <span
+          key={c.id}
+          className="px-2.5 py-1 rounded-md bg-blue-50 text-[#0057B8] border border-blue-200/70 font-medium"
+          >
+          {c.label}
+          </span>
+        ))}
+        </div>
+      )}
+
       {matches.length > 0 ? (
+        <>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {matches.map(({ product, reasons }) => (
+        {matches.map(({ product, reasons, recommendedPackage }) => (
           <Link
           key={product.id}
           to={`/product/${product.slug}`}
-          className="group bg-white border border-slate-200 rounded-xl p-4 flex gap-4 hover:border-[#0057B8]/50 hover:shadow-sm transition-all min-w-0"
+          className="group bg-white border border-slate-200 rounded-xl p-4 flex gap-4 hover:border-[#0057B8]/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 min-w-0"
           >
           <div className="w-20 h-20 rounded-lg bg-slate-50 overflow-hidden shrink-0 border border-slate-100">
           <ImageWithFallback
           src={product.image}
           alt={localize(product.name)}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           </div>
           <div className="min-w-0 flex-1 space-y-1.5">
@@ -127,24 +199,38 @@ export const SmartFinder: React.FC = () => {
             </li>
           ))}
           </ul>
-          <div className="pt-1 text-xs font-medium text-[#0057B8] inline-flex items-center gap-1 flex-wrap">
-          <span>{product.packages.map((p) => p.weight).slice(0, 2).join(' · ')}</span>
-          <ArrowRight className="w-3 h-3 shrink-0" />
+          <div className="pt-1 text-xs font-medium text-[#0057B8] inline-flex items-center gap-1.5 flex-wrap tabular-nums">
+          {recommendedPackage ? (
+            <span className="inline-flex items-center gap-1 bg-blue-50 px-2 py-0.5 rounded text-[11px]">
+            <Package className="w-3 h-3 shrink-0" />
+            {copy.packLabel} {recommendedPackage.weight}
+            </span>
+          ) : (
+            <span>{product.packages.map((p) => p.weight).slice(0, 2).join(' · ')}</span>
+          )}
+          <ArrowRight className="w-3 h-3 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
           </div>
           </div>
           </Link>
         ))}
         </div>
+
+        <div className="flex justify-end">
+        <Link
+        to={`/catalog?q=${encodeURIComponent(query.trim())}`}
+        className="group inline-flex items-center gap-1.5 text-xs font-semibold text-[#0057B8] hover:text-[#004494] transition-colors"
+        >
+        <span>
+        {copy.openCatalog} ({results.length})
+        </span>
+        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+        </Link>
+        </div>
+        </>
       ) : (
         <p className="text-sm text-slate-600 bg-white border border-slate-200 rounded-lg p-4">
-        {language === 'ru'
-          ? 'Подходящих позиций по этому запросу не найдено. Попробуйте «сыр для пиццы», «без лактозы» или «высокий белок».'
-          : language === 'be'
-          ? 'Падыходзячых пазіцый не знойдзена.'
-          : language === 'zh'
-          ? '未找到匹配产品，请尝试“披萨奶酪”、“无乳糖”或“高蛋白”。'
-      : 'No exact match found. Try "pizza cheese", "lactose-free", or "high protein".'}
-      </p>
+        {copy.empty}
+        </p>
       )}
       </div>
     )}

@@ -13,7 +13,7 @@ interface LanguageContextValue {
 }
 
 const STORAGE_LANG_KEY = 'milk_world_lang';
-const STORAGE_TRANS_KEY = 'milk_world_translations_v1';
+const STORAGE_TRANS_KEY = 'milk_world_translations_v2';
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
@@ -78,7 +78,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         ...prev,
         [key]: {
           ...(prev[key] || { ru: '', be: '', en: '', zh: '' }),
-          [lang]: value,
+                    [lang]: value,
         },
       };
       try {
@@ -101,17 +101,17 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   return (
     <LanguageContext.Provider
-      value={{
-        language,
-        setLanguage,
-        t,
-        localize,
-        translations,
-        updateTranslation,
-        resetTranslations,
-      }}
+    value={{
+      language,
+      setLanguage,
+      t,
+      localize,
+      translations,
+      updateTranslation,
+      resetTranslations,
+    }}
     >
-      {children}
+    {children}
     </LanguageContext.Provider>
   );
 };
