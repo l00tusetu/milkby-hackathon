@@ -144,7 +144,15 @@ export const Footer: React.FC = () => {
     </div>
 
     <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-slate-500">
-    <span>© 2026 ОАО «Молочный Мир» (milk.by)</span>
+    <span>
+      {language === 'ru'
+        ? '© 2026 ОАО «Молочный Мир» (milk.by)'
+        : language === 'be'
+        ? '© 2026 ААТ «Малочны Мір» (milk.by)'
+        : language === 'zh'
+        ? '© 2026 Molochny Mir 股份公司 (milk.by)'
+    : '© 2026 Molochny Mir JSC (milk.by)'}
+    </span>
     <span>FSSC 22000 · ISO 9001 · HACCP</span>
     </div>
     </div>

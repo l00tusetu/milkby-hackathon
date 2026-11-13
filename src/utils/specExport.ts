@@ -77,7 +77,7 @@ export function generateXmlSitemap(
       `  <url>\n    <loc>${baseUrl}/#${path || '/'}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${
         path === '' ? '1.0' : '0.8'
       }</priority>\n    ${langs
-        .map((l) => `<xhtml:link rel="alternate" hreflang="${l}" href="${baseUrl}/${l}/#${path || '/'}" />`)
+        .map((l) => `<xhtml:link rel="alternate" hreflang="${l}" href="${baseUrl}/#/${l}${path}" />`)
         .join('\n    ')}\n  </url>`
     );
   }

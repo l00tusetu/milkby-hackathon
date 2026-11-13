@@ -14,8 +14,21 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
   const { t, localize, language } = useLanguage();
   const { products, categories } = useCatalogStore();
   const [focused, setFocused] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState(value);
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedQuery(value);
+    }, 180);
+    return () => window.clearTimeout(timer);
+  }, [value]);
+
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [debouncedQuery]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -28,7 +41,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
   }, []);
 
   const suggestions = useMemo(() => {
-    const q = value.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return [];
     return products
     .filter((p) => p.visible)
@@ -49,20 +62,43 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
         cat?.name.zh || '',
         p.packages.map((pkg) => pkg.weight).join(' '),
             p.useCases.join(' '),
+            ...Object.values(p.characteristics).flatMap((c) => [c.ru, c.be, c.en, c.zh]),
       ]
+      .filter(Boolean)
       .join(' ')
       .toLowerCase();
       return searchIndex.includes(q);
     })
     .slice(0, 6);
-  }, [value, products, categories]);
+  }, [debouncedQuery, products, categories]);
+
+  const showDropdown = focused && debouncedQuery.trim().length > 0;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
       setFocused(false);
+      setActiveIndex(-1);
+      return;
+    }
+    if (e.key === 'ArrowDown' && suggestions.length > 0) {
+      e.preventDefault();
+      setFocused(true);
+      setActiveIndex((prev) => (prev + 1) % suggestions.length);
+      return;
+    }
+    if (e.key === 'ArrowUp' && suggestions.length > 0) {
+      e.preventDefault();
+      setFocused(true);
+      setActiveIndex((prev) => (prev <= 0 ? suggestions.length - 1 : prev - 1));
       return;
     }
     if (e.key === 'Enter') {
+      if (activeIndex >= 0 && suggestions[activeIndex]) {
+        e.preventDefault();
+        setFocused(false);
+        navigate(`/product/${suggestions[activeIndex].slug}`);
+        return;
+      }
       setFocused(false);
       if (onSubmitSearch) {
         onSubmitSearch(value.trim());
@@ -70,12 +106,27 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
     }
   };
 
+  const emptyMessage = {
+    ru: 'Прямых совпадений не найдено — попробуйте «Умный подбор».',
+    be: 'Прамых супадзенняў не знойдзена — паспрабуйце «Разумны падбор».',
+    en: 'No direct matches — try the Smart Product Matcher.',
+    zh: '未找到直接匹配产品 — 请尝试智能选品助手。',
+  }[language];
+
   return (
     <div ref={containerRef} className="relative w-full min-w-0">
     <div className="relative flex items-center">
     <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
     <input
     type="text"
+    role="combobox"
+    aria-expanded={showDropdown}
+    aria-controls="search-suggestions-listbox"
+    aria-activedescendant={
+      activeIndex >= 0 && suggestions[activeIndex]
+      ? `search-option-${suggestions[activeIndex].id}`
+      : undefined
+    }
     value={value}
     onChange={(e) => {
       onChange(e.target.value);
@@ -92,6 +143,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
       type="button"
       onClick={() => {
         onChange('');
+        setDebouncedQuery('');
+        setActiveIndex(-1);
         setFocused(false);
       }}
       aria-label="Clear search"
@@ -102,21 +155,30 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
     )}
     </div>
 
-    {focused && value.trim().length > 0 && (
+    {showDropdown && (
       <div className="absolute left-0 right-0 top-full mt-1.5 z-30 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
       {suggestions.length > 0 ? (
-        <ul className="divide-y divide-slate-100" role="listbox">
-        {suggestions.map((item) => {
+        <ul id="search-suggestions-listbox" className="divide-y divide-slate-100" role="listbox">
+        {suggestions.map((item, idx) => {
           const cat = categories.find((c) => c.id === item.category);
+          const isActive = idx === activeIndex;
           return (
-            <li key={item.id}>
+            <li
+            key={item.id}
+            id={`search-option-${item.id}`}
+            role="option"
+            aria-selected={isActive}
+            >
             <button
             type="button"
+            onMouseEnter={() => setActiveIndex(idx)}
             onClick={() => {
               setFocused(false);
               navigate(`/product/${item.slug}`);
             }}
-            className="w-full px-4 py-3 text-left flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+            className={`w-full px-4 py-3 text-left flex items-center justify-between gap-4 transition-colors ${
+              isActive ? 'bg-blue-50/80' : 'hover:bg-slate-50'
+            }`}
             >
             <div className="min-w-0">
             <div className="text-sm font-medium text-slate-900 truncate">
@@ -141,15 +203,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
         })}
         </ul>
       ) : (
-        <div className="px-4 py-3 text-xs text-slate-500">
-        {language === 'ru'
-          ? 'Прямых совпадений не найдено — попробуйте «Умный подбор».'
-          : language === 'be'
-          ? 'Прамых супадзенняў не знойдзена.'
-          : language === 'zh'
-          ? '未找到直接匹配产品 — 请尝试智能选品助手。'
-      : 'No direct matches — try the Smart Product Matcher.'}
-      </div>
+        <div className="px-4 py-3 text-xs text-slate-500">{emptyMessage}</div>
       )}
       </div>
     )}

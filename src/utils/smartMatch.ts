@@ -51,6 +51,31 @@ const REASON_LABELS: Record<string, Record<Language, string>> = {
   },
 };
 
+function extractSearchTokens(q: string): string[] {
+  const tokens = new Set<string>();
+
+  // Latin, Cyrillic, numbers & percentages (2+ chars so "5%", "СО", etc. work)
+  const wordMatches = q.match(/[a-zа-яёіў0-9%.-]{2,}/gi) || [];
+  for (const w of wordMatches) {
+    tokens.add(w.toLowerCase());
+  }
+
+  // CJK contiguous runs: keep 2-char words intact and split longer runs into bigrams
+  const cjkRuns = q.match(/[\u4e00-\u9fff]+/g) || [];
+  for (const run of cjkRuns) {
+    if (run.length <= 2) {
+      tokens.add(run);
+    } else {
+      tokens.add(run);
+      for (let i = 0; i <= run.length - 2; i++) {
+        tokens.add(run.slice(i, i + 2));
+      }
+    }
+  }
+
+  return Array.from(tokens);
+}
+
 export function runSmartProductMatch(
   query: string,
   products: Product[],
@@ -62,12 +87,13 @@ export function runSmartProductMatch(
   const visibleProducts = products.filter((p) => p.visible);
 
   const wantsPizza = /пицц|pizza|піц|披萨|запек|плав/i.test(q);
-  const wantsLactoseFree = /без лактоз|lactose|лактоз|безлактоз|无乳糖/i.test(q);
+  const wantsLactoseFree = /без\s*лактоз|lactose|безлактоз|无乳糖|零乳糖/i.test(q);
   const wantsHighProtein = /белок|белк|протеин|protein|бялк|спорт|高蛋白|蛋白/i.test(q);
-  const wantsWine = /вин|wine|дегустац|сырн.*тарел|сыр.*вин|він|葡萄酒|品鉴/i.test(q);
-  const wantsBaking = /выпеч|кондитер|торт|крем|pastry|bak|круассан|烘焙/i.test(q);
-  const wantsExport = /экспорт|опт|horeca|export|b2b|мешк|25 кг|20 кг|出口/i.test(q);
+  const wantsWine = /вин|wine|дегустац|сырн.*тарел|сыр.*вин|він|葡萄酒|红酒|品鉴/i.test(q);
+  const wantsBaking = /выпеч|кондитер|кандытар|торт|крем|pastry|bak|круассан|烘焙|甜点/i.test(q);
+  const wantsExport = /экспорт|экспарт|опт|аптов|horeca|export|b2b|мешк|мяшк|25\s*кг|20\s*кг|出口|大宗/i.test(q);
 
+  const tokens = extractSearchTokens(q);
   const results: SmartMatchResult[] = [];
 
   for (const product of visibleProducts) {
@@ -82,9 +108,16 @@ export function runSmartProductMatch(
       score += product.id === 'milk-lactose-free' ? 65 : 50;
       reasons.push(REASON_LABELS.lactoseFree[language]);
     }
-    if (wantsHighProtein && ((product.proteinContent ?? 0) >= 8 || product.useCases.includes('high-protein'))) {
+    if (
+      wantsHighProtein &&
+      ((product.proteinContent ?? 0) >= 8 || product.useCases.includes('high-protein'))
+    ) {
       score += (product.proteinContent ?? 0) >= 15 ? 55 : 40;
-      reasons.push(`${REASON_LABELS.highProtein[language]} (${product.proteinContent} g / 100g)`);
+      reasons.push(
+        `${REASON_LABELS.highProtein[language]} (${product.proteinContent ?? 0} ${
+          language === 'ru' || language === 'be' ? 'г' : 'g'
+        } / 100${language === 'ru' || language === 'be' ? 'г' : 'g'})`
+      );
     }
     if (wantsWine && product.useCases.includes('wine')) {
       score += 60;
@@ -105,20 +138,32 @@ export function runSmartProductMatch(
       product.name.en,
       product.name.zh,
       product.description.ru,
+      product.description.be,
       product.description.en,
+      product.description.zh,
       product.category,
-      ...Object.values(product.characteristics).flatMap((c) => Object.values(c)),
+      product.subcategory,
+      product.packages.map((p) => p.weight).join(' '),
+      product.useCases.join(' '),
+      ...Object.values(product.characteristics).flatMap((c) => [c.ru, c.be, c.en, c.zh]),
     ]
-      .join(' ')
-      .toLowerCase();
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
 
-    const tokens = q.split(/\s+/).filter((t) => t.length > 2);
+    if (haystack.includes(q)) {
+      score += 40;
+      if (reasons.length === 0) {
+        reasons.push(REASON_LABELS.textMatch[language]);
+      }
+    }
+
     let tokenHits = 0;
     for (const token of tokens) {
       if (haystack.includes(token)) tokenHits++;
     }
     if (tokenHits > 0) {
-      score += tokenHits * 18;
+      score += tokenHits * 15;
       if (reasons.length === 0) {
         reasons.push(REASON_LABELS.textMatch[language]);
       }

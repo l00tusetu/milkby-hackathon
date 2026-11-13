@@ -30,8 +30,24 @@ export const Product: React.FC = () => {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-4">
       <SeoHead
-      title={`Товар не найден — ${t('brandName')}`}
-      description="Запрошенный продукт не найден в каталоге."
+      title={`${
+        language === 'ru'
+        ? 'Товар не найден'
+        : language === 'be'
+        ? 'Тавар не знойдзены'
+        : language === 'zh'
+        ? '未找到产品'
+        : 'Product not found'
+      } — ${t('brandName')}`}
+      description={
+        language === 'ru'
+        ? 'Запрошенный продукт не найден в каталоге.'
+        : language === 'be'
+        ? 'Запытаны прадукт не знойдзены ў каталогу.'
+        : language === 'zh'
+        ? '未在目录中找到所请求的产品。'
+        : 'Requested product was not found in the catalog.'
+      }
       />
       <h1 className="font-display text-2xl font-bold text-slate-900">
       {language === 'ru'
