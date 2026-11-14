@@ -3,6 +3,7 @@ import { Plus, Eye, EyeOff, Trash2, RotateCcw, Edit3, Check, Upload, Download } 
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { ASSETS } from '../data/assets';
+import { apiClient } from '../utils/apiClient';
 import { Category, Language, NewsArticle, PackageVariant, Product, RedirectRule } from '../types';
 import { SeoHead } from '../components/SeoHead';
 
@@ -40,11 +41,15 @@ export const Admin: React.FC = () => {
     deleteNews,
     addRedirect,
     deleteRedirect,
+    inquiries,
+    apiConnected,
+    refreshFromServer,
+    refreshInquiries,
     resetDemoData,
   } = useCatalogStore();
 
   const [activeTab, setActiveTab] = useState<
-  'products' | 'categories' | 'news' | 'redirects' | 'translations'
+  'products' | 'categories' | 'news' | 'redirects' | 'translations' | 'inquiries'
   >('products');
   const [editLang, setEditLang] = useState<Language>(language);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -93,7 +98,7 @@ export const Admin: React.FC = () => {
 
   // Add Redirect Form State
   const [redirFrom, setRedirFrom] = useState('');
-  const [redirTo, setRedirTo] = useState('#/catalog');
+  const [redirTo, setRedirTo] = useState('/ru/catalog');
   const [redirNote, setRedirNote] = useState('');
 
   const copy = {
@@ -242,8 +247,17 @@ export const Admin: React.FC = () => {
     });
   }, [products, categories, news, translations]);
 
-  const handleImageUpload = (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
+  const handleImageUpload = async (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
     if (!file) return;
+    if (apiConnected) {
+      try {
+        const res = await apiClient.uploadMedia(file);
+        onLoaded(res.url);
+        return;
+      } catch {
+        // fallback to base64 if upload fails
+      }
+    }
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === 'string') {
@@ -355,9 +369,20 @@ export const Admin: React.FC = () => {
     });
   };
 
-  const handleImportCatalogFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImportCatalogFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (apiConnected) {
+      try {
+        const res = await apiClient.importProductsFile(file);
+        await refreshFromServer();
+        setImportStatus(`DB: +${res.created} / upd ${res.updated}`);
+        e.target.value = '';
+        return;
+      } catch {
+        // fallback to local parse
+      }
+    }
     const reader = new FileReader();
     reader.onload = () => {
       try {
@@ -532,12 +557,18 @@ export const Admin: React.FC = () => {
     <SeoHead
     title={`${t('adminTitle')} — ${t('brandName')}`}
     description={copy.subtitle}
-    canonicalHash="/admin"
+    noIndex
+        canonicalPath="/admin"
     />
 
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
     <div>
-    <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">{t('adminTitle')}</h1>
+    <div className="flex flex-wrap items-center gap-2.5">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">{t('adminTitle')}</h1>
+            <span className={`px-2.5 py-0.5 text-[11px] font-mono rounded-full border ${apiConnected ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
+              {apiConnected ? 'PostgreSQL API' : 'Offline Mode'}
+            </span>
+          </div>
     <p className="text-sm text-slate-600 mt-1">{copy.subtitle}</p>
     </div>
 
@@ -564,12 +595,13 @@ export const Admin: React.FC = () => {
       ['news', copy.tabNews],
       ['redirects', copy.tabRedirects],
       ['translations', copy.tabTranslations],
+      ['inquiries', `B2B (${inquiries.length})`],
       ] as const
     ).map(([tabKey, label]) => (
       <button
       key={tabKey}
       type="button"
-      onClick={() => setActiveTab(tabKey)}
+      onClick={() => { setActiveTab(tabKey); if (tabKey === 'inquiries') refreshInquiries(); }}
       className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
         activeTab === tabKey ? 'bg-white text-[#0057B8] shadow-xs' : 'text-slate-600 hover:text-slate-900'
       }`}
@@ -1522,6 +1554,62 @@ export const Admin: React.FC = () => {
       )}
       </div>
     )}
-    </div>
+  
+    {/* TAB 6: B2B INQUIRIES */}
+    {activeTab === 'inquiries' && (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-lg font-semibold text-slate-900">B2B & Export Inquiries ({inquiries.length})</h2>
+          <button
+            type="button"
+            onClick={() => refreshInquiries()}
+            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200"
+          >
+            Refresh
+          </button>
+        </div>
+        <div className="border border-slate-200 rounded-xl overflow-x-auto bg-white">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 font-semibold text-slate-600">
+                <th className="py-3 px-4">Company / Contact</th>
+                <th className="py-3 px-4">Channel</th>
+                <th className="py-3 px-4">Country / Volume</th>
+                <th className="py-3 px-4">Message</th>
+                <th className="py-3 px-4">Created</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              {inquiries.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-slate-500">
+                    No submitted B2B inquiries yet. Submit one via product card, Export, or Contacts form.
+                  </td>
+                </tr>
+              ) : (
+                inquiries.map((inq, idx) => (
+                  <tr key={inq.id || idx}>
+                    <td className="py-3 px-4">
+                      <div className="font-semibold text-slate-900">{inq.company}</div>
+                      <div className="text-slate-600">{inq.contactName} · {inq.email}</div>
+                    </td>
+                    <td className="py-3 px-4 font-mono text-[#0057B8] uppercase">{inq.channel}</td>
+                    <td className="py-3 px-4 text-slate-700">
+                      <div>{inq.country || '—'}</div>
+                      <div className="text-slate-500">{inq.volume || '—'}</div>
+                    </td>
+                    <td className="py-3 px-4 text-slate-700 max-w-xs">{inq.message}</td>
+                    <td className="py-3 px-4 font-mono text-slate-500">
+                      {inq.createdAt ? inq.createdAt.slice(0, 16).replace('T', ' ') : '—'}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )}
+  </div>
   );
 };

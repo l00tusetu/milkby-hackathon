@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, X, ArrowRight, Calendar, Newspaper } from 'lucide-react';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { NEWS_CATEGORY_LABELS } from '../data/news';
 import { NewsCategoryId } from '../types';
@@ -21,6 +21,7 @@ const NEWS_CATEGORIES: {
 
 export const News: React.FC = () => {
   const { language, localize, t } = useLanguage();
+  const lp = useLocalizedPath();
   const { news } = useCatalogStore();
 
   const [query, setQuery] = useState('');
@@ -150,7 +151,7 @@ export const News: React.FC = () => {
     <SeoHead
     title={`${t('navNews')} — ${t('brandName')} (milk.by)`}
     description={copy.seoDesc}
-    canonicalHash="/news"
+    canonicalPath="/news"
     />
 
     {/* Заголовок и счётчик */}
@@ -259,7 +260,7 @@ export const News: React.FC = () => {
       {/* Выделенная последняя / главная новость */}
       {featuredArticle && (
         <Link
-        to={`/news/${featuredArticle.slug}`}
+        to={lp(`/news/${featuredArticle.slug}`)}
         className="group grid grid-cols-1 lg:grid-cols-12 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:border-[#0057B8]/45 hover:shadow-xl transition-all duration-200"
         >
         <div className="lg:col-span-7 relative aspect-[16/10] lg:aspect-auto lg:min-h-[360px] bg-slate-100 overflow-hidden">
@@ -318,7 +319,7 @@ export const News: React.FC = () => {
         {restArticles.map((article) => (
           <Link
           key={article.id}
-          to={`/news/${article.slug}`}
+          to={lp(`/news/${article.slug}`)}
           className="group bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col hover:border-[#0057B8]/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 ease-out"
           >
           <div className="aspect-[16/10] bg-slate-50 overflow-hidden border-b border-slate-100">

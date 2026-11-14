@@ -17,3 +17,22 @@ export const ASSETS = {
   productIceCream,
   newsDairyFacility,
 } as const;
+
+const ASSET_KEY_MAP: Record<string, string> = {
+  'asset:heroDairyShowcase': heroDairyShowcase,
+  'asset:productMozzarella': productMozzarella,
+  'asset:productAgedCheese': productAgedCheese,
+  'asset:productMilkKefir': productMilkKefir,
+  'asset:productButterCream': productButterCream,
+  'asset:productGreekYogurt': productGreekYogurt,
+  'asset:productIceCream': productIceCream,
+  'asset:newsDairyFacility': newsDairyFacility,
+};
+
+export function resolveAssetUrl(src: string | undefined | null): string {
+  if (!src) return '';
+  if (src in ASSET_KEY_MAP) {
+    return ASSET_KEY_MAP[src];
+  }
+  return src;
+}

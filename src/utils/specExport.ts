@@ -1,10 +1,29 @@
 import { Category, Language, NewsArticle, Product } from '../types';
 
-export function downloadProductB2BSpec(
+export async function downloadProductB2BSpec(
   product: Product,
   category: Category | undefined,
   language: Language
-): void {
+): Promise<void> {
+  const pdfUrl = `/api/v1/products/${encodeURIComponent(product.slug)}/spec.pdf?lang=${language}`;
+  try {
+    const res = await fetch(pdfUrl);
+    if (res.ok && res.headers.get('content-type')?.includes('application/pdf')) {
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `molochny-mir-${product.slug}-spec-${language}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      return;
+    }
+  } catch {
+    // Fallback when running pure static frontend without backend
+  }
+
   const name = product.name[language] || product.name.ru;
   const desc = product.description[language] || product.description.ru;
   const catName = category ? category.name[language] || category.name.ru : product.category;
@@ -18,9 +37,9 @@ export function downloadProductB2BSpec(
     '',
     `PRODUCT: ${name}`,
     `CATEGORY: ${catName}`,
-    `PRODUCT ID / SLUG: ${product.id} (/${product.slug})`,
-    `FAT CONTENT: ${product.fatContent !== undefined ? `${product.fatContent}%` : 'N/A'}`,
-    `PROTEIN CONTENT: ${product.proteinContent !== undefined ? `${product.proteinContent} g / 100g` : 'N/A'}`,
+    `PRODUCT ID / SLUG: ${product.id} (/${language}/product/${product.slug})`,
+    `FAT CONTENT: ${product.fatContent !== undefined && product.fatContent !== null ? `${product.fatContent}%` : 'N/A'}`,
+    `PROTEIN CONTENT: ${product.proteinContent !== undefined && product.proteinContent !== null ? `${product.proteinContent} g / 100g` : 'N/A'}`,
     `LACTOSE FREE: ${product.lactoseFree ? 'Yes (<0.01%)' : 'No (Natural dairy lactose)'}`,
     `EXPORT READY: ${product.exportReady ? 'Yes (Certified)' : 'Domestic / Regional'}`,
     '',
@@ -68,36 +87,33 @@ export function generateXmlSitemap(
   baseUrl = 'https://milk.by'
 ): string {
   const langs: Language[] = ['ru', 'be', 'en', 'zh'];
-  const staticPaths = ['', '/catalog', '/export', '/partners', '/news', '/about', '/contacts'];
-
+  const staticPaths = ['/', '/catalog', '/export', '/partners', '/news', '/about', '/contacts'];
   const urls: string[] = [];
 
+  const pushMultilang = (subPath: string, priority: string, changefreq: string, lastmod?: string) => {
+    const altLines = [
+      ...langs.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${baseUrl}/${l}${subPath}" />`),
+      `    <xhtml:link rel="alternate" hreflang="x-default" href="${baseUrl}/ru${subPath}" />`,
+    ].join('\n');
+    const lm = lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : '';
+    for (const lang of langs) {
+      urls.push(
+        `  <url>\n    <loc>${baseUrl}/${lang}${subPath}</loc>${lm}\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n${altLines}\n  </url>`
+      );
+    }
+  };
+
   for (const path of staticPaths) {
-    urls.push(
-      `  <url>\n    <loc>${baseUrl}/#${path || '/'}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${
-        path === '' ? '1.0' : '0.8'
-      }</priority>\n    ${langs
-        .map((l) => `<xhtml:link rel="alternate" hreflang="${l}" href="${baseUrl}/#/${l}${path}" />`)
-        .join('\n    ')}\n  </url>`
-    );
+    pushMultilang(path, path === '/' ? '1.0' : '0.8', 'weekly');
   }
-
   for (const cat of categories) {
-    urls.push(
-      `  <url>\n    <loc>${baseUrl}/#/catalog/${cat.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`
-    );
+    pushMultilang(`/catalog/${cat.slug}`, '0.85', 'weekly');
   }
-
   for (const prod of products.filter((p) => p.visible)) {
-    urls.push(
-      `  <url>\n    <loc>${baseUrl}/#/product/${prod.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`
-    );
+    pushMultilang(`/product/${prod.slug}`, '0.9', 'weekly');
   }
-
   for (const item of news.filter((n) => n.published)) {
-    urls.push(
-      `  <url>\n    <loc>${baseUrl}/#/news/${item.slug}</loc>\n    <lastmod>${item.date}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`
-    );
+    pushMultilang(`/news/${item.slug}`, '0.7', 'monthly', item.date);
   }
 
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join(

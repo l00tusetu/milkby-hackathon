@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, ArrowUpRight, Phone, Clock } from 'lucide-react';
-import { useLanguage } from '../../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../../hooks/useLanguage';
 
 interface PlantLocation {
   id: string;
@@ -143,6 +143,7 @@ const LOCATIONS: PlantLocation[] = [
 ];
 
 export const HomeLocationsSection: React.FC = () => {
+  const lp = useLocalizedPath();
   const { language } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -356,7 +357,7 @@ export const HomeLocationsSection: React.FC = () => {
     </span>
     </div>
     <Link
-    to="/contacts"
+    to={lp("/contacts")}
     className="inline-flex items-center gap-1 text-xs font-semibold text-[#0057B8] hover:text-[#004494] whitespace-nowrap shrink-0"
     >
     <span>{copy.allContacts}</span>

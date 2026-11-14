@@ -13,7 +13,7 @@ import {
   ArrowUpRight,
   Snowflake,
 } from 'lucide-react';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { SeoHead } from '../components/SeoHead';
 import { ImageWithFallback } from '../components/ImageWithFallback';
@@ -23,6 +23,7 @@ import { Product } from '../types';
 
 export const Export: React.FC = () => {
   const { language, localize, t } = useLanguage();
+  const lp = useLocalizedPath();
   const { products, categories } = useCatalogStore();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
@@ -295,7 +296,7 @@ export const Export: React.FC = () => {
     <SeoHead
     title={`${copy.title} — ${t('brandName')}`}
     description={copy.subtitle}
-    canonicalHash="/export"
+    canonicalPath="/export"
     />
 
     {/* 1. Architectural Hero + Direct Export Desk */}
@@ -334,14 +335,14 @@ export const Export: React.FC = () => {
 
     <div className="flex flex-wrap gap-3 pt-1">
     <Link
-    to="/catalog"
+    to={lp("/catalog")}
     className="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-900 bg-white rounded-xl hover:bg-blue-50 transition-colors"
     >
     <span>{copy.browseCatalog}</span>
     <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
     </Link>
     <Link
-    to="/partners"
+    to={lp("/partners")}
     className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-white/12 border border-white/25 rounded-xl hover:bg-white/20 transition-colors"
     >
     <span>{t('navPartners')}</span>
@@ -480,7 +481,7 @@ export const Export: React.FC = () => {
         </div>
         <div className="min-w-0">
         <Link
-        to={`/product/${prod.slug}`}
+        to={lp(`/product/${prod.slug}`)}
         className="inline-flex items-center gap-1 font-semibold text-slate-900 hover:text-[#0057B8]"
         >
         <span>{localize(prod.name)}</span>

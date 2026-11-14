@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, ArrowRight, Sparkles } from 'lucide-react';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { runSmartSearch } from '../utils/smartMatch';
 import { ImageWithFallback } from './ImageWithFallback';
@@ -14,6 +14,7 @@ interface SearchBarProps {
 
 export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitSearch }) => {
   const { t, localize, language } = useLanguage();
+  const lp = useLocalizedPath();
   const { products, categories } = useCatalogStore();
   const [focused, setFocused] = useState(false);
   const [debouncedQuery, setDebouncedQuery] = useState(value);
@@ -44,7 +45,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
 
   const searchResponse = useMemo(
     () => runSmartSearch(debouncedQuery, products, categories, language),
-                                 [debouncedQuery, products, categories, language]
+    [debouncedQuery, products, categories, language]
   );
 
   const suggestions = searchResponse.results.slice(0, 6);
@@ -72,7 +73,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
       if (activeIndex >= 0 && suggestions[activeIndex]) {
         e.preventDefault();
         setFocused(false);
-        navigate(`/product/${suggestions[activeIndex].product.slug}`);
+        navigate(lp(`/product/${suggestions[activeIndex].product.slug}`));
         return;
       }
       setFocused(false);
@@ -107,148 +108,148 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
 
   return (
     <div ref={containerRef} className="relative w-full min-w-0">
-    <div className="relative flex items-center">
-    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
-    <input
-    type="text"
-    role="combobox"
-    aria-expanded={showDropdown}
-    aria-controls="search-suggestions-listbox"
-    aria-activedescendant={
-      activeIndex >= 0 && suggestions[activeIndex]
-      ? `search-option-${suggestions[activeIndex].product.id}`
-      : undefined
-    }
-    value={value}
-    onChange={(e) => {
-      onChange(e.target.value);
-      setFocused(true);
-    }}
-    onFocus={() => setFocused(true)}
-    onKeyDown={handleKeyDown}
-    placeholder={t('searchPlaceholder')}
-    aria-label={t('searchPlaceholder')}
-    className="w-full h-12 pl-10 pr-10 text-base sm:text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/20 transition-all duration-200"
-    />
-    {value && (
-      <button
-      type="button"
-      onClick={() => {
-        onChange('');
-        setDebouncedQuery('');
-        setActiveIndex(-1);
-        setFocused(false);
-      }}
-      aria-label="Clear search"
-      className="absolute right-2.5 w-7 h-7 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-      >
-      <X className="w-4 h-4" />
-      </button>
-    )}
-    </div>
-
-    {showDropdown && (
-      <div className="absolute left-0 right-0 top-full mt-2 z-30 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[60vh] overflow-y-auto overscroll-contain">
-      {searchResponse.criteria.length > 0 && suggestions.length > 0 && (
-        <div className="px-4 py-2 bg-blue-50/70 border-b border-blue-100 flex flex-wrap items-center gap-1.5 text-xs">
-        <span className="inline-flex items-center gap-1 font-semibold text-[#0057B8]">
-        <Sparkles className="w-3.5 h-3.5 shrink-0" />
-        {copy.smartHint}
-        </span>
-        {searchResponse.criteria.map((c) => (
-          <span
-          key={c.id}
-          className="px-2 py-0.5 rounded-md bg-white border border-blue-200/80 text-slate-700 font-medium"
-          >
-          {c.label}
-          </span>
-        ))}
-        </div>
-      )}
-
-      {suggestions.length > 0 ? (
-        <>
-        <ul id="search-suggestions-listbox" className="divide-y divide-slate-100" role="listbox">
-        {suggestions.map(({ product: item, recommendedPackage }, idx) => {
-          const cat = categories.find((c) => c.id === item.category);
-          const isActive = idx === activeIndex;
-          return (
-            <li
-            key={item.id}
-            id={`search-option-${item.id}`}
-            role="option"
-            aria-selected={isActive}
-            >
-            <button
-            type="button"
-            onMouseEnter={() => setActiveIndex(idx)}
-            onClick={() => {
-              setFocused(false);
-              navigate(`/product/${item.slug}`);
-            }}
-            className={`w-full px-4 py-2.5 text-left flex items-center justify-between gap-3 transition-colors duration-150 ${
-              isActive ? 'bg-blue-50/80' : 'hover:bg-slate-50'
-            }`}
-            >
-            <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200/80 shrink-0">
-            <ImageWithFallback
-            src={item.image}
-            alt={localize(item.name)}
-            className="w-full h-full object-cover"
-            />
-            </div>
-            <div className="min-w-0">
-            <div className="text-sm font-medium text-slate-900 truncate">
-            {localize(item.name)}
-            </div>
-            <div className="text-xs text-slate-500 flex flex-wrap items-center gap-1.5 tabular-nums">
-            <span className="text-[#0057B8] font-medium">
-            {cat ? localize(cat.name) : item.category}
-            </span>
-            {item.fatContent !== undefined && (
-              <>
-              <span aria-hidden="true">·</span>
-              <span>{item.fatContent}%</span>
-              </>
-            )}
-            <span aria-hidden="true">·</span>
-            <span>
-            {recommendedPackage
-              ? recommendedPackage.weight
-              : item.packages.map((p) => p.weight).join(', ')}
-              </span>
-              </div>
-              </div>
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 shrink-0" />
-              </button>
-              </li>
-          );
-        })}
-        </ul>
-
-        {onSubmitSearch && (
-          <button
-          type="button"
-          onClick={() => {
-            setFocused(false);
-            onSubmitSearch(value.trim());
+      <div className="relative flex items-center">
+        <Search className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+        <input
+          type="text"
+          role="combobox"
+          aria-expanded={showDropdown}
+          aria-controls="search-suggestions-listbox"
+          aria-activedescendant={
+            activeIndex >= 0 && suggestions[activeIndex]
+              ? `search-option-${suggestions[activeIndex].product.id}`
+              : undefined
+          }
+          value={value}
+          onChange={(e) => {
+            onChange(e.target.value);
+            setFocused(true);
           }}
-          className="w-full px-4 py-2.5 text-xs font-semibold text-[#0057B8] bg-slate-50 hover:bg-blue-50/70 border-t border-slate-100 flex items-center justify-between transition-colors"
+          onFocus={() => setFocused(true)}
+          onKeyDown={handleKeyDown}
+          placeholder={t('searchPlaceholder')}
+          aria-label={t('searchPlaceholder')}
+          className="w-full h-12 pl-10 pr-10 text-base sm:text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/20 transition-all duration-200"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => {
+              onChange('');
+              setDebouncedQuery('');
+              setActiveIndex(-1);
+              setFocused(false);
+            }}
+            aria-label="Clear search"
+            className="absolute right-2.5 w-7 h-7 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
-          <span>
-          {copy.allResults} ({searchResponse.results.length})
-          </span>
-          <ArrowRight className="w-3.5 h-3.5" />
+            <X className="w-4 h-4" />
           </button>
         )}
-        </>
-      ) : (
-        <div className="px-4 py-3.5 text-xs text-slate-500">{copy.empty}</div>
-      )}
       </div>
-    )}
+
+      {showDropdown && (
+        <div className="absolute left-0 right-0 top-full mt-2 z-30 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[60vh] overflow-y-auto overscroll-contain">
+          {searchResponse.criteria.length > 0 && suggestions.length > 0 && (
+            <div className="px-4 py-2 bg-blue-50/70 border-b border-blue-100 flex flex-wrap items-center gap-1.5 text-xs">
+              <span className="inline-flex items-center gap-1 font-semibold text-[#0057B8]">
+                <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                {copy.smartHint}
+              </span>
+              {searchResponse.criteria.map((c) => (
+                <span
+                  key={c.id}
+                  className="px-2 py-0.5 rounded-md bg-white border border-blue-200/80 text-slate-700 font-medium"
+                >
+                  {c.label}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {suggestions.length > 0 ? (
+            <>
+              <ul id="search-suggestions-listbox" className="divide-y divide-slate-100" role="listbox">
+                {suggestions.map(({ product: item, recommendedPackage }, idx) => {
+                  const cat = categories.find((c) => c.id === item.category);
+                  const isActive = idx === activeIndex;
+                  return (
+                    <li
+                      key={item.id}
+                      id={`search-option-${item.id}`}
+                      role="option"
+                      aria-selected={isActive}
+                    >
+                      <button
+                        type="button"
+                        onMouseEnter={() => setActiveIndex(idx)}
+                        onClick={() => {
+                          setFocused(false);
+                          navigate(lp(`/product/${item.slug}`));
+                        }}
+                        className={`w-full px-4 py-2.5 text-left flex items-center justify-between gap-3 transition-colors duration-150 ${
+                          isActive ? 'bg-blue-50/80' : 'hover:bg-slate-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200/80 shrink-0">
+                            <ImageWithFallback
+                              src={item.image}
+                              alt={localize(item.name)}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-sm font-medium text-slate-900 truncate">
+                              {localize(item.name)}
+                            </div>
+                            <div className="text-xs text-slate-500 flex flex-wrap items-center gap-1.5 tabular-nums">
+                              <span className="text-[#0057B8] font-medium">
+                                {cat ? localize(cat.name) : item.category}
+                              </span>
+                              {item.fatContent !== undefined && item.fatContent !== null && (
+                                <>
+                                  <span aria-hidden="true">·</span>
+                                  <span>{item.fatContent}%</span>
+                                </>
+                              )}
+                              <span aria-hidden="true">·</span>
+                              <span>
+                                {recommendedPackage
+                                  ? recommendedPackage.weight
+                                  : item.packages.map((p) => p.weight).join(', ')}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-slate-400 shrink-0" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {onSubmitSearch && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFocused(false);
+                    onSubmitSearch(value.trim());
+                  }}
+                  className="w-full px-4 py-2.5 text-xs font-semibold text-[#0057B8] bg-slate-50 hover:bg-blue-50/70 border-t border-slate-100 flex items-center justify-between transition-colors"
+                >
+                  <span>
+                    {copy.allResults} ({searchResponse.results.length})
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </>
+          ) : (
+            <div className="px-4 py-3.5 text-xs text-slate-500">{copy.empty}</div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

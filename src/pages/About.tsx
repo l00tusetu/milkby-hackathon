@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../hooks/useLanguage';
 import { ASSETS } from '../data/assets';
 import { SeoHead } from '../components/SeoHead';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 
 export const About: React.FC = () => {
   const { language, t } = useLanguage();
+  const lp = useLocalizedPath();
 
   const copy = {
     ru: {
@@ -60,7 +61,7 @@ export const About: React.FC = () => {
     <SeoHead
     title={`${t('navAbout')} — ${t('brandName')} (milk.by)`}
     description={copy.seoDesc}
-    canonicalHash="/about"
+    canonicalPath="/about"
     />
 
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
@@ -70,13 +71,13 @@ export const About: React.FC = () => {
     <p className="text-base text-slate-600 leading-relaxed">{copy.lead}</p>
     <div className="pt-2 flex flex-wrap gap-3">
     <Link
-    to="/catalog"
+    to={lp("/catalog")}
     className="px-4 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
     >
     {t('heroPrimaryCta')}
     </Link>
     <Link
-    to="/contacts"
+    to={lp("/contacts")}
     className="px-4 py-2.5 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
     >
     {t('ctaContact')}

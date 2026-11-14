@@ -6,11 +6,19 @@ interface SeoHeadProps {
   title: string;
   description: string;
   canonicalHash?: string;
+  canonicalPath?: string;
+  noIndex?: boolean;
 }
 
 const HREFLANG_LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
 
-export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalHash }) => {
+export const SeoHead: React.FC<SeoHeadProps> = ({
+  title,
+  description,
+  canonicalHash,
+  canonicalPath,
+  noIndex = false,
+}) => {
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -35,8 +43,19 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalH
     setMeta('meta[property="og:title"]', 'content', title);
     setMeta('meta[property="og:description"]', 'content', description);
 
-    if (canonicalHash !== undefined) {
-      const normalizedPath = canonicalHash.startsWith('/') ? canonicalHash : `/${canonicalHash}`;
+    if (noIndex) {
+      setMeta('meta[name="robots"]', 'content', 'noindex, nofollow');
+    } else {
+      document.querySelector('meta[name="robots"]')?.remove();
+    }
+
+    const rawPath = canonicalPath ?? canonicalHash;
+    if (rawPath !== undefined) {
+      const normalizedPath = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
+      const suffix = normalizedPath === '/' ? '/' : normalizedPath;
+      const canonicalHref = `https://milk.by/${language}${suffix}`;
+
+      setMeta('meta[property="og:url"]', 'content', canonicalHref);
 
       let canonicalLink = document.querySelector('link[rel="canonical"]');
       if (!canonicalLink) {
@@ -44,7 +63,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalH
         canonicalLink.setAttribute('rel', 'canonical');
         document.head.appendChild(canonicalLink);
       }
-      canonicalLink.setAttribute('href', `https://milk.by/#/${language}${normalizedPath === '/' ? '' : normalizedPath}`);
+      canonicalLink.setAttribute('href', canonicalHref);
 
       const upsertAlternate = (hreflang: string, href: string) => {
         let alt = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
@@ -58,17 +77,11 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalH
       };
 
       HREFLANG_LANGS.forEach((langCode) => {
-        upsertAlternate(
-          langCode,
-          `https://milk.by/#/${langCode}${normalizedPath === '/' ? '' : normalizedPath}`
-        );
+        upsertAlternate(langCode, `https://milk.by/${langCode}${suffix}`);
       });
-      upsertAlternate(
-        'x-default',
-        `https://milk.by/#/ru${normalizedPath === '/' ? '' : normalizedPath}`
-      );
+      upsertAlternate('x-default', `https://milk.by/ru${suffix}`);
     }
-  }, [title, description, canonicalHash, language]);
+  }, [title, description, canonicalHash, canonicalPath, noIndex, language]);
 
   return null;
 };

@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: milkby_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-milkby}
+      POSTGRES_USER: ${POSTGRES_USER:-milkby}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-milkby_secret}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-milkby} -d ${POSTGRES_DB:-milkby}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: milkby_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-milkby}:${POSTGRES_PASSWORD:-milkby_secret}@postgres:5432/${POSTGRES_DB:-milkby}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://milk.by}
+      FRONTEND_INDEX_URL: http://frontend/__spa_template.html
+      MEDIA_DIR: /app/media
+      ADMIN_API_KEY: ${ADMIN_API_KEY:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - media_data:/app/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "alembic upgrade head && python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: milkby_frontend
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  media_data:

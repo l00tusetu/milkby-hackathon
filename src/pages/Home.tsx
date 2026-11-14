@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { useLanguage } from '../hooks/useLanguage';
+import { ArrowRight, ShoppingBag, Store, Globe2, Newspaper } from 'lucide-react';
+import { useLanguage, useLocalizedPath } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { ASSETS } from '../data/assets';
 import { NEWS_CATEGORY_LABELS } from '../data/news';
@@ -17,6 +17,7 @@ import { HomeLocationsSection } from '../components/home/HomeLocationsSection';
 
 export const Home: React.FC = () => {
   const { t, language, localize } = useLanguage();
+  const lp = useLocalizedPath();
   const { products, categories, news } = useCatalogStore();
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
   const [inquiryOpen, setInquiryOpen] = useState(false);
@@ -26,7 +27,7 @@ export const Home: React.FC = () => {
 
   const visibleProducts = useMemo(
     () => products.filter((p) => p.visible),
-                                  [products]
+    [products]
   );
 
   const displayedProducts = useMemo(() => {
@@ -41,167 +42,222 @@ export const Home: React.FC = () => {
   const aboutImageSrc = latestNews[0]?.image || ASSETS.heroDairyShowcase;
 
   const seoTitle =
-  language === 'ru'
-  ? 'ОАО «Молочный Мир» (milk.by) — Натуральные сыры, молоко и экспорт'
-  : language === 'be'
-  ? 'ААТ «Малочны Мір» (milk.by) — Натуральныя сыры, малако і экспарт'
-  : language === 'zh'
-  ? 'Molochny Mir (milk.by) — 乳制品目录、国际出口与B2B合作'
-  : 'Molochny Mir (milk.by) — Dairy Catalog, Export & B2B Portal';
+    language === 'ru'
+      ? 'ОАО «Молочный Мир» (milk.by) — Натуральные сыры, молоко и экспорт'
+      : language === 'be'
+      ? 'ААТ «Малочны Мір» (milk.by) — Натуральныя сыры, малако і экспарт'
+      : language === 'zh'
+      ? 'Molochny Mir (milk.by) — 乳制品目录、国际出口与B2B合作'
+      : 'Molochny Mir (milk.by) — Dairy Catalog, Export & B2B Portal';
 
   const seoDesc = t('heroSubtitle');
 
   const allTabLabel =
-  language === 'ru'
-  ? 'Хиты ассортимента'
-  : language === 'be'
-  ? 'Хіты асартыменту'
-  : language === 'zh'
-  ? '精选热销'
-  : 'Top Highlights';
+    language === 'ru'
+      ? 'Хиты ассортимента'
+      : language === 'be'
+      ? 'Хіты асартыменту'
+      : language === 'zh'
+      ? '精选热销'
+      : 'Top Highlights';
 
   const openCategoryText = activeCategory
-  ? `${t('allProductsLink')}: ${localize(activeCategory.name)}`
-  : t('allProductsLink');
+    ? `${t('allProductsLink')}: ${localize(activeCategory.name)}`
+    : t('allProductsLink');
 
   const handleOpenInquiry = (channel: 'export' | 'wholesale' | 'general') => {
     setInquiryChannel(channel);
     setInquiryOpen(true);
   };
 
+  const audienceRoutes = [
+    {
+      to: '/catalog',
+      icon: ShoppingBag,
+      title: t('roleConsumerTitle'),
+      desc: t('roleConsumerDesc'),
+    },
+    {
+      to: '/partners',
+      icon: Store,
+      title: t('roleB2BTitle'),
+      desc: t('roleB2BDesc'),
+    },
+    {
+      to: '/export',
+      icon: Globe2,
+      title: t('roleExportTitle'),
+      desc: t('roleExportDesc'),
+    },
+    {
+      to: '/news',
+      icon: Newspaper,
+      title: t('roleMediaTitle'),
+      desc: t('roleMediaDesc'),
+    },
+  ];
+
   return (
-    <div className="space-y-12 sm:space-y-24">
-    <SeoHead title={seoTitle} description={seoDesc} canonicalHash="/" />
+    <div className="space-y-12 sm:space-y-20">
+      <SeoHead title={seoTitle} description={seoDesc} canonicalPath="/" />
 
-    {/* 1. Full-bleed Hero + Live Smart Search */}
-    <HomeHeroSection />
+      {/* 1. Full-bleed Hero + Live Smart Search */}
+      <HomeHeroSection />
 
-    {/* 2. Immediate Product Showcase + Interactive Category Filter Tabs + Smart Finder */}
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-8">
-    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-slate-200 pb-4">
-    <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
-    {t('featuredHeading')}
-    </h2>
-    <Link
-    to={activeCategory ? `/catalog/${activeCategory.slug}` : '/catalog'}
-    className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
-    >
-    <span>{openCategoryText}</span>
-    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-    </Link>
+      {/* Mandatory Quick-Entry Routing for 4 Key Audiences */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 sm:-mt-10 relative z-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {audienceRoutes.map((route) => {
+            const Icon = route.icon;
+            return (
+              <Link
+                key={route.to}
+                to={lp(route.to)}
+                className="group bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm hover:border-[#0057B8]/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-start gap-3.5"
+              >
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0057B8] flex items-center justify-center shrink-0 group-hover:bg-[#0057B8] group-hover:text-white transition-colors">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-display text-sm font-bold text-slate-900 group-hover:text-[#0057B8] transition-colors flex items-center justify-between gap-2">
+                    <span className="truncate">{route.title}</span>
+                    <ArrowRight className="w-3.5 h-3.5 shrink-0 opacity-60 group-hover:translate-x-0.5 transition-transform" />
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1 leading-snug line-clamp-2">
+                    {route.desc}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 2. Immediate Product Showcase + Interactive Category Filter Tabs + Smart Finder */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-slate-200 pb-4">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+            {t('featuredHeading')}
+          </h2>
+          <Link
+            to={activeCategory ? lp(`/catalog/${activeCategory.slug}`) : lp('/catalog')}
+            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
+          >
+            <span>{openCategoryText}</span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 sm:scroll-px-0 pb-1 sm:pb-0">
+          <button
+            type="button"
+            onClick={() => setActiveCategoryId('all')}
+            className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
+              activeCategoryId === 'all'
+                ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
+                : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
+            }`}
+          >
+            {allTabLabel}
+          </button>
+          {categories.map((cat) => {
+            const active = activeCategoryId === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setActiveCategoryId(cat.id)}
+                className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
+                  active
+                    ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
+                }`}
+              >
+                {localize(cat.name)}
+              </button>
+            );
+          })}
+        </div>
+
+        <ProductGrid
+          products={displayedProducts}
+          mobileCarousel
+          scrollResetKey={activeCategoryId}
+        />
+
+        <SmartFinder />
+      </section>
+
+      {/* 3. Enterprise Story & Production Metrics */}
+      <HomeAboutSection imageSrc={aboutImageSrc} />
+
+      {/* 4. Interactive B2B, Quality & Export Specialists Slider */}
+      <HomeTeamSlider onRequestContact={handleOpenInquiry} />
+
+      {/* 5. Interactive Production Sites & Cold-Chain Map Tabs */}
+      <HomeLocationsSection />
+
+      {/* 6. Latest Newsroom */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="flex items-end justify-between border-b border-slate-200 pb-4">
+          <h2 className="font-display text-2xl font-bold text-slate-900">{t('navNews')}</h2>
+          <Link
+            to={lp('/news')}
+            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0"
+          >
+            <span>
+              {language === 'ru'
+                ? 'Все новости'
+                : language === 'be'
+                ? 'Усе навіны'
+                : language === 'zh'
+                ? '全部新闻'
+                : 'All news'}
+            </span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {latestNews.map((item) => (
+            <Link
+              key={item.id}
+              to={lp(`/news/${item.slug}`)}
+              className="group bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col hover:border-[#0057B8]/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 ease-out"
+            >
+              <div className="aspect-[16/10] bg-slate-50 overflow-hidden border-b border-slate-100">
+                <ImageWithFallback
+                  src={item.image}
+                  alt={localize(item.title)}
+                  className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300 ease-out"
+                />
+              </div>
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs text-slate-500 tabular-nums">
+                    <span className="font-mono">{item.date}</span>
+                    <span className="px-2 py-0.5 rounded-md bg-blue-50 text-[#0057B8] font-medium">
+                      {localize(NEWS_CATEGORY_LABELS[item.categoryId])}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-base font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors leading-snug">
+                    {localize(item.title)}
+                  </h3>
+                  <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
+                    {localize(item.excerpt)}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <B2BInquiryModal
+        open={inquiryOpen}
+        onClose={() => setInquiryOpen(false)}
+        defaultChannel={inquiryChannel}
+      />
     </div>
-
-    {/* Single-row scrollable category pills on mobile, wrapping grid on sm+ */}
-    <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 sm:scroll-px-0 pb-1 sm:pb-0">
-    <button
-    type="button"
-    onClick={() => setActiveCategoryId('all')}
-    className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
-      activeCategoryId === 'all'
-      ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
-      : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
-    }`}
-    >
-    {allTabLabel}
-    </button>
-    {categories.map((cat) => {
-      const active = activeCategoryId === cat.id;
-      return (
-        <button
-        key={cat.id}
-        type="button"
-        onClick={() => setActiveCategoryId(cat.id)}
-        className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
-          active
-          ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
-          : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
-        }`}
-        >
-        {localize(cat.name)}
-        </button>
-      );
-    })}
-    </div>
-
-    <ProductGrid
-    products={displayedProducts}
-    mobileCarousel
-    scrollResetKey={activeCategoryId}
-    />
-
-    <SmartFinder />
-    </section>
-
-    {/* 3. Enterprise Story & Production Metrics */}
-    <HomeAboutSection imageSrc={aboutImageSrc} />
-
-    {/* 4. Interactive B2B, Quality & Export Specialists Slider */}
-    <HomeTeamSlider onRequestContact={handleOpenInquiry} />
-
-    {/* 5. Interactive Production Sites & Cold-Chain Map Tabs */}
-    <HomeLocationsSection />
-
-    {/* 6. Latest Newsroom */}
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-    <div className="flex items-end justify-between border-b border-slate-200 pb-4">
-    <h2 className="font-display text-2xl font-bold text-slate-900">{t('navNews')}</h2>
-    <Link
-    to="/news"
-    className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0"
-    >
-    <span>
-    {language === 'ru'
-      ? 'Все новости'
-      : language === 'be'
-      ? 'Усе навіны'
-      : language === 'zh'
-      ? '全部新闻'
-  : 'All news'}
-  </span>
-  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-  </Link>
-  </div>
-
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-  {latestNews.map((item) => (
-    <Link
-    key={item.id}
-    to={`/news/${item.slug}`}
-    className="group bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col hover:border-[#0057B8]/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 ease-out"
-    >
-    <div className="aspect-[16/10] bg-slate-50 overflow-hidden border-b border-slate-100">
-    <ImageWithFallback
-    src={item.image}
-    alt={localize(item.title)}
-    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300 ease-out"
-    />
-    </div>
-    <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-    <div className="space-y-2">
-    <div className="flex items-center gap-2 text-xs text-slate-500 tabular-nums">
-    <span className="font-mono">{item.date}</span>
-    <span className="px-2 py-0.5 rounded-md bg-blue-50 text-[#0057B8] font-medium">
-    {localize(NEWS_CATEGORY_LABELS[item.categoryId])}
-    </span>
-    </div>
-    <h3 className="font-display text-base font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors leading-snug">
-    {localize(item.title)}
-    </h3>
-    <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
-    {localize(item.excerpt)}
-    </p>
-    </div>
-    </div>
-    </Link>
-  ))}
-  </div>
-  </section>
-
-  <B2BInquiryModal
-  open={inquiryOpen}
-  onClose={() => setInquiryOpen(false)}
-  defaultChannel={inquiryChannel}
-  />
-  </div>
   );
 };

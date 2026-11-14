@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { NEWS_CATEGORY_LABELS } from '../data/news';
 import { SeoHead } from '../components/SeoHead';
@@ -10,6 +10,7 @@ import { ImageWithFallback } from '../components/ImageWithFallback';
 export const NewsArticle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { language, localize, t } = useLanguage();
+  const lp = useLocalizedPath();
   const { news } = useCatalogStore();
 
   const article = news.find((n) => n.slug === id || n.id === id);
@@ -26,7 +27,7 @@ export const NewsArticle: React.FC = () => {
       <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-4">
       <SeoHead title={`${notFoundCopy.seoTitle} — ${t('brandName')}`} description={notFoundCopy.seoDesc} />
       <h1 className="font-display text-2xl font-bold text-slate-900">{notFoundCopy.title}</h1>
-      <Link to="/news" className="inline-flex px-4 py-2 text-sm font-semibold text-white bg-[#0057B8] rounded-lg">
+      <Link to={lp("/news")} className="inline-flex px-4 py-2 text-sm font-semibold text-white bg-[#0057B8] rounded-lg">
       {t('navNews')}
       </Link>
       </div>
@@ -40,11 +41,11 @@ export const NewsArticle: React.FC = () => {
     <SeoHead
     title={localize(article.seo.title)}
     description={localize(article.seo.description)}
-    canonicalHash={`/news/${article.slug}`}
+    canonicalPath={`/news/${article.slug}`}
     />
 
     <div className="space-y-4">
-    <Link to="/news" className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-[#0057B8]">
+    <Link to={lp("/news")} className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-[#0057B8]">
     <ArrowLeft className="w-3.5 h-3.5" />
     <span>{t('navNews')}</span>
     </Link>
@@ -86,7 +87,7 @@ export const NewsArticle: React.FC = () => {
     {related.map((item) => (
       <Link
       key={item.id}
-      to={`/news/${item.slug}`}
+      to={lp(`/news/${item.slug}`)}
       className="p-4 border border-slate-200 rounded-xl hover:border-[#0057B8]/50 transition-colors space-y-1.5"
       >
       <div className="text-xs font-mono text-slate-500 tabular-nums">{item.date}</div>

@@ -27,8 +27,8 @@ export interface Product {
   name: LocalizedText;
   description: LocalizedText;
   image: string;
-  fatContent?: number;
-  proteinContent?: number;
+  fatContent?: number | null;
+  proteinContent?: number | null;
   lactoseFree?: boolean;
   exportReady?: boolean;
   featured?: boolean;
@@ -85,6 +85,7 @@ export interface NewsArticle {
 }
 
 export interface RedirectRule {
+  id?: number;
   from: string;
   to: string;
   code: 301;
@@ -92,14 +93,89 @@ export interface RedirectRule {
 }
 
 export interface B2BInquiry {
+  id?: string;
   company: string;
   contactName: string;
   email: string;
   phone: string;
   country: string;
-  productId?: string;
-  packageId?: string;
+  productId?: string | null;
+  packageId?: string | null;
   volume: string;
   message: string;
   channel: 'export' | 'wholesale' | 'general';
+  language?: Language;
+  status?: string;
+  createdAt?: string;
+}
+
+export interface ProductListResponse {
+  items: Product[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface SmartCriterion {
+  id: string;
+  label: string;
+}
+
+export interface SmartMatchResult {
+  product: Product;
+  score: number;
+  reasons: string[];
+  recommendedPackage?: PackageVariant | null;
+}
+
+export interface SmartSelectResponse {
+  query: string;
+  correctedQuery?: string | null;
+  mode: 'llm+db' | 'nlp+db';
+  criteria: SmartCriterion[];
+  results: SmartMatchResult[];
+}
+
+export interface AutocompleteSuggestion {
+  id: string;
+  slug: string;
+  name: LocalizedText;
+  category: string;
+  categoryName: LocalizedText;
+  image: string;
+  fatContent?: number | null;
+  recommendedPackage?: PackageVariant | null;
+}
+
+export interface AutocompleteResponse {
+  query: string;
+  correctedQuery?: string | null;
+  criteria: SmartCriterion[];
+  suggestions: AutocompleteSuggestion[];
+  totalMatches: number;
+}
+
+export interface BulkImportResult {
+  created: number;
+  updated: number;
+  skipped: number;
+  errors: string[];
+}
+
+export interface SeoAudit {
+  totalProducts: number;
+  uniqueTitlesByLang: Record<string, number>;
+  duplicateTitlesByLang: Record<string, string[]>;
+  totalNews: number;
+  totalRedirects: number;
+  sitemapUrlCount: number;
+}
+
+export interface BootstrapPayload {
+  categories: Category[];
+  products: Product[];
+  news: NewsArticle[];
+  redirects: RedirectRule[];
+  translations: Record<string, LocalizedText>;
 }

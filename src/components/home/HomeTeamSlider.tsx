@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Mail, Phone, Building2, ArrowRight } from 'lucide-react';
-import { useLanguage } from '../../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../../hooks/useLanguage';
 
 interface HomeTeamSliderProps {
   onRequestContact?: (channel: 'export' | 'wholesale' | 'general') => void;
@@ -160,6 +160,7 @@ function getCardsPerView(): number {
 }
 
 export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact }) => {
+  const lp = useLocalizedPath();
   const { language, t } = useLanguage();
   const [cardsPerView, setCardsPerView] = useState<number>(getCardsPerView);
   const [slide, setSlide] = useState(0);
@@ -332,7 +333,7 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
     </div>
 
     <Link
-    to="/contacts"
+    to={lp("/contacts")}
     className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap shrink-0 self-start md:self-auto"
     >
     <span>{t('ctaContact')}</span>
@@ -394,7 +395,7 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
       <Phone className="w-4 h-4" />
       </a>
       <Link
-      to="/contacts"
+      to={lp("/contacts")}
       aria-label="Contacts"
       className="w-8 h-8 rounded-lg border border-slate-200 text-slate-600 hover:text-[#0057B8] hover:border-[#0057B8]/40 flex items-center justify-center transition-colors"
       >

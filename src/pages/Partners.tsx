@@ -16,7 +16,7 @@ import {
   CheckCircle2,
   Snowflake,
 } from 'lucide-react';
-import { useLanguage } from '../hooks/useLanguage';
+import { useLanguage, useLocalizedPath } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { SeoHead } from '../components/SeoHead';
 import { ImageWithFallback } from '../components/ImageWithFallback';
@@ -34,6 +34,7 @@ const SEGMENT_PRODUCT_IDS: Record<PartnerSegmentId, string[]> = {
 
 export const Partners: React.FC = () => {
   const { language, localize, t } = useLanguage();
+  const lp = useLocalizedPath();
   const { products, categories } = useCatalogStore();
   const [activeSegment, setActiveSegment] = useState<PartnerSegmentId>('horeca');
   const [modalOpen, setModalOpen] = useState(false);
@@ -333,7 +334,7 @@ export const Partners: React.FC = () => {
     <SeoHead
     title={`${t('navPartners')} — ${t('brandName')}`}
     description={copy.seoDesc}
-    canonicalHash="/partners"
+    canonicalPath="/partners"
     />
 
     {/* 1. Architectural Hero + Direct Sales Desk */}
@@ -372,14 +373,14 @@ export const Partners: React.FC = () => {
 
     <div className="flex flex-wrap gap-3 pt-1">
     <Link
-    to="/catalog"
+    to={lp("/catalog")}
     className="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-900 bg-white rounded-xl hover:bg-blue-50 transition-colors"
     >
     <span>{copy.browseCatalog}</span>
     <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
     </Link>
     <Link
-    to="/export"
+    to={lp("/export")}
     className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-white/12 border border-white/25 rounded-xl hover:bg-white/20 transition-colors"
     >
     <span>{t('navExport')}</span>
@@ -507,7 +508,7 @@ export const Partners: React.FC = () => {
         >
         <div className="flex items-start gap-3">
         <Link
-        to={`/product/${prod.slug}`}
+        to={lp(`/product/${prod.slug}`)}
         className="w-16 h-16 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shrink-0"
         >
         <ImageWithFallback
@@ -518,7 +519,7 @@ export const Partners: React.FC = () => {
         </Link>
         <div className="min-w-0 flex-1 space-y-1">
         <Link
-        to={`/product/${prod.slug}`}
+        to={lp(`/product/${prod.slug}`)}
         className="inline-flex items-start gap-1 text-sm font-semibold text-slate-900 hover:text-[#0057B8] leading-snug"
         >
         <span>{localize(prod.name)}</span>

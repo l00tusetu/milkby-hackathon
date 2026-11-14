@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Language, LocalizedText } from '../types';
 import { defaultTranslations } from '../data/translations';
+import { buildLocalizedPath, extractLangFromPath } from '../utils/paths';
+import { apiClient } from '../utils/apiClient';
 
 interface LanguageContextValue {
   language: Language;
@@ -9,16 +11,21 @@ interface LanguageContextValue {
   localize: (text?: Partial<LocalizedText> | null) => string;
   translations: Record<string, LocalizedText>;
   updateTranslation: (key: string, lang: Language, value: string) => void;
+  hydrateTranslations: (serverTranslations: Record<string, LocalizedText>) => void;
   resetTranslations: () => void;
 }
 
 const STORAGE_LANG_KEY = 'milk_world_lang';
-const STORAGE_TRANS_KEY = 'milk_world_translations_v2';
+const STORAGE_TRANS_KEY = 'milk_world_translations_v3';
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const fromUrl = extractLangFromPath(window.location.pathname);
+      if (fromUrl) return fromUrl;
+    }
     try {
       const saved = localStorage.getItem(STORAGE_LANG_KEY) as Language | null;
       if (saved && ['ru', 'be', 'en', 'zh'].includes(saved)) {
@@ -72,13 +79,18 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     [language]
   );
 
+  const hydrateTranslations = useCallback((serverTranslations: Record<string, LocalizedText>) => {
+    if (!serverTranslations || Object.keys(serverTranslations).length === 0) return;
+    setTranslations((prev) => ({ ...prev, ...serverTranslations }));
+  }, []);
+
   const updateTranslation = useCallback((key: string, lang: Language, value: string) => {
     setTranslations((prev) => {
       const updated = {
         ...prev,
         [key]: {
           ...(prev[key] || { ru: '', be: '', en: '', zh: '' }),
-                    [lang]: value,
+          [lang]: value,
         },
       };
       try {
@@ -87,6 +99,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // ignore
       }
       return updated;
+    });
+    apiClient.updateTranslation(key, lang, value).catch(() => {
+      // Fallback safely in offline mode
     });
   }, []);
 
@@ -101,17 +116,18 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   return (
     <LanguageContext.Provider
-    value={{
-      language,
-      setLanguage,
-      t,
-      localize,
-      translations,
-      updateTranslation,
-      resetTranslations,
-    }}
+      value={{
+        language,
+        setLanguage,
+        t,
+        localize,
+        translations,
+        updateTranslation,
+        hydrateTranslations,
+        resetTranslations,
+      }}
     >
-    {children}
+      {children}
     </LanguageContext.Provider>
   );
 };
@@ -122,4 +138,12 @@ export function useLanguage(): LanguageContextValue {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return ctx;
+}
+
+export function useLocalizedPath() {
+  const { language } = useLanguage();
+  return useCallback(
+    (path: string, targetLang?: Language) => buildLocalizedPath(path, targetLang ?? language),
+    [language]
+  );
 }
