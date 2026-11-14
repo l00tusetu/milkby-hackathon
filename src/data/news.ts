@@ -1,5 +1,12 @@
-import { NewsArticle } from '../types';
+import { LocalizedText, NewsArticle, NewsCategoryId } from '../types';
 import { ASSETS } from './assets';
+
+export const NEWS_CATEGORY_LABELS: Record<NewsCategoryId, LocalizedText> = {
+  export: { ru: 'Экспорт', be: 'Экспарт', en: 'Export', zh: '国际出口' },
+  products: { ru: 'Продукция', be: 'Прадукцыя', en: 'Products', zh: '新品发布' },
+  company: { ru: 'Компания', be: 'Кампанія', en: 'Company', zh: '企业动态' },
+  awards: { ru: 'Награды', be: 'Узнагароды', en: 'Awards', zh: '荣誉奖项' },
+};
 
 export const newsArticles: NewsArticle[] = [
   {

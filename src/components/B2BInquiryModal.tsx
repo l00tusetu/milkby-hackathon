@@ -19,6 +19,9 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
   defaultChannel = 'wholesale',
 }) => {
   const { language, localize } = useLanguage();
+  const [mounted, setMounted] = useState(open);
+  const [closing, setClosing] = useState(false);
+
   const [company, setCompany] = useState('');
   const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState('');
@@ -117,6 +120,23 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
   }[language];
 
   useEffect(() => {
+    if (open) {
+      setMounted(true);
+      setClosing(false);
+      return;
+    }
+
+    if (mounted) {
+      setClosing(true);
+      const timer = window.setTimeout(() => {
+        setMounted(false);
+        setClosing(false);
+      }, 180);
+      return () => window.clearTimeout(timer);
+    }
+  }, [open, mounted]);
+
+  useEffect(() => {
     if (!open) return;
     setSubmitted(false);
     setError('');
@@ -140,7 +160,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       return () => window.removeEventListener('keydown', onKeyDown);
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!mounted) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,14 +174,20 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
 
   return (
     <div
-    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs"
+    className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/55 backdrop-blur-xs ${
+      closing ? 'modal-backdrop-out pointer-events-none' : 'modal-backdrop-in'
+    }`}
     role="dialog"
     aria-modal="true"
     onClick={(e) => {
       if (e.target === e.currentTarget) onClose();
     }}
     >
-    <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
+    <div
+    className={`bg-white border border-slate-200 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl ${
+      closing ? 'modal-panel-out' : 'modal-panel-in'
+    }`}
+    >
     <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
     <div>
     <h2 className="font-display text-lg font-semibold text-slate-900">
@@ -173,7 +199,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
     type="button"
     onClick={onClose}
     aria-label="Close modal"
-    className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+    className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
     >
     <X className="w-4 h-4" />
     </button>

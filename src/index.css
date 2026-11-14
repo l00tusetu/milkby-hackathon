@@ -74,3 +74,61 @@
     scroll-behavior: auto !important;
   }
 }
+
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modal-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+}
+
+@layer components {
+  .modal-backdrop-in {
+    animation: modal-backdrop-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .modal-backdrop-out {
+    animation: modal-backdrop-out 180ms ease-in forwards;
+  }
+
+  .modal-panel-in {
+    animation: modal-panel-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .modal-panel-out {
+    animation: modal-panel-out 180ms ease-in forwards;
+  }
+}

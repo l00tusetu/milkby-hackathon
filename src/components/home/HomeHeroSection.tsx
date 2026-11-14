@@ -20,15 +20,39 @@ export const HomeHeroSection: React.FC = () => {
         alt={t('brandName')}
         className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-neutral-950/70" />
+
+        {/* Лёгкое общее затемнение для верхнего меню и нижней кромки */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-neutral-950/65" />
+
+        {/* Радиальный блюр по центру за заголовком и подзаголовком */}
+        <div
+        aria-hidden="true"
+        className="absolute inset-0 backdrop-blur-[12px]"
+        style={{
+            maskImage:
+            'radial-gradient(ellipse clamp(230px, 40%, 540px) clamp(170px, 44%, 250px) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
+            WebkitMaskImage:
+            'radial-gradient(ellipse clamp(230px, 40%, 540px) clamp(170px, 44%, 250px) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
+        }}
+        />
+
+        {/* Очень прозрачная радиальная тень в центре для контраста подтекста */}
+        <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{
+            background:
+            'radial-gradient(ellipse clamp(220px, 38%, 520px) clamp(160px, 42%, 240px) at 50% 45%, rgba(10, 15, 28, 0.38) 0%, rgba(10, 15, 28, 0.18) 50%, rgba(10, 15, 28, 0) 100%)',
+        }}
+        />
         </div>
 
         <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 text-center space-y-7">
         <div className="space-y-4">
-        <h1 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold text-white tracking-tight leading-[1.12]">
+        <h1 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold text-white tracking-tight leading-[1.12] drop-shadow-[0_2px_14px_rgba(0,0,0,0.35)]">
         {t('heroTitle')}
         </h1>
-        <p className="text-base sm:text-lg text-neutral-100/90 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]">
         {t('heroSubtitle')}
         </p>
         </div>

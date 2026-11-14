@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
+import { NEWS_CATEGORY_LABELS } from '../data/news';
 import { SeoHead } from '../components/SeoHead';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 
@@ -48,8 +49,11 @@ export const NewsArticle: React.FC = () => {
     <span>{t('navNews')}</span>
     </Link>
 
-    <div className="text-xs text-slate-500 font-mono tabular-nums">
-    {article.date} · {article.categoryId.toUpperCase()}
+    <div className="flex items-center gap-2.5 text-xs text-slate-500 tabular-nums">
+    <span className="font-mono">{article.date}</span>
+    <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-[#0057B8] font-medium">
+    {localize(NEWS_CATEGORY_LABELS[article.categoryId])}
+    </span>
     </div>
 
     <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">

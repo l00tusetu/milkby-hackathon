@@ -3,15 +3,17 @@ import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
+import { NEWS_CATEGORY_LABELS } from '../data/news';
+import { NewsCategoryId } from '../types';
 import { SeoHead } from '../components/SeoHead';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 
-const NEWS_CATEGORIES = [
+const NEWS_CATEGORIES: { id: 'all' | NewsCategoryId; label: Record<'ru' | 'be' | 'en' | 'zh', string> }[] = [
   { id: 'all', label: { ru: 'Все рубрики', be: 'Усе рубрыкі', en: 'All topics', zh: '全部栏目' } },
-{ id: 'export', label: { ru: 'Экспорт', be: 'Экспарт', en: 'Export', zh: '国际出口' } },
-{ id: 'products', label: { ru: 'Продукция', be: 'Прадукцыя', en: 'Products', zh: '新品发布' } },
-{ id: 'company', label: { ru: 'Компания', be: 'Кампанія', en: 'Company', zh: '企业动态' } },
-{ id: 'awards', label: { ru: 'Награды', be: 'Узнагароды', en: 'Awards', zh: '荣誉奖项' } },
+{ id: 'export', label: NEWS_CATEGORY_LABELS.export },
+{ id: 'products', label: NEWS_CATEGORY_LABELS.products },
+{ id: 'company', label: NEWS_CATEGORY_LABELS.company },
+{ id: 'awards', label: NEWS_CATEGORY_LABELS.awards },
 ];
 
 export const News: React.FC = () => {
@@ -92,7 +94,11 @@ export const News: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
-    <SeoHead title={`${t('navNews')} — ${t('brandName')} (milk.by)`} description={copy.seoDesc} canonicalHash="/news" />
+    <SeoHead
+    title={`${t('navNews')} — ${t('brandName')} (milk.by)`}
+    description={copy.seoDesc}
+    canonicalHash="/news"
+    />
 
     <div className="space-y-3">
     <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">{t('navNews')}</h1>
@@ -166,8 +172,11 @@ export const News: React.FC = () => {
         </div>
         <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
         <div className="space-y-2">
-        <div className="text-xs text-slate-500 font-mono tabular-nums">
-        {article.date} · {article.categoryId.toUpperCase()}
+        <div className="flex items-center gap-2 text-xs text-slate-500 tabular-nums">
+        <span className="font-mono">{article.date}</span>
+        <span className="px-2 py-0.5 rounded-md bg-blue-50 text-[#0057B8] font-medium">
+        {localize(NEWS_CATEGORY_LABELS[article.categoryId])}
+        </span>
         </div>
         <h2 className="font-display text-base font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors leading-snug">
         {localize(article.title)}

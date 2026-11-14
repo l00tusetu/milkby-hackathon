@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { ASSETS } from '../data/assets';
+import { NEWS_CATEGORY_LABELS } from '../data/news';
 import { SeoHead } from '../components/SeoHead';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import { ProductGrid } from '../components/ProductGrid';
@@ -12,7 +13,6 @@ import { B2BInquiryModal } from '../components/B2BInquiryModal';
 import { HomeHeroSection } from '../components/home/HomeHeroSection';
 import { HomeAboutSection } from '../components/home/HomeAboutSection';
 import { HomeTeamSlider } from '../components/home/HomeTeamSlider';
-import { HomeTestimonialSection } from '../components/home/HomeTestimonialSection';
 import { HomeLocationsSection } from '../components/home/HomeLocationsSection';
 
 export const Home: React.FC = () => {
@@ -134,13 +134,10 @@ export const Home: React.FC = () => {
     {/* 4. Interactive B2B, Quality & Export Specialists Slider */}
     <HomeTeamSlider onRequestContact={handleOpenInquiry} />
 
-    {/* 5. Partner Testimonial Highlight */}
-    <HomeTestimonialSection />
-
-    {/* 6. Interactive Production Sites & Cold-Chain Map Tabs */}
+    {/* 5. Interactive Production Sites & Cold-Chain Map Tabs */}
     <HomeLocationsSection />
 
-    {/* 7. Latest Newsroom */}
+    {/* 6. Latest Newsroom */}
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
     <div className="flex items-end justify-between border-b border-slate-200 pb-4">
     <h2 className="font-display text-2xl font-bold text-slate-900">{t('navNews')}</h2>
@@ -177,8 +174,11 @@ export const Home: React.FC = () => {
     </div>
     <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
     <div className="space-y-2">
-    <div className="text-xs text-slate-500 font-mono tabular-nums">
-    {item.date} · {item.categoryId.toUpperCase()}
+    <div className="flex items-center gap-2 text-xs text-slate-500 tabular-nums">
+    <span className="font-mono">{item.date}</span>
+    <span className="px-2 py-0.5 rounded-md bg-blue-50 text-[#0057B8] font-medium">
+    {localize(NEWS_CATEGORY_LABELS[item.categoryId])}
+    </span>
     </div>
     <h3 className="font-display text-base font-semibold text-slate-900 group-hover:text-[#0057B8] transition-colors leading-snug">
     {localize(item.title)}
