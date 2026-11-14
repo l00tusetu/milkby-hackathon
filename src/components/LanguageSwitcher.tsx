@@ -1,18 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Globe, ChevronDown, Check } from 'lucide-react';
+import { ChevronDown, Check } from 'lucide-react';
 import { LANGUAGES } from '../data/translations';
 import { useLanguage } from '../hooks/useLanguage';
+import { LanguageFlag } from './LanguageFlag';
 
 interface LanguageSwitcherProps {
   compact?: boolean;
   dark?: boolean;
   variant?: 'pills' | 'dropdown';
+  direction?: 'down' | 'up';
 }
 
 export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   compact = false,
   dark = false,
   variant = 'pills',
+  direction = 'down',
 }) => {
   const { language, setLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
@@ -53,7 +56,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         : 'bg-slate-100/80 hover:bg-slate-200/80 border-slate-200 text-slate-800'
       }`}
       >
-      <Globe className="w-4 h-4 shrink-0 opacity-85" />
+      <LanguageFlag code={currentLang.code} className="w-[18px] h-3" />
       <span>{currentLang.label}</span>
       <ChevronDown
       className={`w-3.5 h-3.5 shrink-0 opacity-75 transition-transform duration-150 ${
@@ -66,7 +69,9 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         <div
         role="listbox"
         aria-label="Language options"
-        className="absolute right-0 top-full mt-2 w-48 rounded-xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl p-1.5 z-50"
+        className={`absolute right-0 w-52 rounded-xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl p-1.5 z-50 ${
+          direction === 'up' ? 'bottom-full mb-2' : 'top-full mt-2'
+        }`}
         >
         {LANGUAGES.map((item) => {
           const active = language === item.code;
@@ -87,10 +92,11 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             }`}
             >
             <span className="flex items-center gap-2.5 min-w-0">
-            <span className="text-xs font-mono uppercase text-slate-400 w-5 shrink-0">
+            <LanguageFlag code={item.code} className="w-5 h-3.5" />
+            <span className="truncate">{item.nativeName}</span>
+            <span className="text-[11px] font-mono uppercase text-slate-400 shrink-0">
             {item.label}
             </span>
-            <span className="truncate">{item.nativeName}</span>
             </span>
             {active && <Check className="w-4 h-4 text-[#0057B8] shrink-0" />}
             </button>
@@ -120,7 +126,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
         type="button"
         onClick={() => setLanguage(item.code)}
         title={item.nativeName}
-        className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0057B8] ${
+        className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0057B8] ${
           active
           ? dark
           ? 'bg-white text-slate-900 shadow-xs'
@@ -130,7 +136,8 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
           : 'text-slate-600 hover:text-slate-900'
         }`}
         >
-        {compact ? item.label : item.label}
+        <LanguageFlag code={item.code} className="w-4 h-3" />
+        <span>{compact ? item.label : item.label}</span>
         </button>
       );
     })}
