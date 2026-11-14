@@ -9,6 +9,7 @@ import {
   Award,
   Phone,
   Mail,
+  ArrowRight,
   ArrowUpRight,
   Snowflake,
 } from 'lucide-react';
@@ -55,6 +56,8 @@ export const Export: React.FC = () => {
         { value: '4 200', label: 'Паллетомест холодовой цепи' },
         { value: '24 мес.', label: 'Хранение СОМ и масла' },
       ],
+      browseCatalog: 'Весь каталог',
+      requestExportBtn: 'Запросить экспортное КП',
       deptTitle: 'Отдел внешнеэкономической деятельности',
       deptSub: 'Прямые контракты без посредников · Полный пакет экспортных документов',
       incoterms: 'Условия: FCA · DAP · FOB · CIF',
@@ -113,6 +116,8 @@ export const Export: React.FC = () => {
         { value: '4 200', label: 'Палетамесцаў халадовага ланцуга' },
         { value: '24 мес.', label: 'Захоўванне САМ і масла' },
       ],
+      browseCatalog: 'Увесь каталог',
+      requestExportBtn: 'Запытаць экспартнае КП',
       deptTitle: 'Аддзел знешнеэканамічнай дзейнасці',
       deptSub: 'Прамыя кантракты без пасрэднікаў · Поўны пакет экспартных дакументаў',
       incoterms: 'Умовы: FCA · DAP · FOB · CIF',
@@ -171,6 +176,8 @@ export const Export: React.FC = () => {
         { value: '4,200', label: 'Cold-chain pallet slots' },
         { value: '24 mo', label: 'SMP & butter shelf life' },
       ],
+      browseCatalog: 'Full Catalog',
+      requestExportBtn: 'Request Export Quote',
       deptTitle: 'Export Sales Department',
       deptSub: 'Direct manufacturer contracts · Full veterinary & customs dossier',
       incoterms: 'Terms: FCA · DAP · FOB · CIF',
@@ -229,6 +236,8 @@ export const Export: React.FC = () => {
         { value: '4,200', label: '冷链自动化托盘位' },
         { value: '24 个月', label: '奶粉与冷冻黄油保质期' },
       ],
+      browseCatalog: '浏览全部目录',
+      requestExportBtn: '获取国际出口报价',
       deptTitle: '国际外贸出口部门',
       deptSub: '工厂直签无中间商 · 提供全套检验检疫与清关单证',
       incoterms: '贸易术语: FCA · DAP · FOB · CIF',
@@ -289,12 +298,13 @@ export const Export: React.FC = () => {
     canonicalHash="/export"
     />
 
-    {/* 1. Architectural Blue Export Hero + Direct Export Desk */}
-    <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#002f66] via-[#004694] to-[#0057B8] text-white p-6 sm:p-10 lg:p-12 shadow-lg">
+    {/* 1. Architectural Hero + Direct Export Desk */}
+    <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-[#003b82] to-[#0057B8] text-white p-6 sm:p-10 lg:p-12 shadow-lg">
     <div
     aria-hidden="true"
-    className="pointer-events-none absolute -right-24 -top-24 w-80 h-80 rounded-full bg-white/10 blur-3xl"
+    className="pointer-events-none absolute -right-20 -bottom-24 w-80 h-80 rounded-full bg-blue-400/15 blur-3xl"
     />
+
     <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
     <div className="lg:col-span-7 space-y-6">
     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/12 border border-white/20 text-xs font-semibold tracking-wide">
@@ -321,6 +331,22 @@ export const Export: React.FC = () => {
       </div>
     ))}
     </div>
+
+    <div className="flex flex-wrap gap-3 pt-1">
+    <Link
+    to="/catalog"
+    className="group inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-slate-900 bg-white rounded-xl hover:bg-blue-50 transition-colors"
+    >
+    <span>{copy.browseCatalog}</span>
+    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+    </Link>
+    <Link
+    to="/partners"
+    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-white/12 border border-white/25 rounded-xl hover:bg-white/20 transition-colors"
+    >
+    <span>{t('navPartners')}</span>
+    </Link>
+    </div>
     </div>
 
     <div className="lg:col-span-5 bg-white text-slate-900 rounded-2xl p-6 shadow-xl space-y-4">
@@ -342,7 +368,7 @@ export const Export: React.FC = () => {
     +375 (152) 44-55-12
     </a>
     </div>
-    <div className="pt-1.5 border-t border-slate-200 text-xs text-slate-500">
+    <div className="pt-1.5 border-t border-slate-200 text-xs text-slate-500 font-sans">
     {copy.incoterms}
     </div>
     </div>
@@ -356,7 +382,7 @@ export const Export: React.FC = () => {
     className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0057B8] rounded-xl hover:bg-[#004494] transition-colors shadow-xs"
     >
     <MessageSquare className="w-4 h-4 shrink-0" />
-    <span>{t('requestSalesBtn')}</span>
+    <span>{copy.requestExportBtn}</span>
     </button>
     </div>
     </div>
