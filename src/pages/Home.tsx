@@ -70,33 +70,33 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 sm:space-y-24">
+    <div className="space-y-12 sm:space-y-24">
     <SeoHead title={seoTitle} description={seoDesc} canonicalHash="/" />
 
     {/* 1. Full-bleed Hero + Live Smart Search */}
     <HomeHeroSection />
 
     {/* 2. Immediate Product Showcase + Interactive Category Filter Tabs + Smart Finder */}
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 pb-4">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-8">
+    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-slate-200 pb-4">
     <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
     {t('featuredHeading')}
     </h2>
     <Link
     to={activeCategory ? `/catalog/${activeCategory.slug}` : '/catalog'}
-    className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0"
+    className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
     >
     <span>{openCategoryText}</span>
     <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
     </Link>
     </div>
 
-    {/* Clean interactive category filter pills */}
-    <div className="flex flex-wrap gap-2">
+    {/* Single-row scrollable category pills on mobile, wrapping grid on sm+ */}
+    <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 sm:scroll-px-0 pb-1 sm:pb-0">
     <button
     type="button"
     onClick={() => setActiveCategoryId('all')}
-    className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
+    className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
       activeCategoryId === 'all'
       ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
       : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
@@ -111,7 +111,7 @@ export const Home: React.FC = () => {
         key={cat.id}
         type="button"
         onClick={() => setActiveCategoryId(cat.id)}
-        className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
+        className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
           active
           ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
           : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
@@ -123,7 +123,11 @@ export const Home: React.FC = () => {
     })}
     </div>
 
-    <ProductGrid products={displayedProducts} />
+    <ProductGrid
+    products={displayedProducts}
+    mobileCarousel
+    scrollResetKey={activeCategoryId}
+    />
 
     <SmartFinder />
     </section>

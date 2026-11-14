@@ -128,7 +128,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
     onKeyDown={handleKeyDown}
     placeholder={t('searchPlaceholder')}
     aria-label={t('searchPlaceholder')}
-    className="w-full h-12 pl-10 pr-10 text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/20 transition-all duration-200"
+    className="w-full h-12 pl-10 pr-10 text-base sm:text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/20 transition-all duration-200"
     />
     {value && (
       <button
@@ -148,7 +148,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
     </div>
 
     {showDropdown && (
-      <div className="absolute left-0 right-0 top-full mt-2 z-30 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden">
+      <div className="absolute left-0 right-0 top-full mt-2 z-30 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[60vh] overflow-y-auto overscroll-contain">
       {searchResponse.criteria.length > 0 && suggestions.length > 0 && (
         <div className="px-4 py-2 bg-blue-50/70 border-b border-blue-100 flex flex-wrap items-center gap-1.5 text-xs">
         <span className="inline-flex items-center gap-1 font-semibold text-[#0057B8]">

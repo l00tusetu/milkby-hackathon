@@ -31,6 +31,15 @@ export const Header: React.FC = () => {
     setOpenMenu(null);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+      window.addEventListener('keydown', onKeyDown);
+      return () => window.removeEventListener('keydown', onKeyDown);
+  }, [mobileOpen]);
+
   const isOverHero = isHomePage && !pastHero;
 
   const isActive = (path: string) =>
@@ -45,7 +54,6 @@ export const Header: React.FC = () => {
       wholesaleSub: 'Поставки для сетей, пиццерий и пекарен',
       exportTitle: 'Международный экспорт',
       exportSub: 'СОМ, масло, сыры и сертификаты GACC / ISO',
-      admin: 'CMS Админ',
     },
     be: {
       allCatalog: 'Увесь каталог прадукцыі',
@@ -53,7 +61,6 @@ export const Header: React.FC = () => {
       wholesaleSub: 'Пастаўкі для сетак, піцэрый і пякарняў',
       exportTitle: 'Міжнародны экспарт',
       exportSub: 'САМ, масла, сыры і сертыфікаты GACC / ISO',
-      admin: 'CMS Адмін',
     },
     en: {
       allCatalog: 'View All Products',
@@ -61,7 +68,6 @@ export const Header: React.FC = () => {
       wholesaleSub: 'Supply for retail chains, pizzerias, and bakeries',
       exportTitle: 'Global Export Portal',
       exportSub: 'SMP, butter, aged cheese, GACC & ISO docs',
-      admin: 'CMS Admin',
     },
     zh: {
       allCatalog: '浏览全部产品目录',
@@ -69,7 +75,6 @@ export const Header: React.FC = () => {
       wholesaleSub: '面向连锁商超、披萨门店与工业烘焙直供',
       exportTitle: '国际出口专区',
       exportSub: '脱脂奶粉、黄油、奶酪及 GACC / ISO 认证',
-      admin: 'CMS 管理',
     },
   }[language];
 
@@ -88,10 +93,14 @@ export const Header: React.FC = () => {
     <header
     className={`${
       isHomePage ? 'fixed top-0 left-0 right-0' : 'sticky top-0'
-    } z-40 transition-colors duration-200 ${
+    } z-40 transition-colors duration-200 backdrop-blur-md ${
       isOverHero
-      ? 'bg-black/25 backdrop-blur-md border-b border-white/15'
-      : 'bg-white/90 backdrop-blur-md border-b border-slate-200/80'
+      ? mobileOpen
+      ? 'bg-slate-950/60 border-b border-white/15'
+      : 'bg-black/25 border-b border-white/15'
+      : mobileOpen
+      ? 'bg-white/80 border-b border-slate-200/80'
+      : 'bg-white/90 border-b border-slate-200/80'
     }`}
     >
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between gap-6">
@@ -255,8 +264,14 @@ export const Header: React.FC = () => {
 
     {/* Mobile Drawer */}
     {mobileOpen && (
-      <div className="lg:hidden border-t border-slate-200 bg-white/95 backdrop-blur-md text-slate-900 px-4 py-4 space-y-4">
-      <nav className="flex flex-col space-y-1">
+      <div
+      className={`lg:hidden border-t max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain px-4 py-4 space-y-4 ${
+        isOverHero
+        ? 'border-white/15 text-white'
+        : 'border-slate-200/70 text-slate-900'
+      }`}
+      >
+      <nav className="flex flex-col space-y-1" aria-label="Mobile navigation">
       {[
         { to: '/catalog', label: t('navCatalog') },
                     { to: '/partners', label: t('navPartners') },
@@ -264,25 +279,35 @@ export const Header: React.FC = () => {
                     { to: '/news', label: t('navNews') },
                     { to: '/about', label: t('navAbout') },
                     { to: '/contacts', label: t('navContacts') },
-                    { to: '/admin', label: copy.admin },
       ].map((item) => (
         <Link
         key={item.to}
         to={item.to}
         onClick={() => setMobileOpen(false)}
         className={`px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
-          isActive(item.to)
-          ? 'bg-blue-50 text-[#0057B8]'
-          : 'text-slate-700 hover:bg-slate-50'
+          isOverHero
+          ? isActive(item.to)
+          ? 'bg-white/15 text-white'
+          : 'text-white/90 hover:bg-white/10 hover:text-white'
+      : isActive(item.to)
+      ? 'bg-[#0057B8]/10 text-[#0057B8]'
+      : 'text-slate-700 hover:bg-slate-900/5 hover:text-[#0057B8]'
         }`}
         >
         {item.label}
         </Link>
       ))}
       </nav>
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-      <span className="text-xs text-slate-500">Language / Язык</span>
-      <LanguageSwitcher compact />
+
+      <div
+      className={`pt-3 border-t flex items-center justify-between gap-3 ${
+        isOverHero ? 'border-white/15' : 'border-slate-200/70'
+      }`}
+      >
+      <span className={`text-xs ${isOverHero ? 'text-white/75' : 'text-slate-500'}`}>
+      Language / Язык
+      </span>
+      <LanguageSwitcher compact dark={isOverHero} />
       </div>
       </div>
     )}

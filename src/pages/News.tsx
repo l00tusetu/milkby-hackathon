@@ -179,7 +179,7 @@ export const News: React.FC = () => {
     value={query}
     onChange={(e) => setQuery(e.target.value)}
     placeholder={copy.searchPlaceholder}
-    className="w-full h-10 pl-10 pr-9 text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/15 transition-all"
+    className="w-full h-10 pl-10 pr-9 text-base sm:text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/15 transition-all"
     />
     {query && (
       <button
@@ -197,7 +197,7 @@ export const News: React.FC = () => {
     value={selectedYear}
     onChange={(e) => setSelectedYear(e.target.value)}
     aria-label="Filter by year"
-    className="h-10 px-3.5 text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#0057B8] tabular-nums"
+    className="h-10 px-3.5 text-base sm:text-sm bg-white border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#0057B8] tabular-nums"
     >
     <option value="all">{copy.allYears}</option>
     {years.map((y) => (

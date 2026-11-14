@@ -40,9 +40,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <Link
     to={`/product/${product.slug}`}
-    className="group flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-[#0057B8]/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0057B8]"
+    className="group h-full flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-[#0057B8]/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0057B8]"
     >
-    <div className="aspect-[4/3] w-full bg-slate-50 overflow-hidden border-b border-slate-100">
+    <div className="aspect-[4/3] w-full bg-slate-50 overflow-hidden border-b border-slate-100 shrink-0">
     <ImageWithFallback
     src={product.image}
     alt={productName}
@@ -51,7 +51,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     />
     </div>
 
-    <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3 sm:gap-4">
     <div className="space-y-2">
     <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 tabular-nums">
     <span className="font-medium text-[#0057B8]">{categoryName}</span>
@@ -86,8 +86,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     </p>
     </div>
 
-    <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 tabular-nums">
-    <span>
+    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs text-slate-500 tabular-nums">
+    <span className="truncate">
     {product.packages.map((p) => p.weight).slice(0, 3).join(' / ')}
     {product.packages.length > 3 ? ` · ${packCountLabel}` : ''}
     </span>

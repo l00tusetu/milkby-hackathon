@@ -174,7 +174,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
 
   return (
     <div
-    className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/55 backdrop-blur-xs ${
+    className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/55 backdrop-blur-xs ${
       closing ? 'modal-backdrop-out pointer-events-none' : 'modal-backdrop-in'
     }`}
     role="dialog"
@@ -188,7 +188,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       closing ? 'modal-panel-out' : 'modal-panel-in'
     }`}
     >
-    <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+    <div className="px-5 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between">
     <div>
     <h2 className="font-display text-lg font-semibold text-slate-900">
     {defaultChannel === 'export' ? copy.titleExport : copy.titleSales}
@@ -205,7 +205,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
     </button>
     </div>
 
-    <div className="p-6">
+    <div className="p-5 sm:p-6">
     {submitted ? (
       <div className="py-6 text-center space-y-4">
       <CheckCircle2 className="w-12 h-12 text-[#0057B8] mx-auto" strokeWidth={1.5} />
@@ -242,7 +242,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       value={company}
       onChange={(e) => setCompany(e.target.value)}
       placeholder={copy.companyPlaceholder}
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       <div>
@@ -254,7 +254,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       required
       value={contactName}
       onChange={(e) => setContactName(e.target.value)}
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       </div>
@@ -268,7 +268,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       value={email}
       onChange={(e) => setEmail(e.target.value)}
       placeholder="buyer@company.com"
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       <div>
@@ -280,7 +280,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       value={phone}
       onChange={(e) => setPhone(e.target.value)}
       placeholder="+375 ..."
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       </div>
@@ -294,7 +294,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       type="text"
       value={country}
       onChange={(e) => setCountry(e.target.value)}
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       <div>
@@ -305,7 +305,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       type="text"
       value={volume}
       onChange={(e) => setVolume(e.target.value)}
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       </div>
@@ -318,7 +318,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
       rows={3}
       value={message}
       onChange={(e) => setMessage(e.target.value)}
-      className="w-full p-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full p-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
 

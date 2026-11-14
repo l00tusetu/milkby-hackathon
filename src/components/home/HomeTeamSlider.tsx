@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Mail, Phone, Building2, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
@@ -93,7 +93,7 @@ const TEAM_PROFILES: TeamProfile[] = [
   },
   bio: {
     ru: 'Контролирует входное сырьё, аккредитованную лабораторию, соответствие стандартам ISO 9001, HACCP и безлактозных линеек.',
-    be: 'Кантралюе ўваходную сыравіну, акрэдытаваную лабараторыю, адпаведнаць стандартам ISO 9001, HACCP і безлактозных лінеек.',
+    be: 'Кантралюе ўваходную сыравіну, акрэдытаваную лабараторыю, адпаведнасць стандартам ISO 9001, HACCP і безлактозных лінеек.',
     en: 'Oversees raw milk testing, accredited lab compliance, ISO 9001 / HACCP audits, and lactose-free production lines.',
     zh: '主管生牛乳入厂检测、认证实验室合规、ISO 9001/HACCP 体系及无乳糖产线品控。',
   },
@@ -163,19 +163,119 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
   const { language, t } = useLanguage();
   const [cardsPerView, setCardsPerView] = useState<number>(getCardsPerView);
   const [slide, setSlide] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const slideRef = useRef(0);
+  const maxSlideRef = useRef(Math.max(0, TEAM_PROFILES.length - cardsPerView));
+  const cardsPerViewRef = useRef(cardsPerView);
 
   const maxSlide = Math.max(0, TEAM_PROFILES.length - cardsPerView);
 
   useEffect(() => {
+    slideRef.current = slide;
+  }, [slide]);
+
+  useEffect(() => {
+    cardsPerViewRef.current = cardsPerView;
+    maxSlideRef.current = Math.max(0, TEAM_PROFILES.length - cardsPerView);
+  }, [cardsPerView]);
+
+  useEffect(() => {
     const onResize = () => {
       const nextPerView = getCardsPerView();
+      if (nextPerView === cardsPerViewRef.current) return;
+      cardsPerViewRef.current = nextPerView;
       setCardsPerView(nextPerView);
       const nextMax = Math.max(0, TEAM_PROFILES.length - nextPerView);
+      maxSlideRef.current = nextMax;
       setSlide((prev) => Math.min(prev, nextMax));
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    let startX = 0;
+    let startY = 0;
+    let startTime = 0;
+    let lockAxis: 'x' | 'y' | null = null;
+    let currentDx = 0;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      startTime = Date.now();
+      lockAxis = null;
+      currentDx = 0;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+
+      if (lockAxis === null) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        if (Math.abs(dy) >= Math.abs(dx)) {
+          lockAxis = 'y';
+          return;
+        }
+        lockAxis = 'x';
+        setIsDragging(true);
+      }
+
+      if (lockAxis === 'x') {
+        if (e.cancelable) e.preventDefault();
+        const atStart = slideRef.current === 0 && dx > 0;
+        const atEnd = slideRef.current >= maxSlideRef.current && dx < 0;
+        currentDx = atStart || atEnd ? dx * 0.25 : dx;
+        setDragOffset(currentDx);
+      }
+    };
+
+    const finishTouch = () => {
+      if (lockAxis === 'x') {
+        const elapsed = Date.now() - startTime;
+        const threshold = elapsed < 220 ? 25 : 50;
+        const cur = slideRef.current;
+        const max = maxSlideRef.current;
+
+        if (currentDx < -threshold && cur < max) {
+          setSlide(cur + 1);
+        } else if (currentDx > threshold && cur > 0) {
+          setSlide(cur - 1);
+        }
+      }
+      lockAxis = null;
+      currentDx = 0;
+      setIsDragging(false);
+      setDragOffset(0);
+    };
+
+    viewport.addEventListener('touchstart', onTouchStart, { passive: true });
+    viewport.addEventListener('touchmove', onTouchMove, { passive: false });
+    viewport.addEventListener('touchend', finishTouch, { passive: true });
+    viewport.addEventListener('touchcancel', finishTouch, { passive: true });
+
+    return () => {
+      viewport.removeEventListener('touchstart', onTouchStart);
+      viewport.removeEventListener('touchmove', onTouchMove);
+      viewport.removeEventListener('touchend', finishTouch);
+      viewport.removeEventListener('touchcancel', finishTouch);
+    };
+  }, []);
+
+  const goToSlide = (idx: number) => {
+    setIsDragging(false);
+    setDragOffset(0);
+    setSlide(Math.max(0, Math.min(maxSlide, idx)));
+  };
 
   const copy = {
     ru: {
@@ -219,16 +319,16 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
   const dotCount = maxSlide + 1;
 
   return (
-    <section id="team" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <section id="team" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+    <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6">
     <div className="max-w-2xl space-y-3">
     <p className="text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
     {copy.eyebrow}
     </p>
-    <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+    <h2 className="font-display text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight">
     {copy.title}
     </h2>
-    <p className="text-base text-slate-600 leading-relaxed">{copy.subtitle}</p>
+    <p className="text-sm sm:text-base text-slate-600 leading-relaxed">{copy.subtitle}</p>
     </div>
 
     <Link
@@ -240,28 +340,23 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
     </Link>
     </div>
 
-    {/* Carousel Viewport */}
-    <div className="overflow-hidden">
+    {/* Transform Carousel Viewport */}
+    <div ref={viewportRef} className="overflow-hidden touch-pan-y select-none">
     <div
-    className="flex gap-6 transition-transform duration-500 ease-out motion-reduce:transition-none"
-    style={
-      {
-        '--cards-per-view': cardsPerView,
-        transform: `translateX(calc(-${slide} * ((100% + 24px) / ${cardsPerView})))`,
-      } as React.CSSProperties
-    }
+    className="flex gap-6 will-change-transform motion-reduce:transition-none"
+    style={{
+      transform: `translate3d(calc(-${slide} * ((100% + 24px) / ${cardsPerView}) + ${dragOffset}px), 0, 0)`,
+          transition: isDragging ? 'none' : 'transform 320ms cubic-bezier(0.22, 1, 0.36, 1)',
+    }}
     >
     {TEAM_PROFILES.map((member) => (
       <article
       key={member.id}
-      className="flex flex-col justify-between bg-white border border-slate-200 rounded-2xl p-6 space-y-5 shrink-0"
-      style={{
-        flexBasis: `calc((100% - ${(cardsPerView - 1) * 24}px) / ${cardsPerView})`,
-      }}
+      className="w-full min-w-0 sm:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] shrink-0 flex flex-col justify-between bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 space-y-5"
       >
       <div className="space-y-4">
       <div
-      className={`w-16 h-16 rounded-full border flex items-center justify-center font-display text-lg font-bold ${member.accentClass}`}
+      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full border flex items-center justify-center font-display text-lg font-bold ${member.accentClass}`}
       >
       {member.initials}
       </div>
@@ -323,7 +418,7 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
     </div>
 
     {/* Controls */}
-    <div className="flex items-center justify-between gap-4">
+    <div className="pt-2 flex items-center justify-between gap-4">
     <div className="flex items-center gap-2" role="tablist" aria-label="Team carousel slides">
     {Array.from({ length: dotCount }).map((_, idx) => {
       const active = slide === idx;
@@ -333,7 +428,7 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
         type="button"
         aria-label={copy.slideDot(idx)}
         aria-pressed={active}
-        onClick={() => setSlide(idx)}
+        onClick={() => goToSlide(idx)}
         className={`h-2.5 rounded-full transition-all ${
           active ? 'w-7 bg-[#0057B8]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'
         }`}
@@ -346,18 +441,18 @@ export const HomeTeamSlider: React.FC<HomeTeamSliderProps> = ({ onRequestContact
     <button
     type="button"
     aria-label={copy.prev}
-    onClick={() => setSlide((prev) => Math.max(0, prev - 1))}
+    onClick={() => goToSlide(slide - 1)}
     disabled={slide === 0}
-    className="w-11 h-11 rounded-full border border-slate-300 bg-white text-slate-800 flex items-center justify-center hover:border-[#0057B8] hover:text-[#0057B8] disabled:opacity-35 disabled:pointer-events-none transition-colors"
+    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-slate-300 bg-white text-slate-800 flex items-center justify-center hover:border-[#0057B8] hover:text-[#0057B8] disabled:opacity-35 disabled:pointer-events-none transition-colors"
     >
     <ChevronLeft className="w-5 h-5" />
     </button>
     <button
     type="button"
     aria-label={copy.next}
-    onClick={() => setSlide((prev) => Math.min(maxSlide, prev + 1))}
+    onClick={() => goToSlide(slide + 1)}
     disabled={slide >= maxSlide}
-    className="w-11 h-11 rounded-full border border-slate-300 bg-white text-slate-800 flex items-center justify-center hover:border-[#0057B8] hover:text-[#0057B8] disabled:opacity-35 disabled:pointer-events-none transition-colors"
+    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-slate-300 bg-white text-slate-800 flex items-center justify-center hover:border-[#0057B8] hover:text-[#0057B8] disabled:opacity-35 disabled:pointer-events-none transition-colors"
     >
     <ChevronRight className="w-5 h-5" />
     </button>

@@ -13,10 +13,15 @@
     font-size: 16px;
     font-family: var(--font-sans);
     scroll-behavior: smooth;
-    scrollbar-gutter: stable;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     overflow-x: clip;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      scrollbar-gutter: stable;
+    }
   }
 
   body {
@@ -30,6 +35,17 @@
 
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

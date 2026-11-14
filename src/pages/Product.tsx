@@ -115,7 +115,7 @@ export const Product: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-14">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-12 sm:space-y-14">
     <SeoHead
     title={localize(product.seo.title)}
     description={localize(product.seo.description)}
@@ -178,11 +178,11 @@ export const Product: React.FC = () => {
     )}
     </div>
 
-    <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
+    <h1 className="font-display text-2xl sm:text-4xl font-bold text-slate-900">
     {localize(product.seo.h1) || localize(product.name)}
     </h1>
 
-    <p className="text-base text-slate-600 leading-relaxed">
+    <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
     {localize(product.description)}
     </p>
     </div>
@@ -255,11 +255,11 @@ export const Product: React.FC = () => {
     )}
 
     {/* B2B Actions */}
-    <div className="flex flex-wrap gap-3 pt-1">
+    <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-1">
     <button
     type="button"
     onClick={() => setModalOpen(true)}
-    className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors text-center"
     >
     <MessageSquare className="w-4 h-4 shrink-0" />
     <span>{t('requestSalesBtn')}</span>
@@ -267,7 +267,7 @@ export const Product: React.FC = () => {
     <button
     type="button"
     onClick={() => downloadProductB2BSpec(product, category, language)}
-    className="inline-flex items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors text-center"
     >
     <Download className="w-4 h-4 shrink-0" />
     <span>{t('downloadSpecBtn')}</span>
@@ -283,18 +283,18 @@ export const Product: React.FC = () => {
     {product.fatContent !== undefined && (
       <div className="px-4 py-3 flex justify-between gap-4 bg-white">
       <dt className="text-slate-500">{labels.fat}</dt>
-      <dd className="font-medium text-slate-900">{product.fatContent}%</dd>
+      <dd className="font-medium text-slate-900 min-w-0 break-words text-right">{product.fatContent}%</dd>
       </div>
     )}
     {product.proteinContent !== undefined && (
       <div className="px-4 py-3 flex justify-between gap-4 bg-slate-50/50">
       <dt className="text-slate-500">{labels.protein}</dt>
-      <dd className="font-medium text-slate-900">{product.proteinContent} {gramUnit}</dd>
+      <dd className="font-medium text-slate-900 min-w-0 break-words text-right">{product.proteinContent} {gramUnit}</dd>
       </div>
     )}
     <div className="px-4 py-3 flex justify-between gap-4 bg-white">
     <dt className="text-slate-500">{labels.lactose}</dt>
-    <dd className="font-medium text-slate-900 text-right">
+    <dd className="font-medium text-slate-900 min-w-0 break-words text-right">
     {product.lactoseFree
       ? language === 'ru'
       ? 'Без лактозы (< 0,01%)'
@@ -324,7 +324,7 @@ export const Product: React.FC = () => {
       }`}
       >
       <dt className="text-slate-500">{label}</dt>
-      <dd className="font-medium text-slate-900 text-right">{localize(value)}</dd>
+      <dd className="font-medium text-slate-900 min-w-0 break-words text-right">{localize(value)}</dd>
       </div>
     );
   })}

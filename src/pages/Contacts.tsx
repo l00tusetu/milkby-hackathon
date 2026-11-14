@@ -154,7 +154,7 @@ export const Contacts: React.FC = () => {
     </div>
     </div>
 
-    <div className="lg:col-span-7 border border-slate-200 rounded-2xl p-6 sm:p-8 bg-white">
+    <div className="lg:col-span-7 border border-slate-200 rounded-2xl p-5 sm:p-8 bg-white">
     {sent ? (
       <div className="py-10 text-center space-y-3">
       <CheckCircle2 className="w-10 h-10 text-[#0057B8] mx-auto" />
@@ -185,7 +185,7 @@ export const Contacts: React.FC = () => {
       required
       value={name}
       onChange={(e) => setName(e.target.value)}
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       <div>
@@ -195,7 +195,7 @@ export const Contacts: React.FC = () => {
       required
       value={email}
       onChange={(e) => setEmail(e.target.value)}
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
       </div>
@@ -207,7 +207,7 @@ export const Contacts: React.FC = () => {
       <select
       value={department}
       onChange={(e) => setDepartment(e.target.value)}
-      className="w-full h-10 px-3 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-[#0057B8]"
+      className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-[#0057B8]"
       >
       <option value="sales">{copy.deptOptions.sales}</option>
       <option value="export">{copy.deptOptions.export}</option>
@@ -225,13 +225,13 @@ export const Contacts: React.FC = () => {
       required
       value={message}
       onChange={(e) => setMessage(e.target.value)}
-      className="w-full p-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+      className="w-full p-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
       />
       </div>
 
       <button
       type="submit"
-      className="px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+      className="w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
       >
       {copy.submit}
       </button>
