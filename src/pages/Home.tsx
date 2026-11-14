@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { ASSETS } from '../data/assets';
@@ -10,10 +10,14 @@ import { ImageWithFallback } from '../components/ImageWithFallback';
 import { ProductGrid } from '../components/ProductGrid';
 import { SmartFinder } from '../components/SmartFinder';
 import { B2BInquiryModal } from '../components/B2BInquiryModal';
+import { CategoryIcon } from '../components/CategoryIcon';
 import { HomeHeroSection } from '../components/home/HomeHeroSection';
 import { HomeAboutSection } from '../components/home/HomeAboutSection';
 import { HomeTeamSlider } from '../components/home/HomeTeamSlider';
 import { HomeLocationsSection } from '../components/home/HomeLocationsSection';
+import { Product } from '../types';
+
+const FLAGSHIP_ORDER = ['mozzarella-pizza', 'goroden-aged', 'milk-lactose-free', 'butter-825'];
 
 export const Home: React.FC = () => {
   const { t, language, localize } = useLanguage();
@@ -24,16 +28,23 @@ export const Home: React.FC = () => {
     'wholesale'
   );
 
-  const visibleProducts = useMemo(
-    () => products.filter((p) => p.visible),
-                                  [products]
-  );
+  const visibleProducts = useMemo(() => products.filter((p) => p.visible), [products]);
 
   const displayedProducts = useMemo(() => {
     if (activeCategoryId === 'all') {
-      return visibleProducts.filter((p) => p.featured).slice(0, 6);
+      const featuredList = visibleProducts.filter((p) => p.featured);
+      const customFeatured = featuredList.filter(
+        (p) => !FLAGSHIP_ORDER.includes(p.id) && p.id.startsWith('custom-')
+      );
+      const prioritized = FLAGSHIP_ORDER.map((id) => featuredList.find((p) => p.id === id)).filter(
+        (p): p is Product => Boolean(p)
+      );
+      const restFeatured = featuredList.filter(
+        (p) => !FLAGSHIP_ORDER.includes(p.id) && !p.id.startsWith('custom-')
+      );
+      return [...customFeatured, ...prioritized, ...restFeatured].slice(0, 4);
     }
-    return visibleProducts.filter((p) => p.category === activeCategoryId).slice(0, 6);
+    return visibleProducts.filter((p) => p.category === activeCategoryId).slice(0, 4);
   }, [visibleProducts, activeCategoryId]);
 
   const activeCategory = categories.find((c) => c.id === activeCategoryId);
@@ -51,14 +62,36 @@ export const Home: React.FC = () => {
 
   const seoDesc = t('heroSubtitle');
 
-  const allTabLabel =
-  language === 'ru'
-  ? 'Хиты ассортимента'
-  : language === 'be'
-  ? 'Хіты асартыменту'
-  : language === 'zh'
-  ? '精选热销'
-  : 'Top Highlights';
+  const promoCopy = {
+    ru: {
+      badge: 'ХИТЫ ПРОДАЖ · СОРТ «ЭКСТРА»',
+      extra: 'ЛИНЕЙКА «ГОРОДЕНЪ» И ACTIVE LIFE',
+      lead: 'От тягучей моцареллы HoReCa и выдержанных сыров до безлактозного молока и масла 82,5% — натуральный вкус, подтверждённый наградами.',
+      lineCta: 'Линейка «ГороденЪ»',
+      allTab: 'Хиты ассортимента',
+    },
+    be: {
+      badge: 'ХІТЫ ПРОДАЖАЎ · ГАТУНАК «ЭКСТРА»',
+      extra: 'ЛІНЕЙКА «ГОРАДЗЕНЪ» І ACTIVE LIFE',
+      lead: 'Ад цягучай мацарэлы HoReCa і вытрыманых сыроў да безлактознага малака і масла 82,5% — натуральны смак, пацверджаны ўзнагародамі.',
+      lineCta: 'Лінейка «ГорадзенЪ»',
+      allTab: 'Хіты асартыменту',
+    },
+    en: {
+      badge: 'BESTSELLERS · EXTRA-GRADE MILK',
+      extra: 'GORODEN & ACTIVE LIFE RANGES',
+      lead: 'From stretchy HoReCa mozzarella and aged reserve cheeses to lactose-free milk and 82.5% sweet cream butter — award-winning daily quality.',
+      lineCta: 'Goroden Series',
+      allTab: 'Top Highlights',
+    },
+    zh: {
+      badge: '热销口碑 · 特级生牛乳',
+      extra: 'GORODEN 与 ACTIVE LIFE 旗舰系列',
+      lead: '从餐饮拉丝披萨马苏里拉奶酪、陈年干酪到零乳糖牛奶与82.5%纯脂黄油——屡获殊荣的白俄罗斯纯正乳品风味。',
+      lineCta: 'Goroden 臻选',
+      allTab: '精选热销',
+    },
+  }[language];
 
   const openCategoryText = activeCategory
   ? `${t('allProductsLink')}: ${localize(activeCategory.name)}`
@@ -70,39 +103,62 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="space-y-12 sm:space-y-24">
+    <div className="space-y-12 sm:space-y-20">
     <SeoHead title={seoTitle} description={seoDesc} canonicalHash="/" />
 
     {/* 1. Full-bleed Hero + Live Smart Search */}
     <HomeHeroSection />
 
-    {/* 2. Immediate Product Showcase + Interactive Category Filter Tabs + Smart Finder */}
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-8">
-    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-slate-200 pb-4">
-    <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+    {/* 2. Compact Promotional Product Showcase + Category Filter Tabs + Smart Finder */}
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-5">
+    <div className="rounded-2xl bg-gradient-to-r from-[#0057B8] via-[#0a65c2] to-[#0284c7] text-white p-4 sm:px-6 sm:py-4.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 shadow-sm">
+    <div className="space-y-1 min-w-0">
+    <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-blue-100">
+    <span className="inline-flex items-center gap-1">
+    <Sparkles className="w-3 h-3 shrink-0" />
+    {promoCopy.badge}
+    </span>
+    <span aria-hidden="true">·</span>
+    <span>{promoCopy.extra}</span>
+    </div>
+    <h2 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
     {t('featuredHeading')}
     </h2>
-    <Link
-    to={activeCategory ? `/catalog/${activeCategory.slug}` : '/catalog'}
-    className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
-    >
-    <span>{openCategoryText}</span>
-    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-    </Link>
+    <p className="text-xs sm:text-sm text-blue-50/95 max-w-2xl leading-snug">
+    {promoCopy.lead}
+    </p>
     </div>
 
-    {/* Single-row scrollable category pills on mobile, wrapping grid on sm+ */}
+    <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+    <Link
+    to="/catalog/cheese"
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-xs font-semibold text-white transition-colors whitespace-nowrap"
+    >
+    <span>{promoCopy.lineCta}</span>
+    </Link>
+    <Link
+    to={activeCategory ? `/catalog/${activeCategory.slug}` : '/catalog'}
+    className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-[#0057B8] hover:bg-blue-50 text-xs font-bold transition-colors whitespace-nowrap shadow-xs"
+    >
+    <span>{openCategoryText}</span>
+    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+    </Link>
+    </div>
+    </div>
+
+    {/* Category pills with compact milk.by-inspired icons */}
     <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 sm:scroll-px-0 pb-1 sm:pb-0">
     <button
     type="button"
     onClick={() => setActiveCategoryId('all')}
-    className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
+    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
       activeCategoryId === 'all'
       ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
       : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
     }`}
     >
-    {allTabLabel}
+    <CategoryIcon categoryId="all" className="w-4 h-4 shrink-0" />
+    <span>{promoCopy.allTab}</span>
     </button>
     {categories.map((cat) => {
       const active = activeCategoryId === cat.id;
@@ -111,13 +167,14 @@ export const Home: React.FC = () => {
         key={cat.id}
         type="button"
         onClick={() => setActiveCategoryId(cat.id)}
-        className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
+        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
           active
           ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
           : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
         }`}
         >
-        {localize(cat.name)}
+        <CategoryIcon categoryId={cat.id} className="w-4 h-4 shrink-0" />
+        <span>{localize(cat.name)}</span>
         </button>
       );
     })}
@@ -126,6 +183,8 @@ export const Home: React.FC = () => {
     <ProductGrid
     products={displayedProducts}
     mobileCarousel
+    variant="promo"
+    desktopCols={4}
     scrollResetKey={activeCategoryId}
     />
 

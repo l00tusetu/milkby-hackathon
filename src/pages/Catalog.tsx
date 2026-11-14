@@ -8,6 +8,7 @@ import { SearchBar } from '../components/SearchBar';
 import { Filters, CatalogFilterState } from '../components/Filters';
 import { ProductGrid } from '../components/ProductGrid';
 import { SmartFinder } from '../components/SmartFinder';
+import { CategoryIcon } from '../components/CategoryIcon';
 import { runSmartSearch } from '../utils/smartMatch';
 
 interface CatalogProps {
@@ -70,6 +71,17 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   }, [resolvedCategoryId]);
 
   const activeCategory = categories.find((c) => c.id === filterState.categoryId);
+
+  const countsByCategory = useMemo(() => {
+    const map: Record<string, number> = {};
+    let total = 0;
+    for (const p of products) {
+      if (!p.visible) continue;
+      total++;
+      map[p.category] = (map[p.category] || 0) + 1;
+    }
+    return { map, total };
+  }, [products]);
 
   const smartSearch = useMemo(() => {
     const trimmed = query.trim();
@@ -186,6 +198,13 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
     zh: '智能搜索已识别:',
   }[language];
 
+  const allTileLabel = {
+    ru: 'Вся продукция',
+    be: 'Уся прадукцыя',
+    en: 'All Products',
+    zh: '全部产品',
+  }[language];
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
     <SeoHead
@@ -223,36 +242,67 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   <p className="text-sm sm:text-base text-slate-600 max-w-3xl">{pageDesc}</p>
   </div>
 
-  <div className="flex flex-wrap gap-2">
+  {/* Enlarged Category Tiles with milk.by-inspired modernized icons */}
+  <div className="flex overflow-x-auto no-scrollbar -mx-4 px-4 pb-1 sm:pb-0 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2.5 sm:gap-3">
   <Link
   to="/catalog"
-  className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
+  className={`group min-w-[122px] sm:min-w-0 p-3 sm:p-3.5 rounded-2xl border flex flex-col items-center justify-between gap-2 text-center transition-all duration-200 ${
     !activeCategory
-    ? 'bg-[#0057B8] text-white border-[#0057B8]'
-    : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
+    ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-md ring-2 ring-[#0057B8]/20'
+    : 'bg-white text-slate-800 border-slate-200 hover:border-[#0057B8]/45 hover:-translate-y-0.5 hover:shadow-md'
   }`}
   >
-  {language === 'ru'
-    ? 'Все'
-    : language === 'be'
-    ? 'Усе'
-    : language === 'zh'
-    ? '全部'
-  : 'All'}
+  <div
+  className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105 ${
+    !activeCategory ? 'bg-white/15 text-white' : 'bg-sky-50 text-[#0284c7]'
+  }`}
+  >
+  <CategoryIcon categoryId="all" className="w-8 h-8" />
+  </div>
+  <div className="space-y-0.5">
+  <div className="text-xs font-semibold leading-tight">{allTileLabel}</div>
+  <div
+  className={`text-[11px] font-mono tabular-nums ${
+    !activeCategory ? 'text-blue-100' : 'text-slate-400'
+  }`}
+  >
+  {countsByCategory.total} SKU
+  </div>
+  </div>
   </Link>
+
   {categories.map((cat) => {
     const active = activeCategory?.id === cat.id;
+    const count = countsByCategory.map[cat.id] || 0;
     return (
       <Link
       key={cat.id}
       to={`/catalog/${cat.slug}`}
-      className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
+      className={`group min-w-[122px] sm:min-w-0 p-3 sm:p-3.5 rounded-2xl border flex flex-col items-center justify-between gap-2 text-center transition-all duration-200 ${
         active
-        ? 'bg-[#0057B8] text-white border-[#0057B8]'
-        : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
+        ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-md ring-2 ring-[#0057B8]/20'
+        : 'bg-white text-slate-800 border-slate-200 hover:border-[#0057B8]/45 hover:-translate-y-0.5 hover:shadow-md'
       }`}
       >
+      <div
+      className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105 ${
+        active ? 'bg-white/15 text-white' : 'bg-sky-50 text-[#0284c7]'
+      }`}
+      >
+      <CategoryIcon categoryId={cat.id} className="w-8 h-8" />
+      </div>
+      <div className="space-y-0.5">
+      <div className="text-xs font-semibold leading-tight line-clamp-2">
       {localize(cat.name)}
+      </div>
+      <div
+      className={`text-[11px] font-mono tabular-nums ${
+        active ? 'text-blue-100' : 'text-slate-400'
+      }`}
+      >
+      {count} SKU
+      </div>
+      </div>
       </Link>
     );
   })}

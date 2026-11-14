@@ -193,7 +193,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
     <h2 className="font-display text-lg font-semibold text-slate-900">
     {defaultChannel === 'export' ? copy.titleExport : copy.titleSales}
     </h2>
-    <p className="text-xs text-slate-500">export@milk.by · sales@milk.by</p>
+    <p className="text-xs text-slate-500">ved@milk.by · sales@milk.by</p>
     </div>
     <button
     type="button"

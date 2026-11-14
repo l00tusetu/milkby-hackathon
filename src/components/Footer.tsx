@@ -188,7 +188,7 @@ export const Footer: React.FC = () => {
     </Link>
     </li>
     <li className="font-mono text-xs text-slate-500 pt-0.5 tabular-nums">
-    export@milk.by · +375 (152) 44-55-12
+    ved@milk.by · +375 (152) 60-07-52
     </li>
     </ul>
     </div>

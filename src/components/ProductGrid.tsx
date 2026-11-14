@@ -9,6 +9,8 @@ interface ProductGridProps {
   onResetFilters?: () => void;
   mobileCarousel?: boolean;
   scrollResetKey?: string;
+  variant?: 'default' | 'promo';
+  desktopCols?: 3 | 4;
 }
 
 export const ProductGrid: React.FC<ProductGridProps> = ({
@@ -16,6 +18,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   onResetFilters,
   mobileCarousel = false,
   scrollResetKey,
+  variant = 'default',
+  desktopCols = 3,
 }) => {
   const { language } = useLanguage();
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -165,6 +169,11 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     );
   }
 
+  const desktopGridClasses =
+  desktopCols === 4
+  ? 'sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-4 lg:gap-5'
+  : 'sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6';
+
   if (mobileCarousel) {
     return (
       <div className="space-y-4">
@@ -173,7 +182,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       className="overflow-hidden sm:overflow-visible touch-pan-y select-none sm:select-auto"
       >
       <div
-      className="flex gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6 max-sm:[transform:var(--mobile-track-transform)] max-sm:will-change-transform motion-reduce:transition-none"
+      className={`flex gap-4 ${desktopGridClasses} max-sm:[transform:var(--mobile-track-transform)] max-sm:will-change-transform motion-reduce:transition-none`}
       style={
         {
           '--mobile-track-transform': `translate3d(calc(-${activeIndex} * (100% + 16px) + ${dragOffset}px), 0, 0)`,
@@ -184,11 +193,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       }
       >
       {products.map((product) => (
-        <div
-        key={product.id}
-        className="w-full min-w-0 shrink-0 sm:w-auto sm:shrink"
-        >
-        <ProductCard product={product} />
+        <div key={product.id} className="w-full min-w-0 shrink-0 sm:w-auto sm:shrink">
+        <ProductCard product={product} variant={variant} />
         </div>
       ))}
       </div>
@@ -241,9 +247,15 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+    <div
+    className={
+      desktopCols === 4
+      ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5'
+      : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6'
+    }
+    >
     {products.map((product) => (
-      <ProductCard key={product.id} product={product} />
+      <ProductCard key={product.id} product={product} variant={variant} />
     ))}
     </div>
   );

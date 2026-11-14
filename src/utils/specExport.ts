@@ -45,8 +45,8 @@ export function downloadProductB2BSpec(
     ),
     '',
     'EXPORT & WHOLESALE CONTACT:',
-    '  Export Dept: export@milk.by | +375 (152) 44-55-12',
-    '  Domestic Sales: sales@milk.by | +375 (152) 44-55-01',
+    '  Export Dept: ved@milk.by | +375 (152) 60-07-52',
+    '  Domestic Sales: sales@milk.by | +375 (152) 45-39-42',
     `  Generated: ${new Date().toISOString().slice(0, 10)}`,
   ];
 
