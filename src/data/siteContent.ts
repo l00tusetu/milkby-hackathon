@@ -171,10 +171,10 @@ export const defaultSiteSettings: SiteSettings = {
     },
     footer: {
         brandDesc: {
-            ru: 'Натуральные молочные продукты из Гродно с 1938 года: свежее молоко, сыры, сливочное масло, йогурты и пломбир.',
-            be: 'Натуральныя малочныя прадукты з Гродна з 1938 года: свежае малако, сыры, сметанковае масла, ёгурты і пламбір.',
-            en: 'Natural dairy products from Grodno since 1938: farm-fresh milk, aged cheeses, sweet cream butter, yogurts, and ice cream.',
-            zh: '自 1938 年起的格罗德诺天然乳品：纯鲜牛奶、陈年奶酪、天然黄油、希腊酸奶与经典冰淇淋。',
+            ru: 'Натуральные молочные продукты из Гродно с 1938 года: молоко, сыры, масло и йогурты.',
+            be: 'Натуральныя малочныя прадукты з Гродна з 1938 года: малако, сыры, масла і ёгурты.',
+            en: 'Natural dairy products from Grodno since 1938: milk, cheeses, butter, and yogurts.',
+            zh: '自 1938 年起的格罗德诺天然乳品：牛奶、奶酪、黄油与酸奶。',
         },
         address: {
             ru: '230005, г. Гродно, ул. Гаспадарчая, 28 · Пн–Пт 08:00–17:00',
@@ -185,8 +185,8 @@ export const defaultSiteSettings: SiteSettings = {
         copyright: {
             ru: '© 2026 ОАО «Молочный Мир» · УНП 500040357',
             be: '© 2026 ААТ «Малочны Мір» · УНП 500040357',
-            en: '© 2026 OJSC "Molochny Mir" (milk.by)',
-            zh: '© 2026 Molochny Mir 股份公司 (milk.by)',
+            en: '© 2026 OJSC "Molochny Mir" · Tax ID 500040357',
+            zh: '© 2026 Molochny Mir 股份公司 · 税号 500040357',
         },
         heritage: {
             ru: 'Белорусские молочные традиции с 1938 года',
@@ -503,7 +503,6 @@ export const defaultLocations: PlantLocation[] = [
 ];
 
 export const defaultDirectoryEntries: DirectoryEntry[] = [
-    // ======================== 1. SALES, ORDERS, EXPORT & DEALERS ========================
     {
         id: 'sales-logistics-head',
         group: 'sales',
@@ -693,8 +692,6 @@ export const defaultDirectoryEntries: DirectoryEntry[] = [
     ],
     emails: [{ address: 'mm-vostok@yandex.by' }],
 },
-
-// ======================== 2. MANAGEMENT ========================
 {
     id: 'mgmt-ceo',
     group: 'management',
@@ -857,8 +854,6 @@ export const defaultDirectoryEntries: DirectoryEntry[] = [
     phones: [],
     emails: [{ address: 'brik@milk.by' }],
 },
-
-// ======================== 3. DEPARTMENTS & SERVICES ========================
 {
     id: 'dept-marketing',
     group: 'departments',
@@ -1189,8 +1184,6 @@ export const defaultDirectoryEntries: DirectoryEntry[] = [
     phones: [{ number: '+375 (152) 45-39-32' }],
     emails: [{ address: 'doctor@milk.by' }],
 },
-
-// ======================== 4. BRANCHES, PLANTS, FARMS & HOLDING ========================
 {
     id: 'branch-shchuchin',
     group: 'branches',

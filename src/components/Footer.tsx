@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Lock, Mail, Phone, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Lock, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useAuth } from '../hooks/useAuth';
 import { useCatalogStore } from '../hooks/useCatalogStore';
@@ -23,7 +23,6 @@ export const Footer: React.FC = () => {
       milk: 'Молоко и кефир',
       butter: 'Масло и сливки',
       yogurt: 'Йогурты и творог',
-      iceCream: 'Мороженое',
       companyTitle: 'Компания и партнёрам',
       partners: 'Оптовым покупателям и HoReCa',
       export: 'Международный экспорт',
@@ -43,7 +42,6 @@ export const Footer: React.FC = () => {
       milk: 'Малако і кефір',
       butter: 'Масла і вяршкі',
       yogurt: 'Ёгурты і тварог',
-      iceCream: 'Марозіва',
       companyTitle: 'Кампанія і партнёрам',
       partners: 'Аптовым пакупнікам і HoReCa',
       export: 'Міжнародны экспарт',
@@ -63,7 +61,6 @@ export const Footer: React.FC = () => {
       milk: 'Milk & Kefir',
       butter: 'Butter & Cream',
       yogurt: 'Yogurts & Tvorog',
-      iceCream: 'Ice Cream',
       companyTitle: 'Company & Partners',
       partners: 'Wholesale & HoReCa',
       export: 'Global Export',
@@ -83,7 +80,6 @@ export const Footer: React.FC = () => {
       milk: '鲜牛奶与开菲尔',
       butter: '天然黄油与稀奶油',
       yogurt: '酸奶与凝乳干酪',
-      iceCream: '冰淇淋系列',
       companyTitle: '企业与合作',
       partners: '大宗批发与餐饮渠道',
       export: '国际出口业务',
@@ -155,20 +151,21 @@ export const Footer: React.FC = () => {
 
     <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pb-14">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 pb-6 border-b border-slate-200/90">
-    {/* 1. О бренде */}
-    <div className="space-y-2.5">
+    {/* 1. О бренде и адрес */}
+    <div className="space-y-3">
     <Link to="/" className="font-display text-lg font-bold text-slate-900 inline-block">
     {t('brandName')}
     </Link>
-    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xs">
     {localize(footer.brandDesc)}
     </p>
-    <p className="text-xs text-slate-500 leading-relaxed pt-0.5">
-    {localize(footer.address)}
-    </p>
+    <div className="flex items-start gap-2 pt-1 text-xs text-slate-500 leading-snug">
+    <MapPin className="w-3.5 h-3.5 text-[#0057B8] shrink-0 mt-0.5" />
+    <span className="tabular-nums">{localize(footer.address)}</span>
+    </div>
     </div>
 
-    {/* 2. Продукция */}
+    {/* 2. Продукция (сокращено на 1 пункт) */}
     {footer.showProductsColumn && (
       <div>
       <h3 className="text-xs font-semibold text-slate-900 mb-2.5">{copy.productsTitle}</h3>
@@ -196,11 +193,6 @@ export const Footer: React.FC = () => {
       <li>
       <Link to="/catalog/yogurt" className="hover:text-[#0057B8] transition-colors">
       {copy.yogurt}
-      </Link>
-      </li>
-      <li>
-      <Link to="/catalog/ice-cream" className="hover:text-[#0057B8] transition-colors">
-      {copy.iceCream}
       </Link>
       </li>
       </ul>
@@ -301,7 +293,7 @@ export const Footer: React.FC = () => {
 
     {/* Нижняя строка */}
     <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-500">
-    <span>{localize(footer.copyright)}</span>
+    <span className="tabular-nums">{localize(footer.copyright)}</span>
 
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
     <span>{localize(footer.heritage)}</span>
