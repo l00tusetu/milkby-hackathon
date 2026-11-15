@@ -8,7 +8,6 @@ import { NEWS_CATEGORY_LABELS } from '../data/news';
 import { SeoHead } from '../components/SeoHead';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import { ProductGrid } from '../components/ProductGrid';
-import { SmartFinder } from '../components/SmartFinder';
 import { B2BInquiryModal } from '../components/B2BInquiryModal';
 import { CategoryIcon } from '../components/CategoryIcon';
 import { HomeHeroSection } from '../components/home/HomeHeroSection';
@@ -128,7 +127,7 @@ export const Home: React.FC = () => {
     {/* 1. Full-bleed Hero + Live Smart Search */}
     <HomeHeroSection />
 
-    {/* 2. Promotional Product Plaque + Category Filter Tabs + Smart Finder */}
+    {/* 2. Promotional Product Plaque + Category Filter Tabs */}
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-5">
     {promoBanner.enabled && (
       <div
@@ -223,7 +222,6 @@ export const Home: React.FC = () => {
     scrollResetKey={activeCategoryId}
     />
 
-    <SmartFinder />
     </section>
 
     {/* 3. Enterprise Story & Production Metrics */}
