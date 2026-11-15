@@ -1125,66 +1125,127 @@ export const Filters: React.FC<FiltersProps> = ({
 
 `/home/july/Projects/milkby-hackathon/src/components/Footer.tsx`:
 ```
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, Lock, Mail, Phone, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
+import { useAuth } from '../hooks/useAuth';
+import { StaffAuthModal } from './StaffAuth';
 
 export const Footer: React.FC = () => {
   const { t, language } = useLanguage();
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  const [staffLoginOpen, setStaffLoginOpen] = useState(false);
 
-  const labels = {
-    sections:
-    language === 'ru'
-    ? 'Разделы'
-    : language === 'be'
-    ? 'Раздзелы'
-    : language === 'zh'
-    ? '网站导航'
-    : 'Sections',
-    scenarios:
-    language === 'ru'
-    ? 'Сценарии'
-    : language === 'be'
-    ? 'Сцэнарыі'
-    : language === 'zh'
-    ? '业务通道'
-    : 'Audience Paths',
-    tools:
-    language === 'ru'
-    ? 'Управление и SEO'
-    : language === 'be'
-    ? 'Кіраванне і SEO'
-    : language === 'zh'
-    ? '系统管理与SEO'
-    : 'Management & SEO',
-    cms:
-    language === 'ru'
-    ? 'CMS-панель маркетолога'
-    : language === 'be'
-    ? 'CMS-панэль маркетолага'
-    : language === 'zh'
-    ? 'CMS 内容管理后台'
-    : 'Marketing CMS Panel',
-    sitemap:
-    language === 'ru'
-    ? 'XML-карта сайта и 301-редиректы'
-    : language === 'be'
-    ? 'XML-карта сайта і 301-рэдырэкты'
-    : language === 'zh'
-    ? 'XML 站点地图与301重定向'
-    : 'XML Sitemap & 301 Audit',
-  };
+  const copy = {
+    ru: {
+      brandDesc:
+      'Натуральные молочные продукты из Гродно с 1938 года: свежее молоко, сыры, сливочное масло, йогурты и пломбир.',
+      address: '230005, г. Гродно, ул. Гаспадарчая, 28 · Пн–Пт 08:00–17:00',
+      productsTitle: 'Продукция',
+      allCatalog: 'Весь каталог',
+      cheese: 'Сыры и моцарелла',
+      milk: 'Молоко и кефир',
+      butter: 'Масло и сливки',
+      yogurt: 'Йогурты и творог',
+      iceCream: 'Мороженое',
+      companyTitle: 'Компания и партнёрам',
+      partners: 'Оптовым покупателям и HoReCa',
+      export: 'Международный экспорт',
+      contactsTitle: 'Связаться с нами',
+      receptionLabel: 'Приёмная',
+      salesLabel: 'Отдел продаж',
+      exportLabel: 'Экспорт',
+      copyright: '© 2026 ОАО «Молочный Мир» · УНП 500040357',
+      heritage: 'Белорусские молочные традиции с 1938 года',
+      staffLogin: 'Для сотрудников',
+      cmsLink: 'Панель управления',
+      seoLink: 'SEO и карта сайта',
+      logout: 'Выйти',
+    },
+    be: {
+      brandDesc:
+      'Натуральныя малочныя прадукты з Гродна з 1938 года: свежае малако, сыры, сметанковае масла, ёгурты і пламбір.',
+      address: '230005, г. Гродна, вул. Гаспадарчая, 28 · Пн–Пт 08:00–17:00',
+      productsTitle: 'Прадукцыя',
+      allCatalog: 'Увесь каталог',
+      cheese: 'Сыры і мацарэла',
+      milk: 'Малако і кефір',
+      butter: 'Масла і вяршкі',
+      yogurt: 'Ёгурты і тварог',
+      iceCream: 'Марозіва',
+      companyTitle: 'Кампанія і партнёрам',
+      partners: 'Аптовым пакупнікам і HoReCa',
+      export: 'Міжнародны экспарт',
+      contactsTitle: 'Звязацца з намі',
+      receptionLabel: 'Прыёмная',
+      salesLabel: 'Аддзел продажаў',
+      exportLabel: 'Экспарт',
+      copyright: '© 2026 ААТ «Малочны Мір» · УНП 500040357',
+      heritage: 'Беларускія малочныя традыцыі з 1938 года',
+      staffLogin: 'Супрацоўнікам',
+      cmsLink: 'Панэль кіравання',
+      seoLink: 'SEO і карта сайта',
+      logout: 'Выйсці',
+    },
+    en: {
+      brandDesc:
+      'Natural dairy products from Grodno since 1938: farm-fresh milk, aged cheeses, sweet cream butter, yogurts, and ice cream.',
+      address: '28 Gaspadarchaya St, Grodno 230005 · Mon–Fri 08:00–17:00',
+      productsTitle: 'Products',
+      allCatalog: 'Full Catalog',
+      cheese: 'Cheeses & Mozzarella',
+      milk: 'Milk & Kefir',
+      butter: 'Butter & Cream',
+      yogurt: 'Yogurts & Tvorog',
+      iceCream: 'Ice Cream',
+      companyTitle: 'Company & Partners',
+      partners: 'Wholesale & HoReCa',
+      export: 'Global Export',
+      contactsTitle: 'Get in Touch',
+      receptionLabel: 'Reception',
+      salesLabel: 'Sales Desk',
+      exportLabel: 'Export',
+      copyright: '© 2026 OJSC "Molochny Mir" (milk.by)',
+      heritage: 'Belarusian dairy craft since 1938',
+      staffLogin: 'Staff',
+      cmsLink: 'CMS Panel',
+      seoLink: 'SEO & Sitemap',
+      logout: 'Log out',
+    },
+    zh: {
+      brandDesc:
+      '自 1938 年起的格罗德诺天然乳品：纯鲜牛奶、陈年奶酪、天然黄油、希腊酸奶与经典冰淇淋。',
+      address: '格罗德诺市 Gaspadarchaya 街 28 号 · 周一至周五 08:00–17:00',
+      productsTitle: '产品系列',
+      allCatalog: '浏览全部目录',
+      cheese: '奶酪与马苏里拉',
+      milk: '鲜牛奶与开菲尔',
+      butter: '天然黄油与稀奶油',
+      yogurt: '酸奶与凝乳干酪',
+      iceCream: '冰淇淋系列',
+      companyTitle: '企业与合作',
+      partners: '大宗批发与餐饮渠道',
+      export: '国际出口业务',
+      contactsTitle: '联系我们',
+      receptionLabel: '总机前台',
+      salesLabel: '销售中心',
+      exportLabel: '国际出口',
+      copyright: '© 2026 Molochny Mir 股份公司 (milk.by)',
+      heritage: '始自 1938 年的白俄罗斯乳品品质',
+      staffLogin: '员工入口',
+      cmsLink: '管理后台',
+      seoLink: 'SEO 与站点地图',
+      logout: '退出',
+    },
+  }[language];
 
   return (
     <footer className="mt-10 sm:mt-12 bg-slate-50 relative overflow-hidden">
     {/* Компактная синяя молочная волна на границе с контентом */}
     <div className="w-full overflow-hidden leading-none bg-white" aria-hidden="true">
-    <svg
-    viewBox="0 0 1440 56"
-    preserveAspectRatio="none"
-    className="block w-full h-6 sm:h-9"
-    >
+    <svg viewBox="0 0 1440 56" preserveAspectRatio="none" className="block w-full h-6 sm:h-9">
     <path
     d="M0,20 C240,50 480,0 720,24 C960,48 1200,4 1440,22 L1440,56 L0,56 Z"
     fill="#0057B8"
@@ -1214,11 +1275,7 @@ export const Footer: React.FC = () => {
     className="pointer-events-none select-none absolute inset-x-0 bottom-0 h-8 sm:h-10"
     aria-hidden="true"
     >
-    <svg
-    viewBox="0 0 1440 60"
-    preserveAspectRatio="none"
-    className="block w-full h-full"
-    >
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="block w-full h-full">
     <path
     d="M0,26 C260,8 520,44 780,22 C1040,4 1260,38 1440,18 L1440,60 L0,60 Z"
     fill="#0057B8"
@@ -1240,20 +1297,60 @@ export const Footer: React.FC = () => {
     </div>
 
     <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pb-14">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-5 border-b border-slate-200/90">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 pb-6 border-b border-slate-200/90">
+    {/* 1. О бренде */}
     <div className="space-y-2.5">
     <Link to="/" className="font-display text-lg font-bold text-slate-900 inline-block">
     {t('brandName')}
     </Link>
-    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{t('footerLegal')}</p>
+    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{copy.brandDesc}</p>
+    <p className="text-xs text-slate-500 leading-relaxed pt-0.5">{copy.address}</p>
     </div>
 
+    {/* 2. Продукция */}
     <div>
-    <h3 className="text-xs font-semibold text-slate-900 mb-2">{labels.sections}</h3>
+    <h3 className="text-xs font-semibold text-slate-900 mb-2.5">{copy.productsTitle}</h3>
     <ul className="space-y-1.5 text-sm text-slate-600">
     <li>
     <Link to="/catalog" className="hover:text-[#0057B8] transition-colors">
-    {t('navCatalog')}
+    {copy.allCatalog}
+    </Link>
+    </li>
+    <li>
+    <Link to="/catalog/cheese" className="hover:text-[#0057B8] transition-colors">
+    {copy.cheese}
+    </Link>
+    </li>
+    <li>
+    <Link to="/catalog/milk" className="hover:text-[#0057B8] transition-colors">
+    {copy.milk}
+    </Link>
+    </li>
+    <li>
+    <Link to="/catalog/butter" className="hover:text-[#0057B8] transition-colors">
+    {copy.butter}
+    </Link>
+    </li>
+    <li>
+    <Link to="/catalog/yogurt" className="hover:text-[#0057B8] transition-colors">
+    {copy.yogurt}
+    </Link>
+    </li>
+    <li>
+    <Link to="/catalog/ice-cream" className="hover:text-[#0057B8] transition-colors">
+    {copy.iceCream}
+    </Link>
+    </li>
+    </ul>
+    </div>
+
+    {/* 3. Компания и сотрудничество */}
+    <div>
+    <h3 className="text-xs font-semibold text-slate-900 mb-2.5">{copy.companyTitle}</h3>
+    <ul className="space-y-1.5 text-sm text-slate-600">
+    <li>
+    <Link to="/about" className="hover:text-[#0057B8] transition-colors">
+    {t('navAbout')}
     </Link>
     </li>
     <li>
@@ -1262,67 +1359,61 @@ export const Footer: React.FC = () => {
     </Link>
     </li>
     <li>
-    <Link to="/about" className="hover:text-[#0057B8] transition-colors">
-    {t('navAbout')}
-    </Link>
-    </li>
-    <li>
-    <Link to="/contacts" className="hover:text-[#0057B8] transition-colors">
-    {t('ctaContact')}
-    </Link>
-    </li>
-    </ul>
-    </div>
-
-    <div>
-    <h3 className="text-xs font-semibold text-slate-900 mb-2">{labels.scenarios}</h3>
-    <ul className="space-y-1.5 text-sm text-slate-600">
-    <li>
-    <Link to="/catalog/cheese" className="hover:text-[#0057B8] transition-colors">
-    {t('roleConsumerTitle')}
-    </Link>
-    </li>
-    <li>
     <Link to="/partners" className="hover:text-[#0057B8] transition-colors">
-    {t('roleB2BTitle')}
+    {copy.partners}
     </Link>
     </li>
     <li>
     <Link to="/export" className="hover:text-[#0057B8] transition-colors">
-    {t('roleExportTitle')}
+    {copy.export}
     </Link>
     </li>
     <li>
-    <Link to="/news" className="hover:text-[#0057B8] transition-colors">
-    {t('roleMediaTitle')}
+    <Link to="/contacts" className="hover:text-[#0057B8] transition-colors">
+    {t('navContacts')}
     </Link>
     </li>
     </ul>
     </div>
 
-    <div className="space-y-3">
+    {/* 4. Контакты */}
+    <div className="space-y-3.5">
     <div>
-    <h3 className="text-xs font-semibold text-slate-900 mb-2">{labels.tools}</h3>
-    <ul className="space-y-1.5 text-sm text-slate-600">
-    <li>
-    <Link to="/admin" className="hover:text-[#0057B8] transition-colors">
-    {labels.cms}
-    </Link>
+    <h3 className="text-xs font-semibold text-slate-900 mb-2.5">{copy.contactsTitle}</h3>
+    <ul className="space-y-2 text-xs text-slate-600 tabular-nums">
+    <li className="flex items-center gap-2">
+    <Phone className="w-3.5 h-3.5 text-[#0057B8] shrink-0" />
+    <span>
+    <span className="text-slate-500">{copy.receptionLabel}: </span>
+    <a href="tel:+375152430172" className="hover:text-[#0057B8] font-medium">
+    +375 (152) 43-01-72
+    </a>
+    </span>
     </li>
-    <li>
-    <Link to="/sitemap" className="hover:text-[#0057B8] transition-colors">
-    {labels.sitemap}
-    </Link>
+    <li className="flex items-center gap-2">
+    <Phone className="w-3.5 h-3.5 text-[#0057B8] shrink-0" />
+    <span>
+    <span className="text-slate-500">{copy.salesLabel}: </span>
+    <a href="tel:+375152453942" className="hover:text-[#0057B8] font-medium">
+    +375 (152) 45-39-42
+    </a>
+    </span>
     </li>
-    <li className="font-mono text-xs text-slate-500 pt-0.5 tabular-nums">
-    ved@milk.by · +375 (152) 60-07-52
+    <li className="flex items-center gap-2">
+    <Mail className="w-3.5 h-3.5 text-[#0057B8] shrink-0" />
+    <span>
+    <span className="text-slate-500">{copy.exportLabel}: </span>
+    <a href="mailto:ved@milk.by" className="hover:text-[#0057B8] font-medium">
+    ved@milk.by
+    </a>
+    </span>
     </li>
     </ul>
     </div>
 
     <Link
     to="/contacts"
-    className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+    className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
     >
     <span>{t('ctaContact')}</span>
     <ArrowRight className="w-3.5 h-3.5" />
@@ -1330,341 +1421,149 @@ export const Footer: React.FC = () => {
     </div>
     </div>
 
-    <div className="pt-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-500">
-    <span>
-    {language === 'ru'
-      ? '© 2026 ОАО «Молочный Мир» (milk.by)'
-      : language === 'be'
-      ? '© 2026 ААТ «Малочны Мір» (milk.by)'
-      : language === 'zh'
-      ? '© 2026 Molochny Mir 股份公司 (milk.by)'
-  : '© 2026 Molochny Mir JSC (milk.by)'}
-  </span>
-  <span>FSSC 22000 · ISO 9001 · HACCP</span>
-  </div>
-  </div>
-  </footer>
+    {/* Нижняя строка + незаметный вход для сотрудников */}
+    <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-500">
+    <span>{copy.copyright}</span>
+
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+    <span>{copy.heritage}</span>
+
+    <span className="text-slate-300 hidden sm:inline" aria-hidden="true">
+    ·
+    </span>
+
+    {isAuthenticated ? (
+      <div className="inline-flex items-center gap-3 text-[11px]">
+      <Link
+      to="/admin"
+      className="inline-flex items-center gap-1 font-medium text-[#0057B8] hover:underline"
+      >
+      <ShieldCheck className="w-3 h-3 shrink-0" />
+      <span>{copy.cmsLink}</span>
+      </Link>
+      <Link
+      to="/sitemap"
+      className="text-slate-500 hover:text-[#0057B8] transition-colors"
+      >
+      {copy.seoLink}
+      </Link>
+      <button
+      type="button"
+      onClick={logout}
+      className="text-slate-400 hover:text-slate-700 transition-colors"
+      >
+      {copy.logout}
+      </button>
+      </div>
+    ) : (
+      <button
+      type="button"
+      onClick={() => setStaffLoginOpen(true)}
+      className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-600 transition-colors"
+      >
+      <Lock className="w-3 h-3 shrink-0" />
+      <span>{copy.staffLogin}</span>
+      </button>
+    )}
+    </div>
+    </div>
+    </div>
+
+    <StaffAuthModal
+    open={staffLoginOpen}
+    onClose={() => setStaffLoginOpen(false)}
+    onSuccess={() => navigate('/admin')}
+    />
+    </footer>
   );
 };
 ```
 
 `/home/july/Projects/milkby-hackathon/src/components/Header.tsx`:
 ```
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, ArrowRight } from 'lucide-react';
+import React, { useEffect } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
-import { useCatalogStore } from '../hooks/useCatalogStore';
-import { LanguageSwitcher } from './LanguageSwitcher';
-import logoUrl from '../assets/logo.webp';
+import { Language } from '../types';
 
-export const Header: React.FC = () => {
-  const { t, localize, language } = useLanguage();
-  const { categories } = useCatalogStore();
-  const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState<'catalog' | 'business' | null>(null);
-  const [pastHero, setPastHero] = useState(false);
+interface SeoHeadProps {
+  title: string;
+  description: string;
+  canonicalHash?: string;
+  noIndex?: boolean;
+}
 
-  const isHomePage =
-  location.pathname === '/' || /^\/(ru|be|en|zh)\/?$/.test(location.pathname);
+const HREFLANG_LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
+
+export const SeoHead: React.FC<SeoHeadProps> = ({
+  title,
+  description,
+  canonicalHash,
+  noIndex = false,
+}) => {
+  const { language } = useLanguage();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setPastHero(window.scrollY > 440);
+    document.title = title;
+    document.documentElement.lang = language;
+
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector);
+      if (!el) {
+        el = document.createElement('meta');
+        if (selector.includes('property=')) {
+          el.setAttribute('property', selector.match(/property="([^"]+)"/)?.[1] || '');
+        } else {
+          el.setAttribute('name', selector.match(/name="([^"]+)"/)?.[1] || '');
+        }
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
     };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
 
-  useEffect(() => {
-    setMobileOpen(false);
-    setOpenMenu(null);
-  }, [location.pathname]);
+    setMeta('meta[name="description"]', 'content', description);
+    setMeta('meta[property="og:title"]', 'content', title);
+    setMeta('meta[property="og:description"]', 'content', description);
+    setMeta('meta[name="robots"]', 'content', noIndex ? 'noindex, nofollow' : 'index, follow');
 
-  useEffect(() => {
-    if (!mobileOpen) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMobileOpen(false);
-    };
-      window.addEventListener('keydown', onKeyDown);
-      return () => window.removeEventListener('keydown', onKeyDown);
-  }, [mobileOpen]);
+    if (canonicalHash !== undefined) {
+      const normalizedPath = canonicalHash.startsWith('/') ? canonicalHash : `/${canonicalHash}`;
 
-  const isOverHero = isHomePage && !pastHero;
+      let canonicalLink = document.querySelector('link[rel="canonical"]');
+      if (!canonicalLink) {
+        canonicalLink = document.createElement('link');
+        canonicalLink.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalLink);
+      }
+      canonicalLink.setAttribute(
+        'href',
+        `https://milk.by/#/${language}${normalizedPath === '/' ? '' : normalizedPath}`
+      );
 
-  const isActive = (path: string) =>
-  location.pathname === path || location.pathname.startsWith(`${path}/`);
+      const upsertAlternate = (hreflang: string, href: string) => {
+        let alt = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
+        if (!alt) {
+          alt = document.createElement('link');
+          alt.setAttribute('rel', 'alternate');
+          alt.setAttribute('hreflang', hreflang);
+          document.head.appendChild(alt);
+        }
+        alt.setAttribute('href', href);
+      };
 
-  const isBusinessActive = isActive('/partners') || isActive('/export');
+      HREFLANG_LANGS.forEach((langCode) => {
+        upsertAlternate(
+          langCode,
+          `https://milk.by/#/${langCode}${normalizedPath === '/' ? '' : normalizedPath}`
+        );
+      });
+      upsertAlternate(
+        'x-default',
+        `https://milk.by/#/ru${normalizedPath === '/' ? '' : normalizedPath}`
+      );
+    }
+  }, [title, description, canonicalHash, noIndex, language]);
 
-  const copy = {
-    ru: {
-      allCatalog: 'Весь каталог продукции',
-      wholesale: 'Оптовым покупателям и HoReCa',
-      wholesaleSub: 'Поставки для сетей, пиццерий и пекарен',
-      exportTitle: 'Международный экспорт',
-      exportSub: 'СОМ, масло, сыры и сертификаты GACC / ISO',
-    },
-    be: {
-      allCatalog: 'Увесь каталог прадукцыі',
-      wholesale: 'Аптовым пакупнікам і HoReCa',
-      wholesaleSub: 'Пастаўкі для сетак, піцэрый і пякарняў',
-      exportTitle: 'Міжнародны экспарт',
-      exportSub: 'САМ, масла, сыры і сертыфікаты GACC / ISO',
-    },
-    en: {
-      allCatalog: 'View All Products',
-      wholesale: 'Wholesale & HoReCa Partners',
-      wholesaleSub: 'Supply for retail chains, pizzerias, and bakeries',
-      exportTitle: 'Global Export Portal',
-      exportSub: 'SMP, butter, aged cheese, GACC & ISO docs',
-    },
-    zh: {
-      allCatalog: '浏览全部产品目录',
-      wholesale: '大宗批发与 HoReCa 餐饮合作',
-      wholesaleSub: '面向连锁商超、披萨门店与工业烘焙直供',
-      exportTitle: '国际出口专区',
-      exportSub: '脱脂奶粉、黄油、奶酪及 GACC / ISO 认证',
-    },
-  }[language];
-
-  const linkClass = (active: boolean) =>
-  `nav-underline-link inline-flex items-center gap-1 whitespace-nowrap shrink-0 py-2 transition-colors duration-200 ${
-    isOverHero
-    ? active
-    ? 'text-white'
-    : 'text-white/90 hover:text-white'
-    : active
-    ? 'text-[#0057B8]'
-    : 'text-slate-700 hover:text-[#0057B8]'
-  }`;
-
-  return (
-    <header
-    className={`${
-      isHomePage ? 'fixed top-0 left-0 right-0' : 'sticky top-0'
-    } z-40 transition-colors duration-200 backdrop-blur-md ${
-      isOverHero
-      ? mobileOpen
-      ? 'bg-slate-950/60 border-b border-white/15'
-      : 'bg-black/25 border-b border-white/15'
-      : mobileOpen
-      ? 'bg-white/80 border-b border-slate-200/80'
-      : 'bg-white/90 border-b border-slate-200/80'
-    }`}
-    >
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between gap-6">
-    {/* Zone 1: Brand Logo */}
-    <Link
-    to="/"
-    onClick={() => setMobileOpen(false)}
-    aria-label={t('brandName')}
-    className="inline-flex items-center shrink-0 rounded-lg transition-transform duration-200 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0057B8]"
-    >
-    <img
-    src={logoUrl}
-    alt={t('brandName')}
-    className="h-11 sm:h-12 w-auto object-contain"
-    />
-    </Link>
-
-    {/* Zone 2: Clean 5-Item Navigation with Dropdowns & Animated Underlines */}
-    <nav
-    className="hidden lg:flex items-center gap-7 text-[15px] font-medium"
-    aria-label="Main navigation"
-    >
-    {/* 1. Products + Category Dropdown */}
-    <div
-    className="relative group/nav"
-    onMouseEnter={() => setOpenMenu('catalog')}
-    onMouseLeave={() => setOpenMenu(null)}
-    >
-    <Link
-    to="/catalog"
-    data-active={isActive('/catalog')}
-    className={linkClass(isActive('/catalog'))}
-    >
-    <span>{t('navCatalog')}</span>
-    <ChevronDown
-    className={`w-3.5 h-3.5 transition-transform duration-200 ${
-      openMenu === 'catalog' ? 'rotate-180' : ''
-    }`}
-    />
-    </Link>
-
-    {openMenu === 'catalog' && (
-      <div className="absolute left-0 top-full pt-2 z-50">
-      <div className="w-[460px] rounded-2xl bg-white/98 backdrop-blur-xl border border-slate-200/90 shadow-xl p-3 space-y-2">
-      <div className="grid grid-cols-2 gap-1">
-      {categories.map((cat) => (
-        <Link
-        key={cat.id}
-        to={`/catalog/${cat.slug}`}
-        onClick={() => setOpenMenu(null)}
-        className="group/item px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-blue-50/70 hover:text-[#0057B8] transition-colors flex items-center justify-between gap-2"
-        >
-        <span className="truncate">{localize(cat.name)}</span>
-        <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all duration-200 shrink-0" />
-        </Link>
-      ))}
-      </div>
-      <div className="pt-2 border-t border-slate-100">
-      <Link
-      to="/catalog"
-      onClick={() => setOpenMenu(null)}
-      className="group/all flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-[#0057B8] hover:bg-blue-50 transition-colors"
-      >
-      <span>{copy.allCatalog}</span>
-      <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/all:translate-x-0.5" />
-      </Link>
-      </div>
-      </div>
-      </div>
-    )}
-    </div>
-
-    {/* 2. B2B & Export Dropdown */}
-    <div
-    className="relative group/nav"
-    onMouseEnter={() => setOpenMenu('business')}
-    onMouseLeave={() => setOpenMenu(null)}
-    >
-    <Link
-    to="/export"
-    data-active={isBusinessActive}
-    className={linkClass(isBusinessActive)}
-    >
-    <span>{t('navBusiness')}</span>
-    <ChevronDown
-    className={`w-3.5 h-3.5 transition-transform duration-200 ${
-      openMenu === 'business' ? 'rotate-180' : ''
-    }`}
-    />
-    </Link>
-
-    {openMenu === 'business' && (
-      <div className="absolute left-0 top-full pt-2 z-50">
-      <div className="w-80 rounded-2xl bg-white/98 backdrop-blur-xl border border-slate-200/90 shadow-xl p-2 space-y-1">
-      <Link
-      to="/partners"
-      onClick={() => setOpenMenu(null)}
-      className="block px-3.5 py-2.5 rounded-xl hover:bg-blue-50/70 transition-colors group/item"
-      >
-      <div className="text-sm font-semibold text-slate-900 group-hover/item:text-[#0057B8] transition-colors">
-      {copy.wholesale}
-      </div>
-      <div className="text-xs text-slate-500 mt-0.5">{copy.wholesaleSub}</div>
-      </Link>
-      <Link
-      to="/export"
-      onClick={() => setOpenMenu(null)}
-      className="block px-3.5 py-2.5 rounded-xl hover:bg-blue-50/70 transition-colors group/item"
-      >
-      <div className="text-sm font-semibold text-slate-900 group-hover/item:text-[#0057B8] transition-colors">
-      {copy.exportTitle}
-      </div>
-      <div className="text-xs text-slate-500 mt-0.5">{copy.exportSub}</div>
-      </Link>
-      </div>
-      </div>
-    )}
-    </div>
-
-    {/* 3. News */}
-    <Link to="/news" data-active={isActive('/news')} className={linkClass(isActive('/news'))}>
-    {t('navNews')}
-    </Link>
-
-    {/* 4. About */}
-    <Link to="/about" data-active={isActive('/about')} className={linkClass(isActive('/about'))}>
-    {t('navAbout')}
-    </Link>
-
-    {/* 5. Contacts */}
-    <Link
-    to="/contacts"
-    data-active={isActive('/contacts')}
-    className={linkClass(isActive('/contacts'))}
-    >
-    {t('navContacts')}
-    </Link>
-    </nav>
-
-    {/* Zone 3: Language Switcher + Mobile Toggle */}
-    <div className="flex items-center gap-3 shrink-0">
-    <div className="hidden sm:inline-flex">
-    <LanguageSwitcher variant="dropdown" dark={isOverHero} />
-    </div>
-
-    <button
-    type="button"
-    onClick={() => setMobileOpen((prev) => !prev)}
-    className={`lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border transition-colors ${
-      isOverHero
-      ? 'border-white/25 text-white hover:bg-white/10'
-      : 'border-slate-200 text-slate-700 hover:bg-slate-50'
-    }`}
-    aria-expanded={mobileOpen}
-    aria-label="Toggle navigation menu"
-    >
-    {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-    </button>
-    </div>
-    </div>
-
-    {/* Mobile Drawer */}
-    {mobileOpen && (
-      <div
-      className={`lg:hidden border-t max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain px-4 py-4 space-y-4 ${
-        isOverHero
-        ? 'border-white/15 text-white'
-        : 'border-slate-200/70 text-slate-900'
-      }`}
-      >
-      <nav className="flex flex-col space-y-1" aria-label="Mobile navigation">
-      {[
-        { to: '/catalog', label: t('navCatalog') },
-                    { to: '/partners', label: t('navPartners') },
-                    { to: '/export', label: t('navExport') },
-                    { to: '/news', label: t('navNews') },
-                    { to: '/about', label: t('navAbout') },
-                    { to: '/contacts', label: t('navContacts') },
-      ].map((item) => (
-        <Link
-        key={item.to}
-        to={item.to}
-        onClick={() => setMobileOpen(false)}
-        className={`px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
-          isOverHero
-          ? isActive(item.to)
-          ? 'bg-white/15 text-white'
-          : 'text-white/90 hover:bg-white/10 hover:text-white'
-      : isActive(item.to)
-      ? 'bg-[#0057B8]/10 text-[#0057B8]'
-      : 'text-slate-700 hover:bg-slate-900/5 hover:text-[#0057B8]'
-        }`}
-        >
-        {item.label}
-        </Link>
-      ))}
-      </nav>
-
-      <div
-      className={`pt-3 border-t flex items-center justify-between gap-3 ${
-        isOverHero ? 'border-white/15' : 'border-slate-200/70'
-      }`}
-      >
-      <span className={`text-xs ${isOverHero ? 'text-white/75' : 'text-slate-500'}`}>
-      Language / Язык
-      </span>
-      <LanguageSwitcher compact dark={isOverHero} />
-      </div>
-      </div>
-    )}
-    </header>
-  );
+  return null;
 };
 ```
 
@@ -3777,11 +3676,17 @@ interface SeoHeadProps {
   title: string;
   description: string;
   canonicalHash?: string;
+  noIndex?: boolean;
 }
 
 const HREFLANG_LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
 
-export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalHash }) => {
+export const SeoHead: React.FC<SeoHeadProps> = ({
+  title,
+  description,
+  canonicalHash,
+  noIndex = false,
+}) => {
   const { language } = useLanguage();
 
   useEffect(() => {
@@ -3805,6 +3710,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalH
     setMeta('meta[name="description"]', 'content', description);
     setMeta('meta[property="og:title"]', 'content', title);
     setMeta('meta[property="og:description"]', 'content', description);
+    setMeta('meta[name="robots"]', 'content', noIndex ? 'noindex, nofollow' : 'index, follow');
 
     if (canonicalHash !== undefined) {
       const normalizedPath = canonicalHash.startsWith('/') ? canonicalHash : `/${canonicalHash}`;
@@ -3815,7 +3721,10 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalH
         canonicalLink.setAttribute('rel', 'canonical');
         document.head.appendChild(canonicalLink);
       }
-      canonicalLink.setAttribute('href', `https://milk.by/#/${language}${normalizedPath === '/' ? '' : normalizedPath}`);
+      canonicalLink.setAttribute(
+        'href',
+        `https://milk.by/#/${language}${normalizedPath === '/' ? '' : normalizedPath}`
+      );
 
       const upsertAlternate = (hreflang: string, href: string) => {
         let alt = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
@@ -3839,7 +3748,7 @@ export const SeoHead: React.FC<SeoHeadProps> = ({ title, description, canonicalH
         `https://milk.by/#/ru${normalizedPath === '/' ? '' : normalizedPath}`
       );
     }
-  }, [title, description, canonicalHash, language]);
+  }, [title, description, canonicalHash, noIndex, language]);
 
   return null;
 };
@@ -4092,6 +4001,371 @@ export const SmartFinder: React.FC = () => {
     )}
     </section>
   );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/StaffAuth.tsx`:
+```
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, Eye, EyeOff, Lock, X } from 'lucide-react';
+import { DEMO_ADMIN_CREDENTIALS, useAuth } from '../hooks/useAuth';
+import { useLanguage } from '../hooks/useLanguage';
+import { SeoHead } from './SeoHead';
+
+interface StaffLoginFormProps {
+    onSuccess?: () => void;
+    onCancel?: () => void;
+}
+
+const StaffLoginForm: React.FC<StaffLoginFormProps> = ({ onSuccess, onCancel }) => {
+    const { language } = useLanguage();
+    const { login } = useAuth();
+
+    const [identifier, setIdentifier] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
+
+    const copy = {
+        ru: {
+            loginLabel: 'Логин или e-mail',
+            loginPlaceholder: 'admin',
+            passwordLabel: 'Пароль',
+            passwordPlaceholder: 'Введите пароль',
+            showPwd: 'Показать пароль',
+            hidePwd: 'Скрыть пароль',
+            errInvalid: 'Неверный логин или пароль.',
+            submit: 'Войти',
+            cancel: 'Отмена',
+            demoHint: 'Демо-доступ:',
+            fillDemo: 'Заполнить',
+        },
+        be: {
+            loginLabel: 'Лагін або e-mail',
+            loginPlaceholder: 'admin',
+            passwordLabel: 'Пароль',
+            passwordPlaceholder: 'Увядзіце пароль',
+            showPwd: 'Паказаць пароль',
+            hidePwd: 'Схаваць пароль',
+            errInvalid: 'Няправільны лагін або пароль.',
+            submit: 'Увайсці',
+            cancel: 'Адмена',
+            demoHint: 'Дэма-доступ:',
+            fillDemo: 'Запоўніць',
+        },
+        en: {
+            loginLabel: 'Username or email',
+            loginPlaceholder: 'admin',
+            passwordLabel: 'Password',
+            passwordPlaceholder: 'Enter password',
+            showPwd: 'Show password',
+            hidePwd: 'Hide password',
+            errInvalid: 'Invalid username or password.',
+            submit: 'Sign In',
+            cancel: 'Cancel',
+            demoHint: 'Demo access:',
+            fillDemo: 'Autofill',
+        },
+        zh: {
+            loginLabel: '用户名或邮箱',
+            loginPlaceholder: 'admin',
+            passwordLabel: '密码',
+            passwordPlaceholder: '请输入密码',
+            showPwd: '显示密码',
+            hidePwd: '隐藏密码',
+            errInvalid: '用户名或密码错误。',
+            submit: '登录',
+            cancel: '取消',
+            demoHint: '演示账号:',
+            fillDemo: '自动填充',
+        },
+    }[language];
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const ok = login(identifier, password);
+        if (!ok) {
+            setError(copy.errInvalid);
+            return;
+        }
+        setError('');
+        onSuccess?.();
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+            <div className="p-3 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg">
+            {error}
+            </div>
+        )}
+
+        <div>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.loginLabel}
+        </label>
+        <input
+        type="text"
+        required
+        autoComplete="username"
+        value={identifier}
+        onChange={(e) => {
+            setIdentifier(e.target.value);
+            if (error) setError('');
+        }}
+        placeholder={copy.loginPlaceholder}
+        className="w-full h-10 px-3 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+        />
+        </div>
+
+        <div>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.passwordLabel}
+        </label>
+        <div className="relative">
+        <input
+        type={showPassword ? 'text' : 'password'}
+        required
+        autoComplete="current-password"
+        value={password}
+        onChange={(e) => {
+            setPassword(e.target.value);
+            if (error) setError('');
+        }}
+        placeholder={copy.passwordPlaceholder}
+        className="w-full h-10 pl-3 pr-10 text-base sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#0057B8]"
+        />
+        <button
+        type="button"
+        onClick={() => setShowPassword((prev) => !prev)}
+        aria-label={showPassword ? copy.hidePwd : copy.showPwd}
+        className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+        >
+        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+        </button>
+        </div>
+        </div>
+
+        <div className="pt-1 flex items-center justify-end gap-2.5">
+        {onCancel && (
+            <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+            >
+            {copy.cancel}
+            </button>
+        )}
+        <button
+        type="submit"
+        className={`${
+            onCancel ? 'px-5' : 'w-full'
+        } py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors`}
+        >
+        {copy.submit}
+        </button>
+        </div>
+
+        <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-[11px] text-slate-400">
+        <span className="font-mono">
+        {copy.demoHint} {DEMO_ADMIN_CREDENTIALS.username} / {DEMO_ADMIN_CREDENTIALS.password}
+        </span>
+        <button
+        type="button"
+        onClick={() => {
+            setIdentifier(DEMO_ADMIN_CREDENTIALS.username);
+            setPassword(DEMO_ADMIN_CREDENTIALS.password);
+            setError('');
+        }}
+        className="font-medium text-[#0057B8]/85 hover:text-[#0057B8] transition-colors whitespace-nowrap"
+        >
+        {copy.fillDemo}
+        </button>
+        </div>
+        </form>
+    );
+};
+
+interface StaffAuthModalProps {
+    open: boolean;
+    onClose: () => void;
+    onSuccess?: () => void;
+}
+
+export const StaffAuthModal: React.FC<StaffAuthModalProps> = ({
+    open,
+    onClose,
+    onSuccess,
+}) => {
+    const { language } = useLanguage();
+    const [mounted, setMounted] = useState(open);
+    const [closing, setClosing] = useState(false);
+
+    useEffect(() => {
+        if (open) {
+            setMounted(true);
+            setClosing(false);
+            return;
+        }
+
+        if (mounted) {
+            setClosing(true);
+            const timer = window.setTimeout(() => {
+                setMounted(false);
+                setClosing(false);
+            }, 180);
+            return () => window.clearTimeout(timer);
+        }
+    }, [open, mounted]);
+
+    useEffect(() => {
+        if (!open) return;
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+            window.addEventListener('keydown', onKeyDown);
+            return () => window.removeEventListener('keydown', onKeyDown);
+    }, [open, onClose]);
+
+    if (!mounted) return null;
+
+    const copy = {
+        ru: {
+            title: 'Вход для сотрудников',
+            subtitle: 'Панель управления каталогом и материалами сайта',
+        },
+        be: {
+            title: 'Уваход для супрацоўнікаў',
+            subtitle: 'Панэль кіравання каталогам і матэрыяламі сайта',
+        },
+        en: {
+            title: 'Staff Sign In',
+            subtitle: 'Access catalog and website content management',
+        },
+        zh: {
+            title: '员工登录',
+            subtitle: '进入产品目录与网站内容管理后台',
+        },
+    }[language];
+
+    return (
+        <div
+        className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/55 backdrop-blur-xs ${
+            closing ? 'modal-backdrop-out pointer-events-none' : 'modal-backdrop-in'
+        }`}
+        role="dialog"
+        aria-modal="true"
+        onClick={(e) => {
+            if (e.target === e.currentTarget) onClose();
+        }}
+        >
+        <div
+        className={`bg-white border border-slate-200 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden ${
+            closing ? 'modal-panel-out' : 'modal-panel-in'
+        }`}
+        >
+        <div className="px-5 sm:px-6 py-4 border-b border-slate-200 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 min-w-0">
+        <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0057B8] flex items-center justify-center shrink-0">
+        <Lock className="w-4 h-4" />
+        </div>
+        <div className="min-w-0">
+        <h2 className="font-display text-base font-semibold text-slate-900 truncate">
+        {copy.title}
+        </h2>
+        <p className="text-xs text-slate-500 truncate">{copy.subtitle}</p>
+        </div>
+        </div>
+
+        <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close modal"
+        className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors shrink-0"
+        >
+        <X className="w-4 h-4" />
+        </button>
+        </div>
+
+        <div className="p-5 sm:p-6">
+        <StaffLoginForm
+        onCancel={onClose}
+        onSuccess={() => {
+            onClose();
+            onSuccess?.();
+        }}
+        />
+        </div>
+        </div>
+        </div>
+    );
+};
+
+export const StaffAuthGate: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { isAuthenticated } = useAuth();
+    const { language, t } = useLanguage();
+
+    if (isAuthenticated) {
+        return <>{children}</>;
+    }
+
+    const copy = {
+        ru: {
+            title: 'Доступ только для сотрудников',
+            subtitle: 'Авторизуйтесь для перехода в панель управления сайтом.',
+            backHome: 'Вернуться на главную',
+        },
+        be: {
+            title: 'Доступ толькі для супрацоўнікаў',
+            subtitle: 'Аўтарызуйцеся для пераходу ў панэль кіравання сайтам.',
+            backHome: 'Вярнуцца на галоўную',
+        },
+        en: {
+            title: 'Staff Access Required',
+            subtitle: 'Sign in with an employee account to access website administration.',
+            backHome: 'Back to homepage',
+        },
+        zh: {
+            title: '仅限内部员工访问',
+            subtitle: '请使用员工账号登录以访问网站管理后台。',
+            backHome: '返回首页',
+        },
+    }[language];
+
+    return (
+        <div className="max-w-md mx-auto px-4 py-12 sm:py-16 space-y-5">
+        <SeoHead
+        title={`${copy.title} — ${t('brandName')}`}
+        description={copy.subtitle}
+        noIndex
+        />
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-5">
+        <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0057B8] flex items-center justify-center shrink-0">
+        <Lock className="w-5 h-5" />
+        </div>
+        <div className="space-y-1">
+        <h1 className="font-display text-lg font-bold text-slate-900">{copy.title}</h1>
+        <p className="text-xs text-slate-500 leading-relaxed">{copy.subtitle}</p>
+        </div>
+        </div>
+
+        <StaffLoginForm />
+        </div>
+
+        <div className="text-center">
+        <Link
+        to="/"
+        className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-[#0057B8] transition-colors"
+        >
+        <ArrowLeft className="w-3.5 h-3.5" />
+        <span>{copy.backHome}</span>
+        </Link>
+        </div>
+        </div>
+    );
 };
 ```
 
@@ -6158,6 +6432,115 @@ export const defaultTranslations: Record<string, LocalizedText> = {
 };
 ```
 
+`/home/july/Projects/milkby-hackathon/src/hooks/useAuth.tsx`:
+```
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import { Language } from '../types';
+
+export const DEMO_ADMIN_CREDENTIALS = {
+    username: 'admin',
+    emailAlias: 'admin@milk.by',
+    password: 'milk2026',
+} as const;
+
+export interface StaffUser {
+    username: string;
+    role: Record<Language, string>;
+}
+
+interface AuthContextValue {
+    user: StaffUser | null;
+    isAuthenticated: boolean;
+    login: (identifier: string, password: string) => boolean;
+    logout: () => void;
+}
+
+const STORAGE_AUTH_KEY = 'milk_world_staff_auth_v1';
+
+const DEFAULT_STAFF_USER: StaffUser = {
+    username: DEMO_ADMIN_CREDENTIALS.username,
+    role: {
+        ru: 'Администратор сайта',
+        be: 'Адміністратар сайта',
+        en: 'Site Administrator',
+        zh: '网站管理员',
+    },
+};
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+function loadAuthSession(): StaffUser | null {
+    try {
+        const raw = localStorage.getItem(STORAGE_AUTH_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw) as { username?: string };
+        if (parsed?.username === DEMO_ADMIN_CREDENTIALS.username) {
+            return DEFAULT_STAFF_USER;
+        }
+    } catch {
+        // ignore storage errors
+    }
+    return null;
+}
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [user, setUser] = useState<StaffUser | null>(() => loadAuthSession());
+
+    const login = useCallback((identifier: string, password: string): boolean => {
+        const normalized = identifier.trim().toLowerCase();
+        const isValidUser =
+        normalized === DEMO_ADMIN_CREDENTIALS.username ||
+        normalized === DEMO_ADMIN_CREDENTIALS.emailAlias;
+        const isValidPassword = password === DEMO_ADMIN_CREDENTIALS.password;
+
+        if (!isValidUser || !isValidPassword) {
+            return false;
+        }
+
+        setUser(DEFAULT_STAFF_USER);
+        try {
+            localStorage.setItem(
+                STORAGE_AUTH_KEY,
+                JSON.stringify({ username: DEFAULT_STAFF_USER.username })
+            );
+        } catch {
+            // ignore storage errors
+        }
+        return true;
+    }, []);
+
+    const logout = useCallback(() => {
+        setUser(null);
+        try {
+            localStorage.removeItem(STORAGE_AUTH_KEY);
+        } catch {
+            // ignore storage errors
+        }
+    }, []);
+
+    return (
+        <AuthContext.Provider
+        value={{
+            user,
+            isAuthenticated: Boolean(user),
+            login,
+            logout,
+        }}
+        >
+        {children}
+        </AuthContext.Provider>
+    );
+};
+
+export function useAuth(): AuthContextValue {
+    const ctx = useContext(AuthContext);
+    if (!ctx) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return ctx;
+}
+```
+
 `/home/july/Projects/milkby-hackathon/src/hooks/useCatalogStore.tsx`:
 ```
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
@@ -7186,12 +7569,27 @@ export const About: React.FC = () => {
 `/home/july/Projects/milkby-hackathon/src/pages/Admin.tsx`:
 ```
 import React, { useState, useMemo } from 'react';
-import { Plus, Eye, EyeOff, Trash2, RotateCcw, Edit3, Check, Upload, Download } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import {
+  Plus,
+  Eye,
+  EyeOff,
+  Trash2,
+  RotateCcw,
+  Edit3,
+  Check,
+  Upload,
+  Download,
+  Globe2,
+  LogOut,
+} from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
+import { useAuth } from '../hooks/useAuth';
 import { ASSETS } from '../data/assets';
 import { Category, Language, NewsArticle, PackageVariant, Product, RedirectRule } from '../types';
 import { SeoHead } from '../components/SeoHead';
+import { StaffAuthGate } from '../components/StaffAuth';
 
 const LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
 
@@ -7206,8 +7604,9 @@ const parseWeightGrams = (label: string): number => {
 
 const emptyLocalized = (ruValue = '') => ({ ru: ruValue, be: '', en: '', zh: '' });
 
-export const Admin: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const { language, localize, t, translations, updateTranslation, resetTranslations } = useLanguage();
+  const { user, logout } = useAuth();
   const {
     products,
     categories,
@@ -7285,8 +7684,11 @@ export const Admin: React.FC = () => {
 
   const copy = {
     ru: {
-      subtitle: 'Управление каталогом, фасовками, категориями, 301-редиректами, SEO-тегами, новостями и 4 языковыми версиями.',
+      subtitle:
+      'Управление каталогом, фасовками, категориями, 301-редиректами, SEO-тегами, новостями и 4 языковыми версиями.',
+      seoSitemap: 'SEO и карта сайта',
       reset: 'Сбросить демо-данные',
+      logout: 'Выйти',
       tabProducts: `Продукция (${products.length})`,
       tabCategories: `Категории (${categories.length})`,
       tabNews: `Новости (${news.length})`,
@@ -7312,8 +7714,11 @@ export const Admin: React.FC = () => {
       cancelBtn: 'Отмена',
     },
     be: {
-      subtitle: 'Кіраванне каталогам, фасоўкамі, катэгорыямі, 301-рэдырэктамі, SEO-тэгамі, навінамі і 4 моўнымі версіямі.',
+      subtitle:
+      'Кіраванне каталогам, фасоўкамі, катэгорыямі, 301-рэдырэктамі, SEO-тэгамі, навінамі і 4 моўнымі версіямі.',
+      seoSitemap: 'SEO і карта сайта',
       reset: 'Скінуць дэма-даныя',
+      logout: 'Выйсці',
       tabProducts: `Прадукцыя (${products.length})`,
       tabCategories: `Катэгорыі (${categories.length})`,
       tabNews: `Навіны (${news.length})`,
@@ -7339,8 +7744,11 @@ export const Admin: React.FC = () => {
       cancelBtn: 'Адмена',
     },
     en: {
-      subtitle: 'No-code management for products, packaging variants, category schemas, 301 redirects, SEO, news, and 4-language translations.',
+      subtitle:
+      'No-code management for products, packaging variants, category schemas, 301 redirects, SEO, news, and 4-language translations.',
+      seoSitemap: 'SEO & Sitemap',
       reset: 'Reset Demo Data',
+      logout: 'Log out',
       tabProducts: `Products (${products.length})`,
       tabCategories: `Categories (${categories.length})`,
       tabNews: `News (${news.length})`,
@@ -7367,7 +7775,9 @@ export const Admin: React.FC = () => {
     },
     zh: {
       subtitle: '免代码管理产品目录、包装规格、分类属性模板、301重定向、SEO标签、新闻资讯及四语翻译。',
+      seoSitemap: 'SEO 与站点地图',
       reset: '重置演示数据',
+      logout: '退出登录',
       tabProducts: `产品目录 (${products.length})`,
       tabCategories: `产品分类 (${categories.length})`,
       tabNews: `新闻动态 (${news.length})`,
@@ -7531,7 +7941,12 @@ export const Admin: React.FC = () => {
       weight: pkgWeight.trim(),
       weightGrams: parseWeightGrams(pkgWeight),
       shelfLife: { ru: pkgShelf.trim(), be: '', en: '', zh: '' },
-      storage: { ru: pkgStorage.trim(), be: pkgStorage.trim(), en: pkgStorage.trim(), zh: pkgStorage.trim() },
+      storage: {
+        ru: pkgStorage.trim(),
+        be: pkgStorage.trim(),
+        en: pkgStorage.trim(),
+        zh: pkgStorage.trim(),
+      },
       packagingType: { ru: pkgType.trim(), be: '', en: '', zh: '' },
       unitsPerBox: Number(pkgBox) || 1,
       gtin: pkgGtin.trim() || '4810268000000',
@@ -7559,7 +7974,10 @@ export const Admin: React.FC = () => {
           }
         } else {
           // Simple CSV import: id;category;name_ru;name_en;fat;protein;weight;shelfLife
-          const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+          const lines = text
+          .split(/\r?\n/)
+          .map((l) => l.trim())
+          .filter(Boolean);
           const dataLines = lines.slice(lines[0]?.toLowerCase().includes('name') ? 1 : 0);
           const imported: Product[] = [];
           for (const line of dataLines) {
@@ -7588,7 +8006,12 @@ export const Admin: React.FC = () => {
                               weight: w,
                               weightGrams: parseWeightGrams(w),
                           shelfLife: emptyLocalized(shelf || '30 суток'),
-                          storage: { ru: '+2…+6 °C', be: '+2…+6 °C', en: '+2…+6 °C', zh: '+2…+6 °C' },
+                          storage: {
+                            ru: '+2…+6 °C',
+                            be: '+2…+6 °C',
+                            en: '+2…+6 °C',
+                            zh: '+2…+6 °C',
+                          },
                           packagingType: emptyLocalized('Стандартная упаковка'),
                           unitsPerBox: 12,
                           gtin: '4810268000001',
@@ -7620,7 +8043,9 @@ export const Admin: React.FC = () => {
   };
 
   const handleExportJson = () => {
-    const blob = new Blob([JSON.stringify(products, null, 2)], { type: 'application/json;charset=utf-8' });
+    const blob = new Blob([JSON.stringify(products, null, 2)], {
+      type: 'application/json;charset=utf-8',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -7643,14 +8068,24 @@ export const Admin: React.FC = () => {
       year: new Date().getFullYear(),
             categoryId: newsCat,
             title: { ru: newsTitleRu.trim(), be: '', en: newsTitleEn.trim(), zh: '' },
-            excerpt: { ru: newsExcerptRu.trim() || 'Оперативное сообщение пресс-службы ОАО «Молочный Мир».', be: '', en: '', zh: '' },
+            excerpt: {
+              ru: newsExcerptRu.trim() || 'Оперативное сообщение пресс-службы ОАО «Молочный Мир».',
+            be: '',
+            en: '',
+            zh: '',
+            },
             content: { ru: newsExcerptRu.trim() || newsTitleRu.trim(), be: '', en: '', zh: '' },
             image: ASSETS.newsDairyFacility,
             published: true,
             relatedIds: [],
             seo: {
-              title: { ru: `${newsTitleRu.trim()} — Новости Молочный Мир`, be: '', en: newsTitleEn.trim() ? `${newsTitleEn.trim()} — News` : '', zh: '' },
-            description: { ru: newsExcerptRu.trim() || newsTitleRu.trim(), be: '', en: '', zh: '' },
+              title: {
+                ru: `${newsTitleRu.trim()} — Новости Молочный Мир`,
+            be: '',
+            en: newsTitleEn.trim() ? `${newsTitleEn.trim()} — News` : '',
+            zh: '',
+              },
+              description: { ru: newsExcerptRu.trim() || newsTitleRu.trim(), be: '', en: '', zh: '' },
             },
     });
     setNewsTitleRu('');
@@ -7662,7 +8097,9 @@ export const Admin: React.FC = () => {
   const handleCreateCategory = (e: React.FormEvent) => {
     e.preventDefault();
     if (!catNameRu.trim()) return;
-    const slug = (catSlug.trim() || `cat-${Date.now().toString(36)}`).toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    const slug = (catSlug.trim() || `cat-${Date.now().toString(36)}`)
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-');
     const schema = catSchemaInput
     .split(',')
     .map((pair) => pair.trim())
@@ -7679,7 +8116,9 @@ export const Admin: React.FC = () => {
       slug,
       name: { ru: catNameRu.trim(), be: '', en: catNameEn.trim(), zh: '' },
                 description: { ru: catDescRu.trim(), be: '', en: '', zh: '' },
-                subcategories: [{ id: 'default', name: { ru: 'Основная серия', be: '', en: 'Main line', zh: '' } }],
+                subcategories: [
+                  { id: 'default', name: { ru: 'Основная серия', be: '', en: 'Main line', zh: '' } },
+                ],
                 filterKeys: ['fat', 'exportReady'],
                 characteristicSchema: schema,
                 seo: {
@@ -7709,7 +8148,9 @@ export const Admin: React.FC = () => {
   };
 
   const translationEntries = Object.entries(translations);
-  const visibleTranslations = showAllTranslations ? translationEntries : translationEntries.slice(0, 12);
+  const visibleTranslations = showAllTranslations
+  ? translationEntries
+  : translationEntries.slice(0, 12);
   const editingCategoryObj = editingProduct
   ? categories.find((c) => c.id === editingProduct.category)
   : undefined;
@@ -7720,13 +8161,32 @@ export const Admin: React.FC = () => {
     title={`${t('adminTitle')} — ${t('brandName')}`}
     description={copy.subtitle}
     canonicalHash="/admin"
+    noIndex
     />
 
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
     <div>
-    <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">{t('adminTitle')}</h1>
+    <div className="flex flex-wrap items-center gap-2.5">
+    <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+    {t('adminTitle')}
+    </h1>
+    {user && (
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-[#0057B8] border border-blue-200/80">
+      {user.username} · {user.role[language]}
+      </span>
+    )}
+    </div>
     <p className="text-sm text-slate-600 mt-1">{copy.subtitle}</p>
     </div>
+
+    <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
+    <Link
+    to="/sitemap"
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-[#0057B8] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors whitespace-nowrap"
+    >
+    <Globe2 className="w-3.5 h-3.5" />
+    <span>{copy.seoSitemap}</span>
+    </Link>
 
     <button
     type="button"
@@ -7734,11 +8194,21 @@ export const Admin: React.FC = () => {
       resetDemoData();
       resetTranslations();
     }}
-    className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
+    className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
     >
     <RotateCcw className="w-3.5 h-3.5" />
     <span>{copy.reset}</span>
     </button>
+
+    <button
+    type="button"
+    onClick={logout}
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap"
+    >
+    <LogOut className="w-3.5 h-3.5" />
+    <span>{copy.logout}</span>
+    </button>
+    </div>
     </div>
 
     {/* Tabs */}
@@ -7758,7 +8228,9 @@ export const Admin: React.FC = () => {
       type="button"
       onClick={() => setActiveTab(tabKey)}
       className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
-        activeTab === tabKey ? 'bg-white text-[#0057B8] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+        activeTab === tabKey
+        ? 'bg-white text-[#0057B8] shadow-xs'
+        : 'text-slate-600 hover:text-slate-900'
       }`}
       >
       {label}
@@ -7771,7 +8243,9 @@ export const Admin: React.FC = () => {
     {activeTab === 'products' && (
       <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center gap-3">
-      <h2 className="font-display text-lg font-semibold text-slate-900">{copy.catalogItems}</h2>
+      <h2 className="font-display text-lg font-semibold text-slate-900">
+      {copy.catalogItems}
+      </h2>
       <div className="flex flex-wrap items-center gap-2">
       {importStatus && (
         <span className="text-xs font-mono text-[#0057B8] bg-blue-50 px-2.5 py-1 rounded">
@@ -7781,7 +8255,12 @@ export const Admin: React.FC = () => {
       <label className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
       <Upload className="w-3.5 h-3.5" />
       <span>{copy.importBtn}</span>
-      <input type="file" accept=".json,.csv" onChange={handleImportCatalogFile} className="hidden" />
+      <input
+      type="file"
+      accept=".json,.csv"
+      onChange={handleImportCatalogFile}
+      className="hidden"
+      />
       </label>
       <button
       type="button"
@@ -7803,60 +8282,144 @@ export const Admin: React.FC = () => {
       </div>
 
       {showAddProduct && (
-        <form onSubmit={handleCreateProduct} className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4">
-        <h3 className="font-display text-base font-semibold text-slate-900">{copy.addProduct}</h3>
+        <form
+        onSubmit={handleCreateProduct}
+        className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+        >
+        <h3 className="font-display text-base font-semibold text-slate-900">
+        {copy.addProduct}
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Название (RU) *</label>
-        <input type="text" required value={newNameRu} onChange={(e) => setNewNameRu(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Название (RU) *
+        </label>
+        <input
+        type="text"
+        required
+        value={newNameRu}
+        onChange={(e) => setNewNameRu(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Назва (BE)</label>
-        <input type="text" value={newNameBe} onChange={(e) => setNewNameBe(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Назва (BE)
+        </label>
+        <input
+        type="text"
+        value={newNameBe}
+        onChange={(e) => setNewNameBe(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Name (EN)</label>
-        <input type="text" value={newNameEn} onChange={(e) => setNewNameEn(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Name (EN)
+        </label>
+        <input
+        type="text"
+        value={newNameEn}
+        onChange={(e) => setNewNameEn(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">名称 (ZH)</label>
-        <input type="text" value={newNameZh} onChange={(e) => setNewNameZh(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        名称 (ZH)
+        </label>
+        <input
+        type="text"
+        value={newNameZh}
+        onChange={(e) => setNewNameZh(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">{copy.colCategory}</label>
-        <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg">
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.colCategory}
+        </label>
+        <select
+        value={newCategory}
+        onChange={(e) => setNewCategory(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        >
         {categories.map((c) => (
-          <option key={c.id} value={c.id}>{localize(c.name)}</option>
+          <option key={c.id} value={c.id}>
+          {localize(c.name)}
+          </option>
         ))}
         </select>
         </div>
         <div>
         <label className="block text-xs font-medium text-slate-700 mb-1">Fat (%)</label>
-        <input type="number" step="0.1" value={newFat} onChange={(e) => setNewFat(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <input
+        type="number"
+        step="0.1"
+        value={newFat}
+        onChange={(e) => setNewFat(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Protein (g/100g)</label>
-        <input type="number" step="0.1" value={newProtein} onChange={(e) => setNewProtein(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Protein (g/100g)
+        </label>
+        <input
+        type="number"
+        step="0.1"
+        value={newProtein}
+        onChange={(e) => setNewProtein(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Pack / Shelf life</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Pack / Shelf life
+        </label>
         <div className="flex gap-2">
-        <input type="text" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={newShelfLife} onChange={(e) => setNewShelfLife(e.target.value)} className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <input
+        type="text"
+        value={newWeight}
+        onChange={(e) => setNewWeight(e.target.value)}
+        className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={newShelfLife}
+        onChange={(e) => setNewShelfLife(e.target.value)}
+        className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Description (RU)</label>
-        <input type="text" value={newDescRu} onChange={(e) => setNewDescRu(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Description (RU)
+        </label>
+        <input
+        type="text"
+        value={newDescRu}
+        onChange={(e) => setNewDescRu(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO Title (RU)</label>
-        <input type="text" value={newSeoTitle} onChange={(e) => setNewSeoTitle(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Title (RU)
+        </label>
+        <input
+        type="text"
+        value={newSeoTitle}
+        onChange={(e) => setNewSeoTitle(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Photo Upload</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Photo Upload
+        </label>
         <input
         type="file"
         accept="image/*"
@@ -7866,10 +8429,17 @@ export const Admin: React.FC = () => {
         </div>
         </div>
         <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setShowAddProduct(false)} className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg">
+        <button
+        type="button"
+        onClick={() => setShowAddProduct(false)}
+        className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg"
+        >
         {copy.cancelBtn}
         </button>
-        <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+        <button
+        type="submit"
+        className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
         {copy.saveBtn}
         </button>
         </div>
@@ -7877,7 +8447,10 @@ export const Admin: React.FC = () => {
       )}
 
       {editingProduct && (
-        <form onSubmit={handleSaveEditProduct} className="border border-[#0057B8]/40 rounded-xl p-5 bg-blue-50/40 space-y-5">
+        <form
+        onSubmit={handleSaveEditProduct}
+        className="border border-[#0057B8]/40 rounded-xl p-5 bg-blue-50/40 space-y-5"
+        >
         <div className="flex flex-wrap justify-between items-center gap-3">
         <h3 className="font-display text-base font-semibold text-slate-900">
         {localize(editingProduct.name)}
@@ -7897,7 +8470,11 @@ export const Admin: React.FC = () => {
           </button>
         ))}
         </div>
-        <button type="button" onClick={() => setEditingProduct(null)} className="text-xs text-slate-500 hover:text-slate-900 px-2">
+        <button
+        type="button"
+        onClick={() => setEditingProduct(null)}
+        className="text-xs text-slate-500 hover:text-slate-900 px-2"
+        >
         ✕
         </button>
         </div>
@@ -7905,7 +8482,9 @@ export const Admin: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Name ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Name ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.name[editLang] || ''}
@@ -7919,7 +8498,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">{copy.colCategory}</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.colCategory}
+        </label>
         <select
         value={editingProduct.category}
         onChange={(e) => {
@@ -7933,7 +8514,9 @@ export const Admin: React.FC = () => {
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         >
         {categories.map((c) => (
-          <option key={c.id} value={c.id}>{localize(c.name)}</option>
+          <option key={c.id} value={c.id}>
+          {localize(c.name)}
+          </option>
         ))}
         </select>
         </div>
@@ -7943,17 +8526,26 @@ export const Admin: React.FC = () => {
         type="number"
         step="0.1"
         value={editingProduct.fatContent ?? 0}
-        onChange={(e) => setEditingProduct({ ...editingProduct, fatContent: Number(e.target.value) })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, fatContent: Number(e.target.value) })
+        }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Protein (g/100g)</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Protein (g/100g)
+        </label>
         <input
         type="number"
         step="0.1"
         value={editingProduct.proteinContent ?? 0}
-        onChange={(e) => setEditingProduct({ ...editingProduct, proteinContent: Number(e.target.value) })}
+        onChange={(e) =>
+          setEditingProduct({
+            ...editingProduct,
+            proteinContent: Number(e.target.value),
+          })
+        }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
@@ -7964,7 +8556,9 @@ export const Admin: React.FC = () => {
         <input
         type="checkbox"
         checked={editingProduct.lactoseFree}
-        onChange={(e) => setEditingProduct({ ...editingProduct, lactoseFree: e.target.checked })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, lactoseFree: e.target.checked })
+        }
         />
         <span>Lactose-Free</span>
         </label>
@@ -7972,7 +8566,9 @@ export const Admin: React.FC = () => {
         <input
         type="checkbox"
         checked={editingProduct.exportReady}
-        onChange={(e) => setEditingProduct({ ...editingProduct, exportReady: e.target.checked })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, exportReady: e.target.checked })
+        }
         />
         <span>Export B2B</span>
         </label>
@@ -7980,7 +8576,9 @@ export const Admin: React.FC = () => {
         <input
         type="checkbox"
         checked={editingProduct.featured}
-        onChange={(e) => setEditingProduct({ ...editingProduct, featured: e.target.checked })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, featured: e.target.checked })
+        }
         />
         <span>Featured</span>
         </label>
@@ -8001,35 +8599,47 @@ export const Admin: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO H1 ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO H1 ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.seo.h1[editLang] || ''}
         onChange={(e) =>
           setEditingProduct({
             ...editingProduct,
-            seo: { ...editingProduct.seo, h1: { ...editingProduct.seo.h1, [editLang]: e.target.value } },
+            seo: {
+              ...editingProduct.seo,
+              h1: { ...editingProduct.seo.h1, [editLang]: e.target.value },
+            },
           })
         }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO Title ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Title ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.seo.title[editLang] || ''}
         onChange={(e) =>
           setEditingProduct({
             ...editingProduct,
-            seo: { ...editingProduct.seo, title: { ...editingProduct.seo.title, [editLang]: e.target.value } },
+            seo: {
+              ...editingProduct.seo,
+              title: { ...editingProduct.seo.title, [editLang]: e.target.value },
+            },
           })
         }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO Description ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Description ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.seo.description[editLang] || ''}
@@ -8038,7 +8648,10 @@ export const Admin: React.FC = () => {
             ...editingProduct,
             seo: {
               ...editingProduct.seo,
-              description: { ...editingProduct.seo.description, [editLang]: e.target.value },
+              description: {
+                ...editingProduct.seo.description,
+                [editLang]: e.target.value,
+              },
             },
           })
         }
@@ -8046,7 +8659,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Description ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Description ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.description[editLang] || ''}
@@ -8069,10 +8684,13 @@ export const Admin: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {editingCategoryObj.characteristicSchema.map((field) => {
-            const currentVal = editingProduct.characteristics[field.key] || emptyLocalized('');
+            const currentVal =
+            editingProduct.characteristics[field.key] || emptyLocalized('');
             return (
               <div key={field.key}>
-              <label className="block text-xs text-slate-600 mb-1">{localize(field.label)}</label>
+              <label className="block text-xs text-slate-600 mb-1">
+              {localize(field.label)}
+              </label>
               <input
               type="text"
               value={currentVal[editLang] || ''}
@@ -8096,12 +8714,19 @@ export const Admin: React.FC = () => {
 
         {/* Packages Editor */}
         <div className="pt-3 border-t border-slate-200 space-y-3">
-        <div className="text-xs font-semibold text-slate-700">{copy.colPacks} ({editingProduct.packages.length})</div>
+        <div className="text-xs font-semibold text-slate-700">
+        {copy.colPacks} ({editingProduct.packages.length})
+        </div>
         <div className="flex flex-wrap gap-2">
         {editingProduct.packages.map((pkg) => (
-          <div key={pkg.id} className="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs">
+          <div
+          key={pkg.id}
+          className="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs"
+          >
           <span className="font-semibold">{pkg.weight}</span>
-          <span className="text-slate-500">{localize(pkg.shelfLife)} · GTIN {pkg.gtin}</span>
+          <span className="text-slate-500">
+          {localize(pkg.shelfLife)} · GTIN {pkg.gtin}
+          </span>
           <button
           type="button"
           onClick={() =>
@@ -8118,11 +8743,41 @@ export const Admin: React.FC = () => {
         ))}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 items-end">
-        <input type="text" value={pkgWeight} onChange={(e) => setPkgWeight(e.target.value)} placeholder="500 г" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgShelf} onChange={(e) => setPkgShelf(e.target.value)} placeholder="45 суток" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgStorage} onChange={(e) => setPkgStorage(e.target.value)} placeholder="+2…+6 °C" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgType} onChange={(e) => setPkgType(e.target.value)} placeholder="Вакуум" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgGtin} onChange={(e) => setPkgGtin(e.target.value)} placeholder="GTIN" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
+        <input
+        type="text"
+        value={pkgWeight}
+        onChange={(e) => setPkgWeight(e.target.value)}
+        placeholder="500 г"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgShelf}
+        onChange={(e) => setPkgShelf(e.target.value)}
+        placeholder="45 суток"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgStorage}
+        onChange={(e) => setPkgStorage(e.target.value)}
+        placeholder="+2…+6 °C"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgType}
+        onChange={(e) => setPkgType(e.target.value)}
+        placeholder="Вакуум"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgGtin}
+        onChange={(e) => setPkgGtin(e.target.value)}
+        placeholder="GTIN"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
         <button
         type="button"
         onClick={handleAddPackageToEditing}
@@ -8134,7 +8789,10 @@ export const Admin: React.FC = () => {
         </div>
 
         <div className="flex justify-end gap-2">
-        <button type="submit" className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+        <button
+        type="submit"
+        className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
         <Check className="w-3.5 h-3.5" />
         <span>{copy.saveBtn}</span>
         </button>
@@ -8162,22 +8820,46 @@ export const Admin: React.FC = () => {
           <div className="font-medium text-slate-900">{localize(prod.name)}</div>
           <div className="text-xs text-slate-500 font-mono">/{prod.slug}</div>
           </td>
-          <td className="py-3 px-4 text-slate-600">{cat ? localize(cat.name) : prod.category}</td>
-          <td className="py-3 px-4 text-slate-600 text-xs">{prod.packages.map((p) => p.weight).join(', ')}</td>
+          <td className="py-3 px-4 text-slate-600">
+          {cat ? localize(cat.name) : prod.category}
+          </td>
+          <td className="py-3 px-4 text-slate-600 text-xs">
+          {prod.packages.map((p) => p.weight).join(', ')}
+          </td>
           <td className="py-3 px-4">
-          <span className={`text-xs font-medium ${prod.visible ? 'text-[#0057B8]' : 'text-slate-400'}`}>
+          <span
+          className={`text-xs font-medium ${
+            prod.visible ? 'text-[#0057B8]' : 'text-slate-400'
+          }`}
+          >
           {prod.visible ? copy.published : copy.hidden}
           </span>
           </td>
           <td className="py-3 px-4 text-right">
           <div className="inline-flex items-center gap-1.5">
-          <button type="button" onClick={() => setEditingProduct(prod)} className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 hover:text-[#0057B8]">
+          <button
+          type="button"
+          onClick={() => setEditingProduct(prod)}
+          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 hover:text-[#0057B8]"
+          >
           <Edit3 className="w-4 h-4" />
           </button>
-          <button type="button" onClick={() => toggleProductVisibility(prod.id)} className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100">
-          {prod.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+          <button
+          type="button"
+          onClick={() => toggleProductVisibility(prod.id)}
+          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100"
+          >
+          {prod.visible ? (
+            <Eye className="w-4 h-4" />
+          ) : (
+            <EyeOff className="w-4 h-4" />
+          )}
           </button>
-          <button type="button" onClick={() => deleteProduct(prod.id)} className="p-1.5 rounded-md text-slate-500 hover:bg-red-50 hover:text-red-600">
+          <button
+          type="button"
+          onClick={() => deleteProduct(prod.id)}
+          className="p-1.5 rounded-md text-slate-500 hover:bg-red-50 hover:text-red-600"
+          >
           <Trash2 className="w-4 h-4" />
           </button>
           </div>
@@ -8195,7 +8877,9 @@ export const Admin: React.FC = () => {
     {activeTab === 'categories' && (
       <div className="space-y-6">
       <div className="flex justify-between items-center">
-      <h2 className="font-display text-lg font-semibold text-slate-900">{copy.tabCategories}</h2>
+      <h2 className="font-display text-lg font-semibold text-slate-900">
+      {copy.tabCategories}
+      </h2>
       <button
       type="button"
       onClick={() => setShowAddCategory((v) => !v)}
@@ -8207,17 +8891,62 @@ export const Admin: React.FC = () => {
       </div>
 
       {showAddCategory && (
-        <form onSubmit={handleCreateCategory} className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4">
+        <form
+        onSubmit={handleCreateCategory}
+        className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+        >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <input type="text" required value={catNameRu} onChange={(e) => setCatNameRu(e.target.value)} placeholder="Название (RU) *" className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={catNameEn} onChange={(e) => setCatNameEn(e.target.value)} placeholder="Name (EN)" className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={catSlug} onChange={(e) => setCatSlug(e.target.value)} placeholder="slug (e.g. drinks)" className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <input
+        type="text"
+        required
+        value={catNameRu}
+        onChange={(e) => setCatNameRu(e.target.value)}
+        placeholder="Название (RU) *"
+        className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={catNameEn}
+        onChange={(e) => setCatNameEn(e.target.value)}
+        placeholder="Name (EN)"
+        className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={catSlug}
+        onChange={(e) => setCatSlug(e.target.value)}
+        placeholder="slug (e.g. drinks)"
+        className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
-        <input type="text" value={catDescRu} onChange={(e) => setCatDescRu(e.target.value)} placeholder="Описание (RU)" className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={catSchemaInput} onChange={(e) => setCatSchemaInput(e.target.value)} placeholder="Schema key:Label" className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono" />
+        <input
+        type="text"
+        value={catDescRu}
+        onChange={(e) => setCatDescRu(e.target.value)}
+        placeholder="Описание (RU)"
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={catSchemaInput}
+        onChange={(e) => setCatSchemaInput(e.target.value)}
+        placeholder="Schema key:Label"
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono"
+        />
         <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setShowAddCategory(false)} className="px-4 py-2 text-xs bg-white border border-slate-200 rounded-lg">{copy.cancelBtn}</button>
-        <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">{copy.saveBtn}</button>
+        <button
+        type="button"
+        onClick={() => setShowAddCategory(false)}
+        className="px-4 py-2 text-xs bg-white border border-slate-200 rounded-lg"
+        >
+        {copy.cancelBtn}
+        </button>
+        <button
+        type="submit"
+        className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
+        {copy.saveBtn}
+        </button>
         </div>
         </form>
       )}
@@ -8235,7 +8964,14 @@ export const Admin: React.FC = () => {
         <h3 className="font-semibold text-sm">{localize(editingCategory.name)}</h3>
         <div className="inline-flex bg-white border border-slate-200 rounded-lg p-0.5">
         {LANGS.map((l) => (
-          <button key={l} type="button" onClick={() => setEditLang(l)} className={`px-2 py-0.5 text-xs font-semibold rounded ${editLang === l ? 'bg-[#0057B8] text-white' : 'text-slate-600'}`}>
+          <button
+          key={l}
+          type="button"
+          onClick={() => setEditLang(l)}
+          className={`px-2 py-0.5 text-xs font-semibold rounded ${
+            editLang === l ? 'bg-[#0057B8] text-white' : 'text-slate-600'
+          }`}
+          >
           {l.toUpperCase()}
           </button>
         ))}
@@ -8259,15 +8995,29 @@ export const Admin: React.FC = () => {
         onChange={(e) =>
           setEditingCategory({
             ...editingCategory,
-            description: { ...editingCategory.description, [editLang]: e.target.value },
+            description: {
+              ...editingCategory.description,
+              [editLang]: e.target.value,
+            },
           })
         }
         className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setEditingCategory(null)} className="px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg">{copy.cancelBtn}</button>
-        <button type="submit" className="px-4 py-1.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">{copy.saveBtn}</button>
+        <button
+        type="button"
+        onClick={() => setEditingCategory(null)}
+        className="px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg"
+        >
+        {copy.cancelBtn}
+        </button>
+        <button
+        type="submit"
+        className="px-4 py-1.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
+        {copy.saveBtn}
+        </button>
         </div>
         </form>
       )}
@@ -8332,10 +9082,15 @@ export const Admin: React.FC = () => {
       </div>
 
       {showAddNews && (
-        <form onSubmit={handleCreateNews} className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4">
+        <form
+        onSubmit={handleCreateNews}
+        className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+        >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Title (RU) *</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Title (RU) *
+        </label>
         <input
         type="text"
         required
@@ -8345,7 +9100,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Title (EN)</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Title (EN)
+        </label>
         <input
         type="text"
         value={newsTitleEn}
@@ -8354,7 +9111,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">{copy.colCategory}</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.colCategory}
+        </label>
         <select
         value={newsCat}
         onChange={(e) => setNewsCat(e.target.value as NewsArticle['categoryId'])}
@@ -8368,7 +9127,9 @@ export const Admin: React.FC = () => {
         </div>
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Excerpt / Content (RU)</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Excerpt / Content (RU)
+        </label>
         <textarea
         rows={2}
         value={newsExcerptRu}
@@ -8384,7 +9145,10 @@ export const Admin: React.FC = () => {
         >
         {copy.cancelBtn}
         </button>
-        <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+        <button
+        type="submit"
+        className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
         {copy.saveBtn}
         </button>
         </div>
@@ -8401,7 +9165,9 @@ export const Admin: React.FC = () => {
         className="border border-[#0057B8]/40 rounded-xl p-5 bg-blue-50/40 space-y-4"
         >
         <div className="flex flex-wrap justify-between items-center gap-3">
-        <h3 className="font-semibold text-sm text-slate-900">{localize(editingNews.title)}</h3>
+        <h3 className="font-semibold text-sm text-slate-900">
+        {localize(editingNews.title)}
+        </h3>
         <div className="inline-flex bg-white border border-slate-200 rounded-lg p-0.5">
         {LANGS.map((l) => (
           <button
@@ -8532,7 +9298,9 @@ export const Admin: React.FC = () => {
         <td className="py-3 px-4 font-medium text-slate-900">{localize(item.title)}</td>
         <td className="py-3 px-4 text-xs font-mono text-slate-500">{item.date}</td>
         <td className="py-3 px-4 text-xs">
-        <span className={item.published ? 'text-[#0057B8] font-medium' : 'text-slate-400'}>
+        <span
+        className={item.published ? 'text-[#0057B8] font-medium' : 'text-slate-400'}
+        >
         {item.published ? copy.newsPub : copy.newsHidden}
         </span>
         </td>
@@ -8550,7 +9318,11 @@ export const Admin: React.FC = () => {
         onClick={() => toggleNewsPublished(item.id)}
         className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100"
         >
-        {item.published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+        {item.published ? (
+          <Eye className="w-4 h-4" />
+        ) : (
+          <EyeOff className="w-4 h-4" />
+        )}
         </button>
         <button
         type="button"
@@ -8572,7 +9344,10 @@ export const Admin: React.FC = () => {
     {/* TAB 4: 301 REDIRECTS */}
     {activeTab === 'redirects' && (
       <div className="space-y-6">
-      <form onSubmit={handleCreateRedirect} className="border border-slate-200 rounded-xl p-5 bg-slate-50 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+      <form
+      onSubmit={handleCreateRedirect}
+      className="border border-slate-200 rounded-xl p-5 bg-slate-50 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end"
+      >
       <div>
       <label className="block text-xs font-medium text-slate-700 mb-1">From URL *</label>
       <input
@@ -8605,7 +9380,10 @@ export const Admin: React.FC = () => {
       className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
       />
       </div>
-      <button type="submit" className="h-9 px-4 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+      <button
+      type="submit"
+      className="h-9 px-4 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+      >
       + 301 Rule
       </button>
       </form>
@@ -8625,7 +9403,9 @@ export const Admin: React.FC = () => {
       {redirects.map((rule, idx) => (
         <tr key={`${rule.from}-${idx}`}>
         <td className="py-2.5 px-4 font-mono text-slate-700">{rule.from}</td>
-        <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">{rule.code}</td>
+        <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">
+        {rule.code}
+        </td>
         <td className="py-2.5 px-4 font-mono text-slate-700">{rule.to}</td>
         <td className="py-2.5 px-4 text-slate-600">{rule.note}</td>
         <td className="py-2.5 px-4 text-right">
@@ -8650,7 +9430,10 @@ export const Admin: React.FC = () => {
       <div className="space-y-6">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
       {completenessStats.map((stat) => (
-        <div key={stat.lang} className="border border-slate-200 rounded-xl p-4 bg-white space-y-2">
+        <div
+        key={stat.lang}
+        className="border border-slate-200 rounded-xl p-4 bg-white space-y-2"
+        >
         <div className="flex items-center justify-between text-xs font-semibold text-slate-900">
         <span>{stat.lang.toUpperCase()}</span>
         <span className="font-mono text-[#0057B8] tabular-nums">{stat.pct}%</span>
@@ -8710,6 +9493,14 @@ export const Admin: React.FC = () => {
       </div>
     )}
     </div>
+  );
+};
+
+export const Admin: React.FC = () => {
+  return (
+    <StaffAuthGate>
+    <AdminDashboard />
+    </StaffAuthGate>
   );
 };
 ```
@@ -13112,21 +13903,27 @@ export const Product: React.FC = () => {
 ```
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Download, CheckCircle2 } from 'lucide-react';
+import { Download, CheckCircle2, ArrowLeft, LogOut } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
+import { useAuth } from '../hooks/useAuth';
 import { generateXmlSitemap } from '../utils/specExport';
 import { SeoHead } from '../components/SeoHead';
+import { StaffAuthGate } from '../components/StaffAuth';
 
-export const SitemapPage: React.FC = () => {
+const SitemapPageContent: React.FC = () => {
   const { language, t } = useLanguage();
   const { products, categories, news, redirects } = useCatalogStore();
+  const { logout } = useAuth();
 
   const copy = {
     ru: {
-      seoDesc: 'Автоматически обновляемый sitemap.xml, hreflang-связи 4 языковых версий и таблица 301-редиректов со старых URL milk.by.',
+      seoDesc:
+      'Автоматически обновляемый sitemap.xml, hreflang-связи 4 языковых версий и таблица 301-редиректов со старых URL milk.by.',
       h1: 'XML-карта сайта, SEO-аудит и 301-редиректы',
       lead: 'Автоматическая генерация ЧПУ-структуры с поддержкой hreflang (RU / BE / EN / ZH) и отсутствием дублей.',
+      backToCms: 'Панель управления CMS',
+      logout: 'Выйти',
       downloadXml: 'Скачать sitemap.xml',
       uniqTitle: 'Уникальность SEO Title',
       noDupes: '(Без дублей)',
@@ -13140,9 +13937,12 @@ export const SitemapPage: React.FC = () => {
       colNote: 'Примечание',
     },
     be: {
-      seoDesc: 'Аўтаматычна абнаўляемы sitemap.xml, hreflang-сувязі 4 моўных версій і табліца 301-рэдырэктаў са старых URL milk.by.',
+      seoDesc:
+      'Аўтаматычна абнаўляемы sitemap.xml, hreflang-сувязі 4 моўных версій і табліца 301-рэдырэктаў са старых URL milk.by.',
       h1: 'XML-карта сайта, SEO-аўдыт і 301-рэдырэкты',
       lead: 'Аўтаматычная генерацыя ЧПУ-структуры з падтрымкай hreflang (RU / BE / EN / ZH) і адсутнасцю дубляў.',
+      backToCms: 'Панэль кіравання CMS',
+      logout: 'Выйсці',
       downloadXml: 'Спампаваць sitemap.xml',
       uniqTitle: 'Унікальнасць SEO Title',
       noDupes: '(Без дубляў)',
@@ -13156,9 +13956,12 @@ export const SitemapPage: React.FC = () => {
       colNote: 'Заўвага',
     },
     en: {
-      seoDesc: 'Auto-generated sitemap.xml, 4-language hreflang links, and 301 redirect rules from legacy milk.by URLs.',
+      seoDesc:
+      'Auto-generated sitemap.xml, 4-language hreflang links, and 301 redirect rules from legacy milk.by URLs.',
       h1: 'XML Sitemap, SEO Audit & 301 Redirects',
       lead: 'Auto-generated clean URL sitemap with 4-language hreflang links and legacy 301 redirects.',
+      backToCms: 'CMS Panel',
+      logout: 'Log out',
       downloadXml: 'Download sitemap.xml',
       uniqTitle: 'Unique SEO Titles',
       noDupes: '(No duplicates)',
@@ -13172,9 +13975,12 @@ export const SitemapPage: React.FC = () => {
       colNote: 'Note',
     },
     zh: {
-      seoDesc: '自动更新的 sitemap.xml、四种语言 hreflang 关联及 milk.by 旧版链接 301 重定向映射表。',
+      seoDesc:
+      '自动更新的 sitemap.xml、四种语言 hreflang 关联及 milk.by 旧版链接 301 重定向映射表。',
       h1: 'XML 站点地图、SEO 审计与 301 重定向',
       lead: '自动生成支持四种语言 hreflang (RU / BE / EN / ZH) 且无重复标题的规范化 URL 站点地图。',
+      backToCms: '返回管理后台',
+      logout: '退出登录',
       downloadXml: '下载 sitemap.xml',
       uniqTitle: 'SEO 标题唯一性',
       noDupes: '（无重复）',
@@ -13223,6 +14029,7 @@ export const SitemapPage: React.FC = () => {
     title={`XML Sitemap & SEO Audit — ${t('brandName')}`}
     description={copy.seoDesc}
     canonicalHash="/sitemap"
+    noIndex
     />
 
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
@@ -13231,14 +14038,33 @@ export const SitemapPage: React.FC = () => {
     <p className="text-sm text-slate-600 mt-1">{copy.lead}</p>
     </div>
 
+    <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
+    <Link
+    to="/admin"
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
+    >
+    <ArrowLeft className="w-3.5 h-3.5" />
+    <span>{copy.backToCms}</span>
+    </Link>
+
     <button
     type="button"
     onClick={handleDownloadXml}
-    className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
+    className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap"
     >
     <Download className="w-4 h-4" />
     <span>{copy.downloadXml}</span>
     </button>
+
+    <button
+    type="button"
+    onClick={logout}
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap"
+    >
+    <LogOut className="w-3.5 h-3.5" />
+    <span>{copy.logout}</span>
+    </button>
+    </div>
     </div>
 
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 tabular-nums">
@@ -13286,7 +14112,9 @@ export const SitemapPage: React.FC = () => {
     return (
       <tr key={rule.from}>
       <td className="py-2.5 px-4 font-mono text-slate-600">{rule.from}</td>
-      <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">{rule.code}</td>
+      <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">
+      {rule.code}
+      </td>
       <td className="py-2.5 px-4 font-mono">
       <Link to={targetPath} className="text-[#0057B8] hover:underline">
       {rule.to}
@@ -13310,6 +14138,14 @@ export const SitemapPage: React.FC = () => {
     </pre>
     </section>
     </div>
+  );
+};
+
+export const SitemapPage: React.FC = () => {
+  return (
+    <StaffAuthGate>
+    <SitemapPageContent />
+    </StaffAuthGate>
   );
 };
 ```
@@ -14390,6 +15226,7 @@ export function generateXmlSitemap(
 import React, { useEffect, useRef } from 'react';
 import { HashRouter, Routes, Route, Link, useLocation, useParams } from 'react-router-dom';
 import { LanguageProvider, useLanguage } from './hooks/useLanguage';
+import { AuthProvider } from './hooks/useAuth';
 import { CatalogStoreProvider } from './hooks/useCatalogStore';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -14509,6 +15346,7 @@ const LanguageScopedRoutes: React.FC = () => {
 export default function App() {
   return (
     <LanguageProvider>
+    <AuthProvider>
     <CatalogStoreProvider>
     <HashRouter>
     <ScrollToTop />
@@ -14536,6 +15374,7 @@ export default function App() {
     </div>
     </HashRouter>
     </CatalogStoreProvider>
+    </AuthProvider>
     </LanguageProvider>
   );
 }
