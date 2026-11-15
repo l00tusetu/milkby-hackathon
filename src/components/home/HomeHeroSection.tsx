@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
@@ -10,6 +10,7 @@ export const HomeHeroSection: React.FC = () => {
     const { t, localize } = useLanguage();
     const { siteSettings } = useCatalogStore();
     const [searchQuery, setSearchQuery] = useState('');
+    const [blurImgFailed, setBlurImgFailed] = useState(false);
     const navigate = useNavigate();
 
     const { homeHero } = siteSettings;
@@ -17,6 +18,10 @@ export const HomeHeroSection: React.FC = () => {
     const heroSubtitle = localize(homeHero.subtitle) || t('heroSubtitle');
     const primaryCta = localize(homeHero.primaryCta) || t('heroPrimaryCta');
     const secondaryCta = localize(homeHero.secondaryCta) || t('heroSecondaryCta');
+
+    useEffect(() => {
+        setBlurImgFailed(false);
+    }, [homeHero.image]);
 
     return (
         <section className="relative z-20">
@@ -28,25 +33,36 @@ export const HomeHeroSection: React.FC = () => {
         className="w-full h-full object-cover"
         />
 
+        {/* Радиально замаскированный слой с обычным blur() вместо backdrop-filter */}
+        {homeHero.image && !blurImgFailed && (
+            <div
+            aria-hidden="true"
+            className="absolute inset-0 [--blur-rx:220px] [--blur-ry:175px] sm:[--blur-rx:40%] sm:[--blur-ry:44%] lg:[--blur-rx:500px] lg:[--blur-ry:245px]"
+            style={{
+                maskImage:
+                'radial-gradient(ellipse var(--blur-rx) var(--blur-ry) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
+                                              WebkitMaskImage:
+                                              'radial-gradient(ellipse var(--blur-rx) var(--blur-ry) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
+            }}
+            >
+            <img
+            src={homeHero.image}
+            alt=""
+            referrerPolicy="no-referrer"
+            onError={() => setBlurImgFailed(true)}
+            className="w-full h-full object-cover blur-[12px] scale-[1.03]"
+            />
+            </div>
+        )}
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-neutral-950/65" />
 
         <div
         aria-hidden="true"
-        className="absolute inset-0 backdrop-blur-[12px]"
-        style={{
-            maskImage:
-            'radial-gradient(ellipse clamp(230px, 40%, 540px) clamp(170px, 44%, 250px) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
-            WebkitMaskImage:
-            'radial-gradient(ellipse clamp(230px, 40%, 540px) clamp(170px, 44%, 250px) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
-        }}
-        />
-
-        <div
-        aria-hidden="true"
-        className="absolute inset-0"
+        className="absolute inset-0 [--scrim-rx:210px] [--scrim-ry:165px] sm:[--scrim-rx:38%] sm:[--scrim-ry:42%] lg:[--scrim-rx:480px] lg:[--scrim-ry:235px]"
         style={{
             background:
-            'radial-gradient(ellipse clamp(220px, 38%, 520px) clamp(160px, 42%, 240px) at 50% 45%, rgba(10, 15, 28, 0.38) 0%, rgba(10, 15, 28, 0.18) 50%, rgba(10, 15, 28, 0) 100%)',
+            'radial-gradient(ellipse var(--scrim-rx) var(--scrim-ry) at 50% 45%, rgba(10, 15, 28, 0.38) 0%, rgba(10, 15, 28, 0.18) 50%, rgba(10, 15, 28, 0) 100%)',
         }}
         />
         </div>
