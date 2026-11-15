@@ -61,14 +61,14 @@ interface CatalogStoreContextValue {
   resetDemoData: () => void;
 }
 
-const STORAGE_PRODUCTS_KEY = 'milk_world_products_v1';
-const STORAGE_CATEGORIES_KEY = 'milk_world_categories_v1';
-const STORAGE_NEWS_KEY = 'milk_world_news_v1';
-const STORAGE_REDIRECTS_KEY = 'milk_world_redirects_v1';
-const STORAGE_SITE_SETTINGS_KEY = 'milk_world_site_settings_v1';
-const STORAGE_TEAM_KEY = 'milk_world_team_v1';
-const STORAGE_CONTACTS_KEY = 'milk_world_contacts_v1';
-const STORAGE_LOCATIONS_KEY = 'milk_world_locations_v1';
+const STORAGE_PRODUCTS_KEY = 'milk_world_products_v3';
+const STORAGE_CATEGORIES_KEY = 'milk_world_categories_v3';
+const STORAGE_NEWS_KEY = 'milk_world_news_v2';
+const STORAGE_REDIRECTS_KEY = 'milk_world_redirects_v3';
+const STORAGE_SITE_SETTINGS_KEY = 'milk_world_site_settings_v2';
+const STORAGE_TEAM_KEY = 'milk_world_team_v2';
+const STORAGE_CONTACTS_KEY = 'milk_world_contacts_v2';
+const STORAGE_LOCATIONS_KEY = 'milk_world_locations_v2';
 
 const CatalogStoreContext = createContext<CatalogStoreContextValue | undefined>(undefined);
 

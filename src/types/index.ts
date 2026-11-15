@@ -27,6 +27,7 @@ export interface Product {
   name: LocalizedText;
   description: LocalizedText;
   image: string;
+  localImage?: string;
   gallery?: string[];
   fatContent?: number;
   proteinContent?: number;

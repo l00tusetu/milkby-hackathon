@@ -8,7 +8,7 @@ import { ImageWithFallback } from './ImageWithFallback';
 
 const SAMPLE_PROMPTS = {
   ru: [
-    'Сыр для пиццы 1 кг',
+    'Сыр для пиццы',
     'Продукт без лактозы',
     'Высокий белок до 5% жира',
     'Выдержанный сыр к вину',
@@ -16,7 +16,7 @@ const SAMPLE_PROMPTS = {
     'На экспорт с долгим хранением',
   ],
   be: [
-    'Сыр для піцы 1 кг',
+    'Сыр для піцы',
     'Прадукт без лактозы',
     'Высокі бялок да 5% тлушчу',
     'Вытрыманы сыр да віна',
@@ -24,7 +24,7 @@ const SAMPLE_PROMPTS = {
     'На экспарт з доўгім захоўваннем',
   ],
   en: [
-    'Pizza cheese 1kg',
+    'Cheese for pizza',
     'Lactose-free dairy',
     'High protein under 5% fat',
     'Aged cheese for wine tasting',
@@ -32,7 +32,7 @@ const SAMPLE_PROMPTS = {
     'Long-shelf export products',
   ],
   zh: [
-    '1公斤披萨专用奶酪',
+    '披萨用奶酪',
     '无乳糖乳制品',
     '高蛋白低脂',
     '配葡萄酒的陈年奶酪',
@@ -183,6 +183,7 @@ export const SmartFinder: React.FC = () => {
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-slate-50 overflow-hidden shrink-0 border border-slate-100">
           <ImageWithFallback
           src={product.image}
+          fallbackSrc={product.localImage}
           alt={localize(product.name)}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />

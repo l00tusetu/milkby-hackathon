@@ -109,7 +109,7 @@ const AdminDashboard: React.FC = () => {
   const [pkgShelf, setPkgShelf] = useState('45 суток');
   const [pkgStorage, setPkgStorage] = useState('+2…+6 °C');
   const [pkgType, setPkgType] = useState('Вакуумная упаковка');
-  const [pkgBox, setPkgBox] = useState('12');
+  const [pkgBox] = useState('12');
   const [pkgGtin, setPkgGtin] = useState('4810268099999');
 
   // Add Category Form State
@@ -190,7 +190,7 @@ const AdminDashboard: React.FC = () => {
       exportJson: 'Экспарт JSON',
       published: 'Апублікаваны',
       hidden: 'Схаваны',
-      newsPub: 'Апублікавана',
+      newsPub: 'Апублікована',
       newsHidden: 'Знята',
       fieldsFilled: 'палёў перакладзена',
       showFewer: 'Згарнуць спіс',
@@ -273,7 +273,6 @@ const AdminDashboard: React.FC = () => {
     },
   }[language];
 
-  // Translation completeness audit across catalog, news, UI keys, team & site settings
   const completenessStats = useMemo(() => {
     return LANGS.map((lang) => {
       let total = 0;
@@ -371,7 +370,7 @@ const AdminDashboard: React.FC = () => {
       ],
       characteristics: {},
       useCases: ['daily'],
-      relatedIds: ['mozzarella'],
+      relatedIds: ['syr-goroden'],
       seo: {
         title: {
           ru: newSeoTitle.trim() || `${newNameRu.trim()} — Молочный Мир`,
@@ -728,13 +727,9 @@ const AdminDashboard: React.FC = () => {
     </div>
     </div>
 
-    {/* TAB: HOMEPAGE HERO & PROMO PLAQUE */}
     {activeTab === 'home' && <AdminHomeTab />}
-
-    {/* TAB: HOMEPAGE EXPERT TEAM */}
     {activeTab === 'team' && <AdminTeamTab />}
 
-    {/* TAB: PRODUCTS CMS */}
     {activeTab === 'products' && (
       <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center gap-3">
@@ -1076,7 +1071,6 @@ const AdminDashboard: React.FC = () => {
         </label>
         </div>
 
-        {/* Primary photo & optional extra gallery */}
         <ImagePickerField
         label="Основное изображение карточки товара"
         value={editingProduct.image}
@@ -1253,7 +1247,6 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Packages Editor */}
         <div className="pt-3 border-t border-slate-200 space-y-3">
         <div className="text-xs font-semibold text-slate-700">
         {copy.colPacks} ({editingProduct.packages.length})
@@ -1362,6 +1355,7 @@ const AdminDashboard: React.FC = () => {
           <img
           src={prod.image}
           alt=""
+          referrerPolicy="no-referrer"
           className="w-10 h-10 rounded-lg object-cover border border-slate-200 bg-slate-50 shrink-0"
           />
           <div>
@@ -1374,7 +1368,8 @@ const AdminDashboard: React.FC = () => {
           {cat ? localize(cat.name) : prod.category}
           </td>
           <td className="py-3 px-4 text-slate-600 text-xs">
-          {prod.packages.map((p) => p.weight).join(', ')}
+          {prod.packages.map((p) => p.weight).slice(0, 3).join(', ')}
+          {prod.packages.length > 3 ? ` (+${prod.packages.length - 3})` : ''}
           </td>
           <td className="py-3 px-4">
           <span
@@ -1423,7 +1418,6 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB: CATEGORIES & SCHEMAS */}
     {activeTab === 'categories' && (
       <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -1641,7 +1635,6 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB: NEWS CMS */}
     {activeTab === 'news' && (
       <div className="space-y-6">
       <div className="flex justify-between items-center gap-3">
@@ -1994,15 +1987,9 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB: CONTACTS & MAP LOCATIONS */}
     {activeTab === 'contacts' && <AdminContactsTab />}
+    {activeTab === 'footer' && <AdminFooterTab onJumpToContacts={() => setActiveTab('contacts')} />}
 
-    {/* TAB: FOOTER */}
-    {activeTab === 'footer' && (
-      <AdminFooterTab onJumpToContacts={() => setActiveTab('contacts')} />
-    )}
-
-    {/* TAB: 301 REDIRECTS */}
     {activeTab === 'redirects' && (
       <div className="space-y-6">
       <form
@@ -2086,7 +2073,6 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB: TRANSLATIONS & LANGUAGE COMPLETENESS */}
     {activeTab === 'translations' && (
       <div className="space-y-6">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

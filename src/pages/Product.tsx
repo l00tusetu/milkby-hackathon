@@ -228,13 +228,13 @@ export const Product: React.FC = () => {
     <span className="text-slate-900 font-medium">{localize(product.name)}</span>
     </nav>
 
-    {/* Hero Product Overview: Anchored Image Left + Pack Selector & CTAs Right */}
+    {/* Hero Product Overview */}
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-    {/* Left Column: Static Image + Key Nutrition/Compliance Metrics */}
     <div className="lg:col-span-6 space-y-4">
     <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-xs">
     <ImageWithFallback
     src={product.image}
+    fallbackSrc={product.localImage}
     alt={localize(product.name)}
     fallbackTitle={localize(product.name)}
     className="w-full h-full object-cover"
@@ -271,7 +271,6 @@ export const Product: React.FC = () => {
       </div>
       </div>
 
-      {/* Right Column: Title, Interactive Pack Switcher, Active Pack Info, CTAs */}
       <div className="lg:col-span-6 space-y-6 min-w-0">
       <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -305,12 +304,11 @@ export const Product: React.FC = () => {
       {localize(product.seo.h1) || localize(product.name)}
       </h1>
 
-      <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+      <p className="text-sm sm:text-base text-slate-600 leading-relaxed whitespace-pre-line">
       {localize(product.description)}
       </p>
       </div>
 
-      {/* Multi-Packaging Variant Selector */}
       {product.packages.length > 0 && (
         <div className="space-y-3 pt-4 border-t border-slate-200">
         <div className="flex items-center justify-between gap-2">
@@ -390,7 +388,6 @@ export const Product: React.FC = () => {
         </div>
       )}
 
-      {/* B2B Actions */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-1">
       <button
       type="button"
@@ -412,9 +409,8 @@ export const Product: React.FC = () => {
       </div>
       </div>
 
-      {/* Dedicated Full-Width Section: Technical Specifications & All Pack Formats */}
+      {/* Technical Specifications & All Pack Formats */}
       <div className="pt-8 border-t border-slate-200 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      {/* Dynamic Category-Specific Characteristics Table */}
       <section className="lg:col-span-6 space-y-4">
       <div>
       <h2 className="font-display text-xl font-bold text-slate-900">
@@ -467,7 +463,6 @@ export const Product: React.FC = () => {
       </dl>
       </section>
 
-      {/* Interactive All-Packs Logistics Matrix */}
       {product.packages.length > 0 && (
         <section className="lg:col-span-6 space-y-4">
         <div>
@@ -528,7 +523,6 @@ export const Product: React.FC = () => {
       )}
       </div>
 
-      {/* Related Products */}
       {relatedProducts.length > 0 && (
         <section className="space-y-6 pt-8 border-t border-slate-200">
         <h2 className="font-display text-2xl font-bold text-slate-900">

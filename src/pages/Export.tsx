@@ -73,7 +73,7 @@ export const Export: React.FC = () => {
         {
           title: 'Страны СНГ и ЕАЭС',
           tag: 'Ежедневные рейсы',
-          desc: 'Регулярные прямые поставки свежих сыров, моцареллы HoReCa, греческих йогуртов, масла и UHT-молока для федеральных сетей.',
+          desc: 'Регулярные прямые поставки свежих сыров, греческих йогуртов, масла, мороженого и стерилизованного молока для торговых сетей.',
           mode: 'Собственный автопарк с телеметрией (+2…+6 °C / -18 °C)',
         },
         {
@@ -110,7 +110,7 @@ export const Export: React.FC = () => {
       badge: 'FSSC 22000 · ISO 9001 · HACCP · China GACC',
       title: 'Экспарт і міжнароднае партнёрства',
       subtitle:
-      'Прамыя кантрактныя адгрузкі малочнай прадукцыі ААТ «Малочны Мір» больш чым у 25 краін свету: сухія інгрэдыенты, сметанковае масла, сыры і UHT-малако.',
+      'Прамыя кантрактныя адгрузкі малочнай прадукцыі ААТ «Малочны Мір» больш чым у 25 краін свету: сухія інгрэдыенты, сметанковае масла, сыры і стэрылізаванае малако.',
       metrics: [
         { value: '25+', label: 'Краін імпарцёраў' },
         { value: '4 200', label: 'Палетамесцаў халадовага ланцуга' },
@@ -133,7 +133,7 @@ export const Export: React.FC = () => {
         {
           title: 'Краіны СНД і ЕАЭС',
           tag: 'Штодзённыя рэйсы',
-          desc: 'Рэгулярныя пастаўкі свежых сыроў, мацарэлы HoReCa, грэчаскіх ёгуртаў, масла і малака для гандлёвых сетак.',
+          desc: 'Рэгулярныя пастаўкі свежых сыроў, грэчаскіх ёгуртаў, масла, марозіва і малака для гандлёвых сетак.',
           mode: 'Уласны аўтапарк з тэлеметрыяй (+2…+6 °C / -18 °C)',
         },
         {
@@ -170,7 +170,7 @@ export const Export: React.FC = () => {
       badge: 'FSSC 22000 · ISO 9001 · HACCP · China GACC',
       title: 'Global Export & International B2B',
       subtitle:
-      'Direct manufacturer exports from Molochny Mir to over 25 countries: spray-dried dairy ingredients, 82.5% sweet cream butter, aged cheeses, and aseptic UHT dairy.',
+      'Direct manufacturer exports from Molochny Mir to over 25 countries: spray-dried dairy ingredients, 82.5% sweet cream butter, aged cheeses, and aseptic sterilized dairy.',
       metrics: [
         { value: '25+', label: 'Export destinations' },
         { value: '4,200', label: 'Cold-chain pallet slots' },
@@ -193,7 +193,7 @@ export const Export: React.FC = () => {
         {
           title: 'CIS & Eurasian Union',
           tag: 'Daily Dispatch',
-          desc: 'Scheduled wholesale supply of pasta filata mozzarella, Greek yogurts, fresh cheeses, butter, and UHT milk.',
+          desc: 'Scheduled wholesale supply of aged & cream cheeses, Greek yogurts, butter, ice cream, and sterilized milk.',
           mode: 'Dedicated chilled truck fleet (+2…+6 °C / -18 °C telemetry)',
         },
         {
@@ -253,7 +253,7 @@ export const Export: React.FC = () => {
         {
           title: '独联体及欧亚经济联盟',
           tag: '每日发车',
-          desc: '面向商超及餐饮供应链直供披萨马苏里拉奶酪、高蛋白希腊酸奶、鲜奶及黄油。',
+          desc: '面向商超及餐饮供应链直供陈年及奶油奶酪、希腊酸奶、冰淇淋、鲜奶及黄油。',
           mode: '自有全程温控冷藏车队 (+2…+6 °C / -18 °C)',
         },
         {
@@ -358,14 +358,14 @@ export const Export: React.FC = () => {
     <div className="space-y-2 pt-1 text-sm font-mono tabular-nums text-slate-700 bg-slate-50 border border-slate-200 rounded-xl p-4">
     <div className="flex items-center gap-2.5">
     <Mail className="w-4 h-4 text-[#0057B8] shrink-0" />
-    <a href="mailto:export@milk.by" className="hover:text-[#0057B8] font-medium">
-    export@milk.by
+    <a href="mailto:ved@milk.by" className="hover:text-[#0057B8] font-medium">
+    ved@milk.by
     </a>
     </div>
     <div className="flex items-center gap-2.5">
     <Phone className="w-4 h-4 text-[#0057B8] shrink-0" />
-    <a href="tel:+375152445512" className="hover:text-[#0057B8] font-medium">
-    +375 (152) 44-55-12
+    <a href="tel:+375152600752" className="hover:text-[#0057B8] font-medium">
+    +375 (152) 60-07-52
     </a>
     </div>
     <div className="pt-1.5 border-t border-slate-200 text-xs text-slate-500 font-sans">
@@ -474,6 +474,7 @@ export const Export: React.FC = () => {
         <div className="w-11 h-11 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
         <ImageWithFallback
         src={prod.image}
+        fallbackSrc={prod.localImage}
         alt={localize(prod.name)}
         className="w-full h-full object-cover"
         />
@@ -498,7 +499,10 @@ export const Export: React.FC = () => {
         </span>
         </td>
         <td className="py-3.5 px-4 text-slate-700 min-w-[200px]">
-        <div className="font-medium">{prod.packages.map((p) => p.weight).join(' · ')}</div>
+        <div className="font-medium">
+        {prod.packages.map((p) => p.weight).slice(0, 3).join(' · ')}
+        {prod.packages.length > 3 ? ` (+${prod.packages.length - 3})` : ''}
+        </div>
         {mainPkg && (
           <div className="text-xs text-slate-500 mt-0.5">
           {mainPkg.unitsPerBox} {copy.boxUnit} · {localize(mainPkg.packagingType)}

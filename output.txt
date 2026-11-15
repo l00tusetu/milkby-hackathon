@@ -4749,7 +4749,7 @@ export const HomeAboutSection: React.FC<HomeAboutSectionProps> = ({ imageSrc }) 
 
 `/home/july/Projects/milkby-hackathon/src/components/home/HomeHeroSection.tsx`:
 ```
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
@@ -4761,6 +4761,7 @@ export const HomeHeroSection: React.FC = () => {
     const { t, localize } = useLanguage();
     const { siteSettings } = useCatalogStore();
     const [searchQuery, setSearchQuery] = useState('');
+    const [blurImgFailed, setBlurImgFailed] = useState(false);
     const navigate = useNavigate();
 
     const { homeHero } = siteSettings;
@@ -4768,6 +4769,10 @@ export const HomeHeroSection: React.FC = () => {
     const heroSubtitle = localize(homeHero.subtitle) || t('heroSubtitle');
     const primaryCta = localize(homeHero.primaryCta) || t('heroPrimaryCta');
     const secondaryCta = localize(homeHero.secondaryCta) || t('heroSecondaryCta');
+
+    useEffect(() => {
+        setBlurImgFailed(false);
+    }, [homeHero.image]);
 
     return (
         <section className="relative z-20">
@@ -4779,25 +4784,36 @@ export const HomeHeroSection: React.FC = () => {
         className="w-full h-full object-cover"
         />
 
+        {/* Радиально замаскированный слой с обычным blur() вместо backdrop-filter */}
+        {homeHero.image && !blurImgFailed && (
+            <div
+            aria-hidden="true"
+            className="absolute inset-0 [--blur-rx:220px] [--blur-ry:175px] sm:[--blur-rx:40%] sm:[--blur-ry:44%] lg:[--blur-rx:500px] lg:[--blur-ry:245px]"
+            style={{
+                maskImage:
+                'radial-gradient(ellipse var(--blur-rx) var(--blur-ry) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
+                                              WebkitMaskImage:
+                                              'radial-gradient(ellipse var(--blur-rx) var(--blur-ry) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
+            }}
+            >
+            <img
+            src={homeHero.image}
+            alt=""
+            referrerPolicy="no-referrer"
+            onError={() => setBlurImgFailed(true)}
+            className="w-full h-full object-cover blur-[12px] scale-[1.03]"
+            />
+            </div>
+        )}
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-neutral-950/65" />
 
         <div
         aria-hidden="true"
-        className="absolute inset-0 backdrop-blur-[12px]"
-        style={{
-            maskImage:
-            'radial-gradient(ellipse clamp(230px, 40%, 540px) clamp(170px, 44%, 250px) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
-            WebkitMaskImage:
-            'radial-gradient(ellipse clamp(230px, 40%, 540px) clamp(170px, 44%, 250px) at 50% 45%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0) 100%)',
-        }}
-        />
-
-        <div
-        aria-hidden="true"
-        className="absolute inset-0"
+        className="absolute inset-0 [--scrim-rx:210px] [--scrim-ry:165px] sm:[--scrim-rx:38%] sm:[--scrim-ry:42%] lg:[--scrim-rx:480px] lg:[--scrim-ry:235px]"
         style={{
             background:
-            'radial-gradient(ellipse clamp(220px, 38%, 520px) clamp(160px, 42%, 240px) at 50% 45%, rgba(10, 15, 28, 0.38) 0%, rgba(10, 15, 28, 0.18) 50%, rgba(10, 15, 28, 0) 100%)',
+            'radial-gradient(ellipse var(--scrim-rx) var(--scrim-ry) at 50% 45%, rgba(10, 15, 28, 0.38) 0%, rgba(10, 15, 28, 0.18) 50%, rgba(10, 15, 28, 0) 100%)',
         }}
         />
         </div>
@@ -7926,173 +7942,1139 @@ export const NEWS_CATEGORY_LABELS: Record<NewsCategoryId, LocalizedText> = {
 
 export const newsArticles: NewsArticle[] = [
   {
-    id: 'cheese-export-china-2026',
-    slug: 'cheese-export-china-2026',
-    date: '2026-10-18',
+    id: 'forum-molodykh-spetsialistov',
+    slug: 'forum-molodykh-spetsialistov',
+    date: '2026-11-14',
     year: 2026,
-    categoryId: 'export',
-    title: {
-      ru: 'ОАО «Молочный Мир» расширило поставки выдержанных сыров и сухого молока в страны Азии',
-      be: 'ААТ «Малочны Мір» пашырыла пастаўкі вытрыманых сыроў і сухога малака ў краіны Азіі',
-      en: 'Molochny Mir Expands Aged Cheese and Dry Dairy Shipments to Asia',
-      zh: 'Molochny Mir 进一步扩大陈年奶酪与干乳制品对亚洲市场出口',
-    },
-    excerpt: {
-      ru: 'Подтверждена аккредитация новой линии распылительной сушки и отгружены первые контейнерные партии сыра «ГороденЪ» и СОМ в Китай и Вьетнам.',
-      be: 'Пацверджана акрэдытацыя новай лініі і адгружаны першыя кантэйнерныя партыі сыру і САМ у Кітай і В’етнам.',
-      en: 'Following renewed GACC accreditation, the enterprise dispatched container shipments of Goroden aged cheese and SMP to China and Vietnam.',
-      zh: '随着GACC资质更新完成，公司已向中国及越南发运首批Goroden陈年奶酪与脱脂奶粉集装箱货柜。',
-    },
-    content: {
-      ru: 'По итогам международного аудита систем безопасности пищевых продуктов FSSC 22000 и подтверждения экспортных сертификатов ISO 9001 и GACC ОАО «Молочный Мир» увеличило экспортные отгрузки в страны Юго-Восточной Азии и Китай на 28% по сравнению с аналогичным периодом прошлого года. Основной драйвер роста — сухое обезжиренное молоко (СОМ) в крафт-мешках по 25 кг, масло сливочное 82,5% в монолитах и выдержанные полутвёрдые сыры с длительным сроком хранения.',
-      be: 'Па выніках міжнароднага аўдыту FSSC 22000 і пацвярджэння сертыфікатаў ISO 9001 і GACC ААТ «Малочны Мір» павялічыла экспартныя адгрузкі ў краіны Паўднёва-Усходняй Азіі і Кітай на 28%. Асноўны драйвер росту — сухое абястлушчанае малако ў мяшках па 25 кг, масла 82,5% і вытрыманыя сыры.',
-      en: 'Following a successful international FSSC 22000 food safety audit alongside ISO 9001 and China GACC confirmations, Molochny Mir increased export volume to Southeast Asia and China by 28% year-over-year. Growth was led by 25kg Skimmed Milk Powder bags, 20kg 82.5% butter blocks, and long-shelf-life aged cheeses.',
-      zh: '在顺利通过FSSC 22000食品安全体系国际审核并更新ISO 9001与GACC出口认证后，Molochny Mir 对东南亚及中国市场的出口量同比增长28%。25公斤装脱脂奶粉、20公斤装82.5%天然黄油及长保质期陈年奶酪成为核心增长引擎。',
-    },
-    image: ASSETS.newsDairyFacility,
-    published: true,
-    relatedIds: ['new-mozzarella-horeca-line', 'active-life-protein-award'],
-    seo: {
-      title: {
-        ru: 'Расширение экспортных поставок в Азию и Китай | Новости Молочный Мир',
-        be: 'Пашырэнне экспартных паставак у Азію і Кітай | Навіны Малочны Мір',
-        en: 'Asian & China Export Expansion 2026 | Molochny Mir News',
-        zh: '亚洲及中国市场出口业务扩展 | Molochny Mir 新闻',
-      },
-      description: {
-        ru: 'ОАО «Молочный Мир» увеличило экспорт сухого молока СОМ и выдержанных сыров в Китай и страны Азии на 28%.',
-        be: 'ААТ «Малочны Мір» павялічыла экспарт САМ і вытрыманых сыроў у Кітай на 28%.',
-        en: 'Molochny Mir increases exports of SMP and aged cheeses to China and Southeast Asia by 28%.',
-        zh: 'Molochny Mir 对中国及东南亚脱脂奶粉和陈年奶酪出口量增长28%。',
-      },
-    },
-  },
-  {
-    id: 'new-mozzarella-horeca-line',
-    slug: 'new-mozzarella-horeca-line',
-    date: '2026-08-05',
-    year: 2026,
-    categoryId: 'products',
-    title: {
-      ru: 'Запущена новая автоматизированная линия сыров Паста Филата для сегмента HoReCa',
-      be: 'Запушчана новая аўтаматызаваная лінія сыроў Паста Філата для сегмента HoReCa',
-      en: 'New Automated Pasta Filata Mozzarella Line Launched for HoReCa',
-      zh: '全新全自动 HoReCa 餐饮专用马苏里拉奶酪生产线正式投产',
-    },
-    excerpt: {
-      ru: 'Производственная мощность увеличена на 15 тонн в сутки; в ассортименте появились форматы 1 кг и 2,5 кг для сетей пиццерий.',
-      be: 'Вытворчая магутнасць павялічана на 15 тон у суткі; з’явіліся фарматы 1 кг і 2,5 кг для піцэрый.',
-      en: 'Daily capacity rises by 15 metric tons with dedicated 1kg and 2.5kg vacuum blocks tailored for pizzeria chains.',
-      zh: '日产能提升15吨，并新增专为连锁披萨店研发的1公斤与2.5公斤真空包装规格。',
-    },
-    content: {
-      ru: 'Модернизация сыродельного цеха в Гродно позволила внедрить закрытую европейскую линию вытяжения сырного теста с точным контролем влажности и pH. Это гарантирует стабильное плавление и отсутствие подгорания Моцареллы для пиццы в печах с температурой до 400 °C. Новые фасовки 500 г, 1 кг и 2,5 кг уже доступны для оптовых партнёров.',
-      be: 'Мадэрнізацыя сыраробнага цэха ў Гродне дазволіла ўкараніць закрытую еўрапейскую лінію выцяжэння сырнага цеста з дакладным кантролем вільготнасці.',
-      en: 'The modernization of the Grodno cheese plant introduced a closed European pasta filata stretching line with precision moisture and pH control, guaranteeing consistent melt at 400°C oven temperatures. 500g, 1kg, and 2.5kg formats are now open for B2B ordering.',
-      zh: '格罗德诺奶酪车间的现代化改造引入了全封闭欧洲拉伸凝乳生产线，实现精准水分与pH值控制，确保披萨奶酪在400°C高温烤炉中稳定拉丝不焦糊。',
-    },
-    image: ASSETS.productMozzarella,
-    published: true,
-    relatedIds: ['cheese-export-china-2026', 'grodno-cold-chain-2025'],
-    seo: {
-      title: {
-        ru: 'Запуск новой линии Моцареллы HoReCa — Новости ОАО «Молочный Мир»',
-        be: 'Запуск новай лініі Мацарэлы HoReCa — Навіны ААТ «Малочны Мір»',
-        en: 'New Automated Mozzarella HoReCa Production Line | Molochny Mir',
-        zh: '全自动 HoReCa 马苏里拉奶酪生产线投产 | Molochny Mir',
-      },
-      description: {
-        ru: 'Новая линия Паста Филата в Гродно увеличила выпуск Моцареллы для пиццы на 15 тонн в сутки.',
-        be: 'Новая лінія Паста Філата ў Гродне павялічыла выпуск Мацарэлы на 15 тон у суткі.',
-        en: 'Automated pasta filata line in Grodno adds 15 tons daily mozzarella output for pizzerias.',
-        zh: '格罗德诺全新拉伸凝乳生产线投产，日新增15吨餐饮专用马苏里拉产能。',
-      },
-    },
-  },
-  {
-    id: 'active-life-protein-award',
-    slug: 'active-life-protein-award',
-    date: '2025-11-22',
-    year: 2025,
-    categoryId: 'awards',
-    title: {
-      ru: 'Линейка Active Life удостоена Гран-при международного дегустационного конкурса',
-      be: 'Лінейка Active Life атрымала Гран-пры міжнароднага дэгустацыйнага конкурсу',
-      en: 'Active Life High-Protein & Lactose-Free Range Wins International Grand Prix',
-      zh: 'Active Life 高蛋白及无乳糖系列荣获国际乳品品鉴大奖',
-    },
-    excerpt: {
-      ru: 'Экспертное жюри отметило греческий йогурт High Protein и безлактозное молоко 2,5% за чистый состав и сбалансированный вкус.',
-      be: 'Экспертнае журы адзначыла грэчаскі ёгурт High Protein і безлактознае малако 2,5%.',
-      en: 'International sensory judges awarded gold medals to Active Life High-Protein Greek Yogurt and 2.5% Lactose-Free Milk.',
-      zh: '国际评委团授予 Active Life 高蛋白希腊酸奶及2.5%无乳糖牛奶纯正配方金奖。',
-    },
-    content: {
-      ru: 'На ежегодном международном конкурсе качества молочной продукции линейка функционального питания Active Life получила высшие баллы по органолептическим и микробиологическим показателям. Особое признание получил греческий йогурт с 8 г белка без добавления сахара и крахмала.',
-      be: 'На штогадовым міжнародным конкурсе якасці малочнай прадукцыі лінейка Active Life атрымала вышэйшыя балы.',
-      en: 'At the annual international dairy quality competition, the Active Life functional nutrition range achieved top scores in sensory and microbiological benchmarks, highlighted by the 8g-protein Greek yogurt.',
-      zh: '在年度国际乳制品质量大赛中，Active Life 功能营养系列凭借洁净配方与卓越口感获评最高分。',
-    },
-    image: ASSETS.productGreekYogurt,
-    published: true,
-    relatedIds: ['grodno-cold-chain-2025', 'cheese-export-china-2026'],
-    seo: {
-      title: {
-        ru: 'Награда Гран-при для линейки Active Life | Молочный Мир',
-        be: 'Узнагарода Гран-пры для лінейкі Active Life | Малочны Мір',
-        en: 'Active Life Range International Grand Prix Award | Molochny Mir',
-        zh: 'Active Life 系列荣获国际乳品大奖 | Molochny Mir',
-      },
-      description: {
-        ru: 'Греческий йогурт High Protein и безлактозное молоко Active Life признаны лучшими продуктами года.',
-        be: 'Грэчаскі ёгурт і безлактознае малако Active Life прызнаны лепшымі прадуктамі года.',
-        en: 'Active Life High-Protein Greek Yogurt and Lactose-Free Milk win international gold awards.',
-        zh: 'Active Life 高蛋白酸奶与无乳糖牛奶荣获国际质量金奖。',
-      },
-    },
-  },
-  {
-    id: 'grodno-cold-chain-2025',
-    slug: 'grodno-cold-chain-2025',
-    date: '2024-09-14',
-    year: 2024,
     categoryId: 'company',
     title: {
-      ru: 'Введён в эксплуатацию роботизированный распределительный центр с контролем холодовой цепи',
-      be: 'Уведзены ў эксплуатацыю рабатызаваны размеркавальны цэнтр з кантролем халадовага ланцуга',
-      en: 'Automated Cold-Chain Distribution Hub Commissioned in Grodno',
-      zh: '格罗德诺全自动冷链物流分拨中心正式启用',
+      ru: 'Форум молодых специалистов ОАО «Молочный Мир»',
+      be: 'Форум маладых спецыялістаў ААТ «Малочны Мір»',
+      en: 'Young Specialists Forum at Molochny Mir',
+      zh: 'Molochny Mir 青年专业人才论坛',
     },
     excerpt: {
-      ru: 'Новый логистический терминал вмещает 4 200 паллетомест и сокращает время комплектации экспортных и оптовых отгрузок на 40%.',
-      be: 'Новы лагістычны тэрмінал змяшчае 4 200 палетамесцаў і паскарае адгрузку на 40%.',
-      en: 'The 4,200-pallet automated cold warehouse cuts wholesale and export dispatch lead times by 40%.',
-      zh: '拥有4,200个托盘位的智能冷链中心将大宗批发及出口备货周期缩短了40%。',
+      ru: 'Представители «Молочного Мира» приняли активное участие во II Гродненском форуме молодых специалистов и возложении цветов в парке Жилибера.',
+      be: 'Прадстаўнікі «Малочнага Міру» прынялі актыўны ўдзел у II Гродзенскім форуме маладых спецыялістаў.',
+      en: 'Young professionals from Molochny Mir actively participated in the 2nd Grodno Youth Forum.',
+      zh: 'Molochny Mir 青年代表积极参与第二届格罗德诺青年专业人才论坛。',
     },
     content: {
-      ru: 'Новый логистический хаб оснащён многозональными камерами (+2…+6 °C и -18 °C) с круглосуточным телеметрическим мониторингом температуры и автоматизированной системой WMS. Это позволяет гарантировать безупречную свежесть продукции при поставках как по всей Беларуси, так и на удалённые экспортные рынки.',
-      be: 'Новы лагістычны хаб аснашчаны шматзанальнымі камерамі (+2…+6 °C і -18 °C) і аўтаматызаванай сістэмай WMS.',
-      en: 'Equipped with dual-zone climate chambers (+2…+6 °C and -18 °C) and automated WMS tracking, the hub ensures uninterrupted cold-chain integrity for domestic retail and international export.',
-      zh: '该中心配备+2至+6°C冷藏库与-18°C冷冻库及全自动WMS仓储系统，保障乳制品从工厂到全球客户端的全程新鲜。',
+      ru: 'Сегодня проходит II Гродненский форум молодых специалистов, и представители «Молочного Мира» принимают в нём самое активное участие! Программа дня началась с важного и трогательного события — наша молодёжь присоединилась к торжественному возложению цветов в парке Жилибера, почтив память героев, отдавших жизни за мирное небо.',
+      be: 'Сёння праходзіць II Гродзенскі форум маладых спецыялістаў, і прадстаўнікі «Малочнага Міру» прымаюць у ім актыўны ўдзел! Моладзь прадпрыемства далучылася да ўскладання кветак у парку Жылібера.',
+      en: 'Delegates from OJSC Molochny Mir joined the 2nd Grodno Forum for Young Specialists, commemorating veterans at Zhilibera Park and participating in developmental panels.',
+      zh: 'Molochny Mir 青年员工代表参加了第二届格罗德诺青年专业人才论坛，并在日利贝尔公园向纪念碑献花。',
     },
-    image: ASSETS.heroDairyShowcase,
+    image: 'https://milk.by/upload/medialibrary/258/c2vlmm8bt45f9r0cbxh1s8kn4vb9mdy3.jpg',
     published: true,
-    relatedIds: ['new-mozzarella-horeca-line', 'cheese-export-china-2026'],
+    relatedIds: ['okolo-200-molodykh-spetsialistov-forum', 'preemstvennost-pokoleniy'],
     seo: {
       title: {
-        ru: 'Новый роботизированный распределительный центр | Молочный Мир',
-        be: 'Новы рабатызаваны размеркавальны цэнтр | Малочны Мір',
-        en: 'Automated Cold-Chain Distribution Hub | Molochny Mir',
-        zh: '全自动冷链物流分拨中心启用 | Molochny Mir',
+        ru: 'Форум молодых специалистов — Новости ОАО «Молочный Мир»',
+        be: 'Форум маладых спецыялістаў — Навіны ААТ «Малочны Мір»',
+        en: 'Young Specialists Forum | Molochny Mir News',
+        zh: '青年专业人才论坛 | Molochny Mir 新闻',
       },
       description: {
-        ru: 'Логистический терминал на 4 200 паллетомест ускоряет оптовые и экспортные отгрузки ОАО «Молочный Мир».',
-        be: 'Лагістычны тэрмінал на 4 200 палетамесцаў паскарае адгрузкі ААТ «Малочны Мір».',
-        en: '4,200-pallet automated cold-chain warehouse commissioned for faster B2B and export fulfillment.',
-        zh: '4,200托盘位智能冷链物流中心全面提升批发与出口发货效率。',
+        ru: 'Молодые сотрудники ОАО «Молочный Мир» приняли участие во II Гродненском форуме молодых специалистов.',
+        be: 'Маладыя супрацоўнікі ААТ «Малочны Мір» прынялі ўдзел у форуме маладых спецыялістаў.',
+        en: 'Young employees of Molochny Mir participated in the regional Youth Forum.',
+        zh: 'Molochny Mir 青年员工代表参加青年人才论坛。',
       },
     },
   },
+{
+  id: 'zhenshchinam-molochnogo-mira-osoboe-priznanie',
+  slug: 'zhenshchinam-molochnogo-mira-osoboe-priznanie',
+  date: '2026-11-13',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Женщинам «Молочного Мира» — особое признание!',
+    be: 'Жанчынам «Малочнага Міру» — асаблівае прызнанне!',
+    en: 'Special Recognition for the Women of Molochny Mir',
+    zh: '向 Molochny Mir 卓越女性职工致敬！',
+  },
+  excerpt: {
+    ru: 'В преддверии Дня работников сельского хозяйства в филармонии прошла фотовыставка, посвящённая женщинам предприятия в рамках Года белорусской женщины.',
+    be: 'У філармоніі прайшла фотавыстава, прысвечаная жанчынам прадпрыемства.',
+    en: 'Photo exhibition honoring the inspiring women of Molochny Mir held ahead of Agricultural Workers Day.',
+    zh: '在白俄罗斯女性年框架下，爱乐大厅举办了献给企业女性员工的主题摄影展。',
+  },
+  content: {
+    ru: 'В преддверии торжественного мероприятия ко Дню работников сельского хозяйства и перерабатывающей промышленности в фойе филармонии прошла вдохновляющая фотовыставка, посвящённая женщинам нашего предприятия. Выставка стала частью мероприятий в рамках Года белорусской женщины. Гости смогли принять участие в дегустации продукции «Молочного Мира», насладиться сладким столом и сделать памятные фотографии.',
+    be: 'Напярэдадні свята ў фае філармоніі прайшла фотавыстава, прысвечаная жанчынам нашага прадпрыемства ў межах Года беларускай жанчыны.',
+    en: 'Ahead of Agriculture Day celebrations, a dedicated photo exhibition honored the inspiring women of Molochny Mir alongside dairy tastings and awards.',
+    zh: '农业工人节前夕，格罗德诺爱乐大厅举办了企业女性摄影展与乳品品鉴交流会。',
+  },
+  image: 'https://milk.by/upload/medialibrary/56c/msw7q966fl39f15ble0tcuguul9cyglg.jpg',
+  published: true,
+  relatedIds: ['doska-pocheta-predpriyatiya-2026-2027', 'gordost-regiona-i-flagman-otrasli'],
+  seo: {
+    title: {
+      ru: 'Женщинам «Молочного Мира» — особое признание | Новости',
+      be: 'Жанчынам «Малочнага Міру» — асаблівае прызнанне | Навіны',
+      en: 'Special Tribute to Women of Molochny Mir | Corporate News',
+      zh: '致敬 Molochny Mir 卓越女性职工 | 企业新闻',
+    },
+    description: {
+      ru: 'Фотовыставка и чествование женщин-передовиков ОАО «Молочный Мир» в Гродненской филармонии.',
+      be: 'Фотавыстава і ўшанаванне жанчын ААТ «Малочны Мір».',
+      en: 'Photo exhibition celebrating women leaders and specialists at Molochny Mir.',
+      zh: '在格罗德诺爱乐大厅举办的女性先锋职工摄影展与表彰活动。',
+    },
+  },
+},
+{
+  id: 'doska-pocheta-predpriyatiya-2026-2027',
+  slug: 'doska-pocheta-predpriyatiya-2026-2027',
+  date: '2026-11-13',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Доска почета предприятия 2026–2027',
+    be: 'Дошка гонару прадпрыемства 2026–2027',
+    en: 'Enterprise Board of Honor 2026–2027',
+    zh: '企业 2026–2027 年度荣誉榜公布',
+  },
+  excerpt: {
+    ru: 'С гордостью представляем работников ОАО «Молочный Мир», чей профессионализм и вклад отмечены занесением на Доску почёта.',
+    be: 'З гонарам прадстаўляем работнікаў, чый уклад адзначаны занясеннем на Дошку гонару.',
+    en: 'Molochny Mir announces its annual Board of Honor inductees across processing, engineering, logistics, and quality labs.',
+    zh: 'Molochny Mir 公布本年度生产、工艺、化验与物流领域的优秀先锋荣誉榜。',
+  },
+  content: {
+    ru: 'С гордостью представляем наших коллег — работников ОАО «Молочный Мир», чьи высокий профессионализм, ответственное отношение к делу и значительный вклад в развитие предприятия отмечены занесением на Доску почёта: Петюшик Тереса (пастеризация), Шандроха Александр, Гаврицкая Виктория (мороженое), Тимошук Руслан, Ракевич Игорь (сыродельный цех), Бардаков Виталий, Бодич Светлана (цех Скидель), Антонович Данута, Вакульчик Александр (Берестовица), Миленкевич Юлия (лаборатория), Своробович Андрей, Тарасик Антон, Лесецкий Виталий, Пелудь Евгений, Моренко Дмитрий, Шупица Наталия, Барташ Наталия, Михновец Ольга. Также цветами и аплодисментами поздравили Шапеля Юрия и Лебедева Александра с государственными наградами!',
+    be: 'З гонарам прадстаўляем калег — работнікаў ААТ «Малочны Мір», адзначаных занясеннем на Дошку гонару за прафесіяналізм і значны ўклад у развіццё завода.',
+    en: 'Honoring leading operators, cheese masters, lab chemists, and logistics specialists inducted into the Molochny Mir Enterprise Board of Honor.',
+    zh: '表彰在巴氏杀菌、奶酪熟化、品控化验及冷链发运岗位做出突出贡献的优秀员工。',
+  },
+  image: 'https://milk.by/upload/medialibrary/da1/cs4po3qzeyv6f2pbq5p6abgn21lv1qqx.jpg',
+  published: true,
+  relatedIds: ['zasluzhennye-rabotniki-molochnogo-mira', 'nagrady-nashli-vsekh-svoikh-geroev'],
+  seo: {
+    title: {
+      ru: 'Доска почета ОАО «Молочный Мир» 2026–2027 | Новости',
+      be: 'Дошка гонару ААТ «Малочны Мір» 2026–2027 | Навіны',
+      en: 'Board of Honor 2026–2027 | Molochny Mir',
+      zh: '企业 2026–2027 年度荣誉榜 | Molochny Mir',
+    },
+    description: {
+      ru: 'Работники ОАО «Молочный Мир», занесенные на Доску почёта за вклад в развитие молочной отрасли.',
+      be: 'Перадавікі ААТ «Малочны Мір», занесеныя на Дошку гонару.',
+      en: 'Annual honors list recognizing dedicated employees across dairy production and logistics.',
+      zh: '公布在乳制品加工制造中表现卓著的年度荣誉员工名单。',
+    },
+  },
+},
+{
+  id: 'nagrady-nashli-vsekh-svoikh-geroev',
+  slug: 'nagrady-nashli-vsekh-svoikh-geroev',
+  date: '2026-11-12',
+  year: 2026,
+  categoryId: 'awards',
+  title: {
+    ru: 'Награды нашли всех своих героев в филиалах и хозяйствах',
+    be: 'Узнагароды знайшлі ўсіх сваіх герояў у філіялах і гаспадарках',
+    en: 'Honors Awarded Across Regional Branches and Agricultural Farms',
+    zh: '各分厂与现代化牧场先锋团队喜获嘉奖',
+  },
+  excerpt: {
+    ru: 'Чествование коллективов Щучинского и Дятловского филиалов, цеха в Слониме, а также передовых хозяйств СУП «Милк-Агро» и ОАО «Дворец-Агро».',
+    be: 'Ушанаванне калектываў Шчучынскага і Дзятлаўскага філіялаў, а таксама СУП «Мілк-Агра» і ААТ «Дварэц-Агра».',
+    en: 'Recognizing excellence in Shchuchin, Dyatlovo, Slonim branches and MilkAgro / Dvorets-Agro dairy farms.',
+    zh: '休钦分公司、佳特洛沃分公司、斯洛尼姆车间及自有牧场团队荣获表彰。',
+  },
+  content: {
+    ru: 'ОАО «Молочный Мир» — флагман молочной промышленности с Орденом Трудовой Славы. Производственные мощности включают Щучинский филиал (твердые и сычужные сыры, масло, сухая сыворотка), Дятловский филиал (элитные сорта сыра Cheeseland), цех в Слониме, а также агропредприятия СУП «Милк-Агро» и ОАО «Дворец-Агро», обеспечивающие завод отборным молоком сорта «Экстра». Сплоченный союз филиалов позволяет предприятию уверенно удерживать лидерство.',
+    be: 'Вытворчыя магутнасці таварыства аб’ядноўваюць Шчучынскі і Дзятлаўскі філіялы, цэх у Слоніме і сельгаспрадпрыемствы «Мілк-Агра» і «Дварэц-Агра».',
+    en: 'Detailed recognition of manufacturing divisions across Grodno region and integrated agricultural suppliers.',
+    zh: '展示休钦、佳特洛沃奶酪分厂与自有牧场协同发展的现代化乳业全产业链格局。',
+  },
+  image: 'https://milk.by/upload/medialibrary/867/2rjvgsv0l9jt40m8ghh80mn6qt8zdowx.jpg',
+  published: true,
+  relatedIds: ['doska-pocheta-predpriyatiya-2026-2027', 'gordost-regiona-i-flagman-otrasli'],
+  seo: {
+    title: {
+      ru: 'Награды нашли своих героев — филиалы Молочного Мира',
+      be: 'Узнагароды знайшлі сваіх герояў — філіялы Малочнага Міру',
+      en: 'Regional Branches & Farms Recognized | Molochny Mir',
+      zh: '分厂与牧场团队荣获表彰 | Molochny Mir',
+    },
+    description: {
+      ru: 'Награждение сотрудников Щучинского и Дятловского филиалов, СУП Милк-Агро и Дворец-Агро.',
+      be: 'Узнагароды калектываў філіялаў ААТ «Малочны Мір».',
+      en: 'Awards presentation at regional branches and farms of OJSC Molochny Mir.',
+      zh: '休钦与佳特洛沃等分厂团队获得行业荣誉表彰。',
+    },
+  },
+},
+{
+  id: 'zasluzhennye-rabotniki-molochnogo-mira',
+  slug: 'zasluzhennye-rabotniki-molochnogo-mira',
+  date: '2026-11-12',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Заслуженные работники ОАО «Молочный Мир» — до 40 лет стажа!',
+    be: 'Заслужаныя работнікі ААТ «Малочны Мір» — да 40 гадоў стажу!',
+    en: 'Honored Veterans of Molochny Mir: Up to 40 Years of Devotion',
+    zh: 'Molochny Mir 资深功勋老员工：四十年匠心奉献',
+  },
+  excerpt: {
+    ru: 'Генеральный директор Марина Аникеева вручила звания «Заслуженный работник» Светлане Прокопик (40 лет), Геннадию Войтюлю (37 лет) и Болеславу Семеновичу (39 лет).',
+    be: 'Генеральны дырэктар Марына Анікеева ўручыла ганаровыя званні ветэранам прадпрыемства.',
+    en: 'General Director Marina Anikeeva recognized master technicians and operators serving up to 40 consecutive years.',
+    zh: '总经理 Marina Anikeeva 为工龄长达 40 年的资深骨干颁发“企业功勋员工”荣誉奖章。',
+  },
+  content: {
+    ru: 'Генеральный директор ОАО «Молочный Мир» Марина Аникеева поблагодарила работников за верность традициям и безукоризненную круглосуточную работу: «Мы с вами вместе делаем одно большое дело». Звания «Заслуженный работник Открытого акционерного общества «Молочный Мир» удостоены: Прокопик Светлана (лаборант, 40 лет стажа), Войтюль Геннадий (слесарь-ремонтник, 37 лет стажа) и Семенович Болеслав (водитель транспортного цеха, 39 лет стажа).',
+    be: 'Звання «Заслужаны работнік ААТ «Малочны Мір» удастоены: Пракопік Святлана (40 гадоў стажу), Вайцюль Генадзь (37 гадоў) і Семановіч Баляслаў (39 гадоў).',
+    en: 'Honoring senior laboratory chemists, mechanical engineers, and fleet drivers celebrating nearly four decades of service at Molochny Mir.',
+    zh: '向连续奉献近四十载的中心实验室化验员、机械机修师与冷链车队驾驶员致敬。',
+  },
+  image: 'https://milk.by/upload/medialibrary/fdf/u89qejrbhgus221tf1rj0s3ulbv4owwx.jpg',
+  published: true,
+  relatedIds: ['doska-pocheta-predpriyatiya-2026-2027', 'preemstvennost-pokoleniy'],
+  seo: {
+    title: {
+      ru: 'Заслуженные работники Молочного Мира — 40 лет стажа | Новости',
+      be: 'Заслужаныя работнікі Малочнага Міру | Навіны',
+      en: 'Honored Workers of Molochny Mir | Corporate News',
+      zh: '企业功勋老员工表彰 | Molochny Mir 新闻',
+    },
+    description: {
+      ru: 'Присвоение почетных званий сотрудникам ОАО «Молочный Мир» со стажем от 37 до 40 лет.',
+      be: 'Прысваенне ганаровых званняў супрацоўнікам прадпрыемства.',
+      en: 'Veterans with up to 40 years of service honored by Molochny Mir leadership.',
+      zh: '表彰在企业深耕37至40年的杰出功勋模范老员工。',
+    },
+  },
+},
+{
+  id: 'atmosferno',
+  slug: 'atmosferno',
+  date: '2026-11-12',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Атмосферно: Праздничный концерт и фаер-шоу для коллектива',
+    be: 'Атмасферна: Святочны канцэрт і фаер-шоу для калектыву',
+    en: 'Vibrant Celebrations: Concert & Fire Show for Molochny Mir Staff',
+    zh: '热烈欢腾：企业职工庆祝晚会与炫目焰火秀',
+  },
+  excerpt: {
+    ru: 'Музыка, танцы и море положительных эмоций: завершением профессионального праздника стало впечатляющее фаер-шоу.',
+    be: 'Музыка, танцы і эфектнае завяршэнне свята ўражлівым фаер-шоу!',
+    en: 'Performances, music, and a spectacular fire show rounded out the celebration for enterprise workers.',
+    zh: '精彩文艺汇演与焰火表演为全厂职工带来难忘的节日之夜。',
+  },
+  content: {
+    ru: 'В этот день было всё: музыка, песни, танцы и море положительных эмоций! Артисты и танцевальные коллективы подарили всем пришедшим незабываемую праздничную программу. Особенно эффектным завершением праздника стало впечатляющее фаер-шоу, вызвавшее бурный восторг зрителей.',
+    be: 'У гэты дзень было ўсё: музыка, песні, танцы і мора станоўчых эмоцый! Асабліва эфектным завяршэннем стала ўражлівае фаер-шоу.',
+    en: 'A festive program of music, dance, and a captivating fire show celebrated the daily dedication of dairy factory workers.',
+    zh: '歌舞表演与震撼的火焰秀为全厂员工及受邀嘉宾呈现了一场视听盛宴。',
+  },
+  image: 'https://milk.by/upload/medialibrary/430/yinajl5ri5ach9wc7ftay7ikwxol7k0q.jpg',
+  published: true,
+  relatedIds: ['gordost-regiona-i-flagman-otrasli', 'pochetnye-gosti-s-pozdravleniyami'],
+  seo: {
+    title: {
+      ru: 'Праздничный концерт и фаер-шоу для Молочного Мира | Новости',
+      be: 'Святочны канцэрт і фаер-шоу | Навіны Малочны Мір',
+      en: 'Celebration Concert & Fire Show | Molochny Mir',
+      zh: '职工庆祝晚会与焰火秀 | Molochny Mir',
+    },
+    description: {
+      ru: 'Яркие моменты профессионального праздника коллектива ОАО «Молочный Мир».',
+      be: 'Яркія моманты прафесійнага свята калектыву ААТ «Малочны Мір».',
+      en: 'Highlights of the corporate concert and celebration at Molochny Mir.',
+      zh: 'Molochny Mir 庆祝活动的精彩瞬间与文艺表演回顾。',
+    },
+  },
+},
+{
+  id: 'gordost-regiona-i-flagman-otrasli',
+  slug: 'gordost-regiona-i-flagman-otrasli',
+  date: '2026-11-11',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Гордость региона: «Молочный Мир» отпраздновал День работников сельского хозяйства',
+    be: 'Гонар рэгіёна: «Малочны Мір» адсвяткаваў Дзень работнікаў сельскай гаспадаркі',
+    en: 'Regional Pride: Molochny Mir Celebrates Agriculture & Processing Day',
+    zh: '区域标杆：Molochny Mir 隆重庆祝农业与农工综合体加工业工作者节',
+  },
+  excerpt: {
+    ru: '«Молочный Мир» занимает 2-е место по чистой прибыли в молочной отрасли Беларуси: перерабатывает 50% сырья региона и производит 75% сыров Гродненщины.',
+    be: '«Малочны Мір» займае 2-е месца па чыстым прыбытку ў малочнай галіне Беларусі.',
+    en: 'Molochny Mir ranks 2nd in net profit among all Belarusian dairies, processing 50% of regional milk and producing 75% of Grodno cheeses.',
+    zh: 'Molochny Mir 净利润位居白俄罗斯全乳品企业第2位，加工全州50%的原奶并制造格罗德诺75%的奶酪。',
+  },
+  content: {
+    ru: 'Поздравить передовиков предприятия с праздником приехали почетные гости, в том числе руководство Гродненского облисполкома и горисполкома. Сегодня «Молочный Мир» — лидер, занимающий 2-е место по чистой прибыли среди всех молокоперерабатывающих предприятий Беларуси. Предприятие перерабатывает 50% всего молока региона и выпускает 75% всех сыров Гродненщины (3-е место в республике).',
+    be: 'Сёння «Малочны Мір» — лідар, які займае 2-е месца па чыстым прыбытку сярод усіх малакаперапрацоўчых прадпрыемстваў Беларусі: 50% сыравіны рэгіёна і 75% усіх сыроў Гродзеншчыны.',
+    en: 'State and city leadership congratulated the collective, highlighting enterprise leadership: processing 50% of the regional milk supply and yielding 75% of Grodno cheeses.',
+    zh: '省市领导亲临祝贺，企业原奶日加工量与奶酪产销量稳居白俄罗斯乳品工业第一梯队。',
+  },
+  image: 'https://milk.by/upload/medialibrary/b1f/x2fc347l4h35ipnk3b95q6jb8pmf26kd.jpg',
+  published: true,
+  relatedIds: ['pochetnye-gosti-s-pozdravleniyami', 'zasluzhennaya-pobeda2'],
+  seo: {
+    title: {
+      ru: 'Гордость региона: 2-е место по чистой прибыли в РБ | Молочный Мир',
+      be: 'Гонар рэгіёна і флагман галіны | Навіны Малочны Мір',
+      en: 'Regional Dairy Pride: 2nd in Net Profit | Molochny Mir',
+      zh: '格罗德诺州乳业明珠：全行业净利润第二名 | Molochny Mir',
+    },
+    description: {
+      ru: 'ОАО «Молочный Мир» перерабатывает 50% молока региона и обеспечивает 75% выпуска сыров Гродненщины.',
+      be: 'ААТ «Малочны Мір» забяспечвае 75% вытворчасці сыроў Гродзеншчыны.',
+      en: 'Molochny Mir processes 50% of regional milk and produces 75% of regional cheeses.',
+      zh: 'Molochny Mir 承担全州50%鲜奶深加工并贡献75%奶酪产能。',
+    },
+  },
+},
+{
+  id: 'pochetnye-gosti-s-pozdravleniyami',
+  slug: 'pochetnye-gosti-s-pozdravleniyami',
+  date: '2026-11-11',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Почетные гости поздравили коллектив: Юрий Караев, Андрей Хмель и руководство региона',
+    be: 'Ганаровыя госці павіншавалі калектыў: Юрый Караеў, Андрэй Хмель і кіраўніцтва рэгіёна',
+    en: 'Regional Leadership Commends Molochny Mir for Excellence & Innovation',
+    zh: '州长及市领导亲临祝贺：高度赞扬创新与品质追求',
+  },
+  excerpt: {
+    ru: 'Председатель Гродненского облисполкома Юрий Караев отметил сплоченность команды и выдающиеся успехи генерального директора Марины Аникеевой.',
+    be: 'Старшыня Гродзенскага аблвыканкама Юрый Караеў адзначыў поспехі прадпрыемства.',
+    en: 'Grodno regional Governor Yuri Karaev commended the tireless efforts of workers and General Director Marina Anikeeva.',
+    zh: '格罗德诺州州长对企业连年取得的创新突破与市场拓展给予高度评价。',
+  },
+  content: {
+    ru: '«Вы — креативный и сплоченный коллектив, добившийся больших успехов. За каждым достижением стоит каждодневный труд тысяч людей. Вы осваиваете новые рынки, постоянно совершенствуете технологии, удивляете сырными фестивалями и достойно представляете Беларусь на престижных международных выставках. Отдельное спасибо Марине Евгеньевне Аникеевой — заботливому и ответственному руководителю», — отметил председатель Гродненского облисполкома Юрий Караев. В торжествах приняли участие мэр Гродно Андрей Хмель, председатель горсовета Олег Белинский и руководители районов.',
+    be: '«Вы — крэатыўны і згуртаваны калектыў. На ўсіх самых прэстыжных міжнародных выставах абавязкова ёсць ваша прадукцыя. Мы вамі вельмі ганарымся», — падкрэсліў Юрый Караеў.',
+    en: 'Regional Governor Yuri Karaev and Mayor Andrey Khmel congratulated the collective on export milestones, cheese festival innovations, and dairy leadership.',
+    zh: '格罗德诺州及格罗德诺市政府高级官员高度肯定企业在国内外的品牌声誉与卓越品质。',
+  },
+  image: 'https://milk.by/upload/medialibrary/30f/9f0axzs2wgfu0cfy1mfablsumzfv83yv.jpg',
+  published: true,
+  relatedIds: ['gordost-regiona-i-flagman-otrasli', 'zasluzhennaya-pobeda2'],
+  seo: {
+    title: {
+      ru: 'Почетные гости поздравили Молочный Мир | Новости',
+      be: 'Ганаровыя госці з віншаваннямі | Малочны Мір',
+      en: 'Regional Dignitaries Congratulate Molochny Mir | News',
+      zh: '省市高层亲临祝贺 Molochny Mir | 企业新闻',
+    },
+    description: {
+      ru: 'Юрий Караев и Андрей Хмель вручили заслуженные награды передовикам производства ОАО «Молочный Мир».',
+      be: 'Кіраўніцтва Гродзеншчыны павіншавала работнікаў ААТ «Малочны Мір».',
+      en: 'Regional leaders applaud achievements and innovations at OJSC Molochny Mir.',
+      zh: '格罗德诺州领导层对企业取得的卓越成就予以高度认可与嘉奖。',
+    },
+  },
+},
+{
+  id: 'zasluzhennaya-pobeda2',
+  slug: 'zasluzhennaya-pobeda2',
+  date: '2026-11-10',
+  year: 2026,
+  categoryId: 'awards',
+  title: {
+    ru: 'Заслуженная победа: «Молочный Мир» — Лидер энергоэффективности Беларуси – 2026!',
+    be: 'Заслужаная перамога: «Малочны Мір» — Лідар энергаэфектыўнасці Беларусі – 2026!',
+    en: 'Molochny Mir Awarded 1st Degree Diploma at Energy Efficiency Leaders of Belarus 2026',
+    zh: '载誉前行：Molochny Mir 荣获白俄罗斯 2026 年度国家能效领跑者一等奖！',
+  },
+  excerpt: {
+    ru: 'Диплом I степени в номинации «Реализованные проекты сферы энергоэффективности, ресурсосбережения и экологической безопасности».',
+    be: 'Дыплом I ступені ў намінацыі энергаэфектыўнасці і рэсурсазберажэння.',
+    en: 'Awarded top honors for eco-friendly resource-saving tech and green production upgrades across processing lines.',
+    zh: '在能源综合利用、资源节约及生态环保工程领域斩获最高一等荣誉奖状。',
+  },
+  content: {
+    ru: 'Экспертное жюри престижного республиканского конкурса оценило работу ОАО «Молочный Мир» на высшем уровне: предприятие удостоено Диплома I степени в номинации «Реализованные проекты, мероприятия сферы энергоэффективности, ресурсосбережения и экологической безопасности». Награда подтверждает, что завод внедряет передовые энергосберегающие технологии и заботится об экологии страны.',
+    be: 'ААТ «Малочны Мір» удастоена Дыплома I ступені рэспубліканскага конкурсу за энергаэфектыўнасць, рэсурсазберажэнне і экалагічную бяспеку.',
+    en: 'An independent jury awarded Molochny Mir the 1st Degree Diploma for sustainable dairy processing technologies and industrial energy conservation.',
+    zh: '国家级专家评审团授予 Molochny Mir 能效与绿色低碳生产改造一等奖，凸显企业的可持续发展承诺。',
+  },
+  image: 'https://milk.by/upload/medialibrary/a64/zoa0g2t9ti64fqh5sxlvq4z5fu0edcrg.jpg',
+  published: true,
+  relatedIds: ['vysokaya-gosudarstvennaya-nagrada', 'gordost-regiona-i-flagman-otrasli'],
+  seo: {
+    title: {
+      ru: 'Лидер энергоэффективности Беларуси 2026 — ОАО «Молочный Мир»',
+      be: 'Лідар энергаэфектыўнасці Беларусі 2026 | Малочны Мір',
+      en: 'Energy Efficiency Leader of Belarus 2026 | Molochny Mir',
+      zh: '2026 年度白俄罗斯能效领跑者一等奖 | Molochny Mir',
+    },
+    description: {
+      ru: 'ОАО «Молочный Мир» удостоено Диплома I степени за энергосбережение и экологическую безопасность.',
+      be: 'Дыплом I ступені за энергаэфектыўнасць і экалогію.',
+      en: 'Molochny Mir wins 1st Prize in the national Energy Efficiency Leaders competition.',
+      zh: '凭借先进环保与节能工艺荣获白俄罗斯国家级能效与绿色工业奖项。',
+    },
+  },
+},
+{
+  id: 'vysokaya-gosudarstvennaya-nagrada',
+  slug: 'vysokaya-gosudarstvennaya-nagrada',
+  date: '2026-11-08',
+  year: 2026,
+  categoryId: 'awards',
+  title: {
+    ru: 'Высокая государственная награда: медаль «За трудовые заслуги» сотруднику завода',
+    be: 'Высокая дзяржаўная ўзнагарода: медаль «За працоўныя заслугі»',
+    en: 'State Honor: Medal for Labor Merits Awarded to Molochny Mir Cheese Specialist',
+    zh: '国家殊荣：浓缩蒸发工段老专家荣获“劳动功绩奖章”',
+  },
+  excerpt: {
+    ru: 'Премьер-министр Беларуси вручил медаль «За трудовые заслуги» Александру Лебедеву за 26 лет безупречной работы в сыродельном цехе.',
+    be: 'Прэм’ер-міністр Беларусі ўручыў медаль «За працоўныя заслугі» Аляксандру Лебедзеву.',
+    en: 'Prime Minister of Belarus presented the Medal for Labor Merits to Alexander Lebedev after 26 years of cheese crafting excellence.',
+    zh: '白俄罗斯总理亲自向在奶酪车间辛勤耕耘26载的 Alexander Lebedev 颁授国家劳动功绩奖章。',
+  },
+  content: {
+    ru: 'В Минске состоялась торжественная церемония вручения государственных наград. Премьер-министр Беларуси вручил медаль «За трудовые заслуги» уважаемому коллеге — Лебедеву Александру Ивановичу! Он трудится на предприятии уже более 26 лет на одном из самых сложных участков — аппаратчик упаривания и сгущения продуктов сыродельного цеха. Его профессионализм ранее был отмечен наградами Минсельхозпрода и Совета Министров, а в 2021 году его имя занесено на Доску почёта предприятия.',
+    be: 'Прэм’ер-міністр уручыў медаль «За працоўныя заслугі» апаратчыку сыраробнага цэха Лебедзеву Аляксандру Іванавічу за 26 гадоў бездакорнай працы.',
+    en: 'The Prime Minister presented the Medal for Labor Merits to cheese condensing specialist Alexander Lebedev, honoring over 26 years of dedicated craftsmanship.',
+    zh: '在明斯克举行的国家授勋仪式上，Alexander Lebedev 因在奶酪核心工段二十六年的严谨精湛技艺荣获国家功绩奖章。',
+  },
+  image: 'https://milk.by/upload/medialibrary/70c/kxhaij2l3eyntpa3iscv1n2asj6qq1bh.jpg',
+  published: true,
+  relatedIds: ['zasluzhennaya-pobeda2', 'doska-pocheta-predpriyatiya-2026-2027'],
+  seo: {
+    title: {
+      ru: 'Медаль «За трудовые заслуги» Александру Лебедеву | Молочный Мир',
+      be: 'Медаль «За працоўныя заслугі» Аляксандру Лебедзеву | Навіны',
+      en: 'Medal for Labor Merits Awarded to Cheese Specialist | News',
+      zh: '老员工荣获白俄罗斯国家“劳动功绩奖章” | Molochny Mir',
+    },
+    description: {
+      ru: 'Сотрудник сыродельного цеха ОАО «Молочный Мир» удостоен государственной награды из рук Премьер-министра.',
+      be: 'Дзяржаўная ўзнагарода работніку ААТ «Малочны Мір».',
+      en: 'Molochny Mir cheese production specialist honored with Belarus State Medal for Labor Merits.',
+      zh: '白俄罗斯总理向在奶酪车间坚守二十六载的功勋工人颁授国家级勋章。',
+    },
+  },
+},
+{
+  id: 'rabochiy-vizit-ministra',
+  slug: 'rabochiy-vizit-ministra',
+  date: '2026-10-24',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Рабочий визит Министра антимонопольного регулирования и торговли на Щучинский филиал',
+    be: 'Працоўны візіт Міністра антыманапольнага рэгулявання на Шчучынскі філіял',
+    en: 'Minister of Antimonopoly Regulation & Trade Visits Shchuchin Dairy Branch',
+    zh: '白俄罗斯反垄断与贸易部部长视察休钦奶酪分公司',
+  },
+  excerpt: {
+    ru: 'Министр Александр Яковчиц и генеральный директор Марина Аникеева обсудили производственные мощности и насыщение внутреннего рынка сырами.',
+    be: 'Міністр Аляксандр Якаўчыц і генеральны дырэктар Марына Анікеева абмеркавалі вытворчыя планы.',
+    en: 'Minister Alexander Yakovchits and CEO Marina Anikeeva inspected hard cheese maturation lines and trade strategies.',
+    zh: '贸易部部长与总经理深入考察了半硬质及干酪熟化车间与国内供应链保障情况。',
+  },
+  content: {
+    ru: 'В рамках Единого дня информирования Щучинский филиал ОАО «Молочный Мир» посетил Министр антимонопольного регулирования и торговли Республики Беларусь Александр Яковчиц. Встретила гостей генеральный директор Марина Аникеева. В обсуждении приняли участие зампред облисполкома Андрей Болтрик, руководство Щучинского района и директор филиала Пётр Пограновский. Диалог подтвердил совместную ориентацию государства и предприятия на повышение качества жизни граждан.',
+    be: 'Міністр Аляксандр Якаўчыц наведаў Шчучынскі філіял прадпрыемства. Госці азнаёміліся з сыраробнымі магутнасцямі і працай філіяла.',
+    en: 'Minister Alexander Yakovchits, Grodno region deputies, and Molochny Mir CEO Marina Anikeeva met at Shchuchin Branch to review cheese output and consumer pricing.',
+    zh: '部长一行对休钦基地严格执行的现代化品控体系与保供稳价举措表示高度认可。',
+  },
+  image: 'https://milk.by/upload/medialibrary/87f/6l4f324riuqaz1o246rf2ciga13jq3e6.jpg',
+  published: true,
+  relatedIds: ['nagrady-nashli-vsekh-svoikh-geroev', 'grodnenskie-proizvoditeli-pokazali-kachestvo'],
+  seo: {
+    title: {
+      ru: 'Визит Министра МАРТ на Щучинский филиал Молочного Мира | Новости',
+      be: 'Візіт Міністра МАРТ на Шчучынскі філіял | Малочны Мір',
+      en: 'Minister of Trade Visits Shchuchin Dairy Branch | News',
+      zh: '贸易部部长视察休钦分公司 | Molochny Mir',
+    },
+    description: {
+      ru: 'Министр антимонопольного регулирования и торговли посетил сыродельный филиал ОАО «Молочный Мир» в Щучине.',
+      be: 'Працоўны візіт міністра на сыраробны філіял у Шчучыне.',
+      en: 'Government trade minister visits the automated cheese manufacturing site in Shchuchin.',
+      zh: '贸易部部长一行深入了解休钦生产基地的奶酪加工与市场供应。',
+    },
+  },
+},
+{
+  id: 'preemstvennost-pokoleniy',
+  slug: 'preemstvennost-pokoleniy',
+  date: '2026-10-01',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Преемственность поколений: «Молочный Мир» поздравил ветеранов в комплексе «Привал»',
+    be: 'Пераемнасць пакаленняў: «Малочны Мір» павіншаваў ветэранаў у комплексе «Прывал»',
+    en: 'Continuity of Generations: Molochny Mir Honors Enterprise Veterans at Prival',
+    zh: '薪火相传：Molochny Mir 在“普里瓦尔”庄园隆重慰问退休老职工',
+  },
+  excerpt: {
+    ru: 'Порядка ста ветеранов труда и молодых специалистов собрались вместе. 10 золотых медалей на «ПРОДЭКСПО-2026» — общая гордость поколений.',
+    be: 'Каля ста ветэранаў працы і маладых спецыялістаў сабраліся разам у комплексе «Прывал».',
+    en: 'Around one hundred factory veterans and newly onboarded specialists met to celebrate generational craft and 10 Prodexpo gold medals.',
+    zh: '百余位老干部、退休职工与新入职青年骨干共聚一堂，共话传承与十年辉煌战绩。',
+  },
+  content: {
+    ru: 'В праздник людей золотого возраста большая семья ОАО «Молочный Мир» собралась в живописном комплексе «Привал». Порядка ста ветеранов труда встретились с молодыми специалистами. Среди почетных гостей — легендарный директор Иосиф Вацлавович Шишко, руководивший заводом почти 30 лет. Генеральный директор Марина Аникеева подчеркнула: «Уходящий год принес 10 золотых медалей на «ПРОДЭКСПО-2026» в Москве, Гран-при «Лидеры промышленности» и 21 победу на Сырном фестивале. Но главное — это люди, чей труд помнят и продолжают».',
+    be: 'У комплексе «Прывал» ветэраны сустрэліся з маладым пакаленнем. Марына Анікеева адзначыла важнасць сувязі пакаленняў і падзякавала за шматгадовую працу.',
+    en: 'Over 100 enterprise veterans joined early-career dairy technologists at Prival Resort to celebrate awards, memory books, and ongoing cheesemaking traditions.',
+    zh: '活动重温了老一辈开拓创业的历史功绩，新入职员工代表现场佩戴企业司徽接过传承接力棒。',
+  },
+  image: 'https://milk.by/upload/iblock/771/lczl1rdum5m6gps6f52wsf1rcq2bnu9i.webp',
+  published: true,
+  relatedIds: ['veteranov-truda-oao-molochnyy-mir-pozdravili', 'zasluzhennye-rabotniki-molochnogo-mira'],
+  seo: {
+    title: {
+      ru: 'Преемственность поколений: чествование ветеранов завода | Молочный Мир',
+      be: 'Пераемнасць пакаленняў: ушанаванне ветэранаў | Малочны Мір',
+      en: 'Generational Craft: Honoring Factory Veterans | Molochny Mir',
+      zh: '代际相传：情系企业退休职工 | Molochny Mir',
+    },
+    description: {
+      ru: 'Встреча поколений ОАО «Молочный Мир»: 10 золотых медалей на ПРОДЭКСПО-2026 и чествование ветеранов труда.',
+      be: 'Сустрэча ветэранаў працы і маладых спецыялістаў ААТ «Малочны Мір».',
+      en: 'Molochny Mir celebrates veterans alongside young dairy engineers at Prival complex.',
+      zh: 'Molochny Mir 举办大型敬老聚会，传承八十八载乳品匠心传统。',
+    },
+  },
+},
+{
+  id: 'veteranov-truda-oao-molochnyy-mir-pozdravili',
+  slug: 'veteranov-truda-oao-molochnyy-mir-pozdravili',
+  date: '2026-10-02',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Ветеранов труда ОАО «Молочный Мир» поздравили с Днем мудрости, добра и уважения',
+    be: 'Ветэранаў працы ААТ «Малочны Мір» павіншавалі з Днём мудрасці',
+    en: 'Molochny Mir Celebrates Day of Wisdom & Respect for Factory Veterans',
+    zh: '格罗德诺乳品联合体老功臣齐聚欢庆“智慧、善意与尊重日”',
+  },
+  excerpt: {
+    ru: '«Связь с родным заводом — она на всю жизнь». Чествование юбиляров предприятия и презентация экспортных побед.',
+    be: 'Ушанаванне юбіляраў прадпрыемства і прэзентацыя экспартных перамог.',
+    en: 'Honoring retirees with up to 40 years of service, sharing updates on new logistics hubs and export markets.',
+    zh: '表彰退休寿星，通报自动化物流中心投产及输华、东盟外贸出口取得的优异成绩。',
+  },
+  content: {
+    ru: 'Генеральный директор Марина Аникеева и экс-руководители Иосиф Шишко и Николай Максимович встретились с ветеранами завода. В начале 2026 года введен в строй роботизированный логистический центр, завоевано 1-е место по благоустройству, 20 наград на «Белагро-2026», звание «Лучший экспортер» и 21 награда на Сырном фестивале. Бренд поставляется в Китай, Вьетнам, Алжир, Сербию, Казахстан и Сингапур.',
+    be: 'Ветэраны заводу абмеркавалі вынікі года: новы лагістычны цэнтр, узнагароды Белагра і экспарт у Кітай, В’етнам і Алжыр.',
+    en: 'Leadership shared milestone accomplishments with factory retirees, including new automated cold-chain logistics and exports to China, Vietnam, and Algeria.',
+    zh: '企业向老一辈通报了最新冷链物流枢纽建设以及扩大对中国、东南亚出口等亮眼成绩。',
+  },
+  image: ASSETS.heroDairyShowcase,
+  published: true,
+  relatedIds: ['preemstvennost-pokoleniy', 'gordost-regiona-i-flagman-otrasli'],
+  seo: {
+    title: {
+      ru: 'Чествование ветеранов труда ОАО «Молочный Мир» | Новости',
+      be: 'Ушанаванне ветэранаў працы ААТ «Малочны Мір» | Навіны',
+      en: 'Honoring Labor Veterans | Molochny Mir News',
+      zh: '慰问退休模范老职工 | Molochny Mir 新闻',
+    },
+    description: {
+      ru: 'Праздничная встреча руководства ОАО «Молочный Мир» с ветеранами труда.',
+      be: 'Сустрэча кіраўніцтва завода з ветэранамі працы.',
+      en: 'Annual celebration honoring senior workers at OJSC Molochny Mir.',
+      zh: '企业高管团队慰问功勋退休职工，汇报高质量发展最新成就。',
+    },
+  },
+},
+{
+  id: 'grodnenskie-proizvoditeli-pokazali-kachestvo',
+  slug: 'grodnenskie-proizvoditeli-pokazali-kachestvo',
+  date: '2026-09-09',
+  year: 2026,
+  categoryId: 'export',
+  title: {
+    ru: 'Гродненские производители показали ростовским коллегам, как рождается качество',
+    be: 'Гродзенскія вытворцы паказалі растоўскім калегам, як нараджаецца якасць',
+    en: 'Rostov Region Agricultural Delegation Visits Molochny Mir to Study Quality Standards',
+    zh: '俄罗斯罗斯托夫州农业代表团考察 Molochny Mir 现代工艺与品质把控',
+  },
+  excerpt: {
+    ru: 'Делегация во главе с замминистра сельского хозяйства Ростовской области посетила сыродельные цеха ОАО «Молочный Мир».',
+    be: 'Дэлегацыя Растоўскай вобласці азнаёмілася з вытворчасцю сыроў ААТ «Малочны Мір».',
+    en: 'Rostov Region agricultural leadership visited the Grodno plant to study automated cheese lines and technological cooperation.',
+    zh: '俄罗斯农业代表团实地走访自动化奶酪加工车间，商讨深入深化双边农业乳业供应链合作。',
+  },
+  content: {
+    ru: 'С рабочим визитом в Гродно прибыла делегация Ростовской области во главе с заместителем министра сельского хозяйства Ольгой Чернобаевой. Гости посетили передовые цеха ОАО «Молочный Мир», отметив, что белорусская молочная продукция заслужила глубокое доверие потребителей. Стороны наметили новые ориентиры технологического сотрудничества и взаимных поставок.',
+    be: 'Дэлегацыя Растоўскай вобласці наведала ААТ «Малочны Мір» для абмену вопытам у сферы сыраробства і развіцця кааперацыйных сувязей.',
+    en: 'A high-level agricultural delegation from Russia visited Molochny Mir to review state-of-the-art cheese processing and discuss expanded distribution partnerships.',
+    zh: '双方围绕深加工技术互通、物流标准对接及大宗乳品直供展开深度商谈。',
+  },
+  image: 'https://milk.by/upload/iblock/813/ilm6j26f1vawy9qvvl9vyh8lmuiq4q80.jpeg',
+  published: true,
+  relatedIds: ['v-grodno-prokhodit-xiii-syrnyy-festival', 'rabochiy-vizit-ministra'],
+  seo: {
+    title: {
+      ru: 'Визит делегации Ростовской области на ОАО «Молочный Мир» | Новости',
+      be: 'Візіт дэлегацыі Растоўскай вобласці на ААТ «Малочны Мір» | Навіны',
+      en: 'Rostov Delegation Inspects Dairy Quality at Molochny Mir | News',
+      zh: '罗斯托夫州代表团考察乳品制造工艺 | Molochny Mir',
+    },
+    description: {
+      ru: 'Обмен опытом и развитие технологического партнерства между Гродненской и Ростовской областями.',
+      be: 'Развіццё кааперацыі паміж Гродзенскай і Растоўскай абласцямі.',
+      en: 'Molochny Mir hosts Russian agricultural delegation to deepen regional supply chains.',
+      zh: '俄罗斯代表团高度评价白俄罗斯格罗德诺生产线的严苛质控水准。',
+    },
+  },
+},
+{
+  id: 'v-grodno-prokhodit-xiii-syrnyy-festival',
+  slug: 'v-grodno-prokhodit-xiii-syrnyy-festival',
+  date: '2026-09-05',
+  year: 2026,
+  categoryId: 'products',
+  title: {
+    ru: 'В Гродно проходит XIII Сырный фестиваль «Сила родных традиций»',
+    be: 'У Гродне праходзіць XIII Сырны фестываль «Сіла родных традыцый»',
+    en: '13th Cheese Festival "Power of Native Traditions" Opens in Grodno',
+    zh: '第十三届格罗德诺“传统传承之力”金秋奶酪文化节盛大启幕',
+  },
+  excerpt: {
+    ru: 'Главное сырное событие года: самая большая сырная тарелка, дегустации премиальных сортов сыра и кулинарные мастер-классы.',
+    be: 'Галоўная сырная падзея года: самая вялікая сырная талерка і дэгустацыя лепшых сыроў.',
+    en: 'Grodno hosts the 13th Cheese Festival featuring the record-breaking giant cheese plate and artisan tastings.',
+    zh: '全白俄罗斯最负盛名的年度奶酪盛会：超大奶酪拼盘、大师厨艺课堂与新品风味首发。',
+  },
+  content: {
+    ru: 'В Гродно стартовал XIII Сырный фестиваль «Сила родных традиций». Праздник объединил лучших сыроделов страны, шеф-поваров и тысячи гостей. Главным событием стала грандиозная сырная тарелка с представлением новинок: сыров «ГуберТ», «Гродненская Вежа», линеек «Кронес» с белым и черным трюфелем, медом и мятой, а также дегустации для жителей и гостей города.',
+    be: 'XIII Сырны фестываль сабраў тысячы гасцей на дэгустацыю знакамітых сыроў «ГуберТ», «Гродзенская Вежа» і «Кронес».',
+    en: 'The 13th Grodno Cheese Festival brought together master cheesemakers and thousands of visitors for artisan tastings and culinary shows.',
+    zh: '节日现场展示了包括松露奶酪、黑胡椒及薄荷蜂蜜成熟奶酪在内的多元化产品线，广受好评。',
+  },
+  image: 'https://milk.by/upload/medialibrary/557/nkne81ggz70nrfwazmsystlmsf861c36.png',
+  published: true,
+  relatedIds: ['vkusnyy-prazdnik-dlya-vsey-semi', 'oao-molochnyy-mir-udivilo-novinkami-svisloch'],
+  seo: {
+    title: {
+      ru: 'XIII Сырный фестиваль в Гродно — ОАО «Молочный Мир»',
+      be: 'XIII Сырны фестываль у Гродне | Малочны Мір',
+      en: '13th Grodno Cheese Festival | Molochny Mir',
+      zh: '第十三届格罗德诺国际奶酪节 | Molochny Mir',
+    },
+    description: {
+      ru: 'XIII Сырный фестиваль «Сила родных традиций» собрал тысячи ценителей сыра в Гродно.',
+      be: 'Свята сыру ў Гродне з удзелам вядучых сыраробаў краіны.',
+      en: 'Highlights of the 13th Cheese Festival held in Grodno, Belarus.',
+      zh: '格罗德诺第十三届奶酪文化节盛况与全新研发特色干酪亮相。',
+    },
+  },
+},
+{
+  id: 'vkusnyy-prazdnik-dlya-vsey-semi',
+  slug: 'vkusnyy-prazdnik-dlya-vsey-semi',
+  date: '2026-08-19',
+  year: 2026,
+  categoryId: 'products',
+  title: {
+    ru: 'Вкусный праздник для всей семьи! Сырный фестиваль в Гродно',
+    be: 'Смачнае свята для ўсёй сям’і! Сырны фестываль у Гродне',
+    en: 'Delicious Celebration for Families: Cheese Festival Program Announced',
+    zh: '阖家共享的美味节日：格罗德诺奶酪嘉年华指南',
+  },
+  excerpt: {
+    ru: 'Дегустации лучших сыров, кулинарные битвы шефов, конкурсы с фирменным мерчем и интерактивная детская зона.',
+    be: 'Дэгустацыі лепшых сыроў, кулінарныя майстар-класы і сямейныя забавы.',
+    en: 'Program highlights for the upcoming dairy festival: tastings, cooking shows, and children games.',
+    zh: '品鉴顶尖发酵乳酪、知名星厨现场料理秀、互动游戏与精美文创礼品派送。',
+  },
+  content: {
+    ru: 'Приглашаем на XIII Сырный фестиваль в Гродно! В программе: самая большая сырная тарелка в истории праздника, ярмарка свежей продукции напрямую от производителя, кулинарные мастер-классы от шеф-поваров, розыгрыши фирменного мерча, детская анимация и живая музыка.',
+    be: 'Запрашаем на XIII Сырны фестываль! Вас чакаюць дэгустацыі, майстар-класы і выдатны настрой.',
+    en: 'The festival features direct producer pricing, live masterclasses, kids activity parks, and dairy tastings.',
+    zh: '诚邀广大市民游客亲临格罗德诺，领略正宗白俄罗斯传统奶酪制作工艺的魅力。',
+  },
+  image: 'https://milk.by/upload/medialibrary/f1c/1va9ts3une32j3n5aclayil0wc3b73i2.jpg',
+  published: true,
+  relatedIds: ['v-grodno-prokhodit-xiii-syrnyy-festival', 'oao-molochnyy-mir-udivilo-novinkami-svisloch'],
+  seo: {
+    title: {
+      ru: 'Программа Сырного фестиваля в Гродно | Новости Молочный Мир',
+      be: 'Праграма Сырнага фестывалю ў Гродне | Малочны Мір',
+      en: 'Grodno Cheese Festival Program Announced | News',
+      zh: '格罗德诺奶酪嘉年华活动指南 | Molochny Mir',
+    },
+    description: {
+      ru: 'Анонс программы XIII Сырного фестиваля в Гродно с бесплатным входом для всей семьи.',
+      be: 'Анонс праграмы Сырнага фестывалю ў Гродне.',
+      en: 'Upcoming Grodno Cheese Festival program and family tasting events.',
+      zh: '发布格罗德诺秋季奶酪狂欢节活动排期与市民参与指南。',
+    },
+  },
+},
+{
+  id: 'oao-molochnyy-mir-udivilo-novinkami-svisloch',
+  slug: 'oao-molochnyy-mir-udivilo-novinkami-svisloch',
+  date: '2026-08-19',
+  year: 2026,
+  categoryId: 'products',
+  title: {
+    ru: 'ОАО «Молочный Мир» удивило участников каравай‑феста в Свислочи необычными новинками',
+    be: 'ААТ «Малочны Мір» здзівіла ўдзельнікаў каравай‑фэсту ў Свіслачы навінкамі',
+    en: 'Molochny Mir Delights Guests at Svisloch Loaf-Fest with Innovative Dairy Novelties',
+    zh: '斯维斯洛奇“父亲的面包”面包节：Molochny Mir 惊艳亮相创意乳品',
+  },
+  excerpt: {
+    ru: 'Премьера пикантного творожного крема с азиатскими вкусами («Жду Сай», «Том Ям Тай», «Ким Чи»), масел со шкварками и безлактозной моцареллы.',
+    be: 'Прэм’ера вострага тварожнага крэму, масла са шкваркамі і безлактознай мацарэлы.',
+    en: 'Presenting Asian-inspired spiced cream cheeses ("Tom Yum", "Kimchi"), savory garlic-onion butter, and lactose-free mini mozzarella.',
+    zh: '首发冬阴功、泡菜风味发酵软质奶酪涂抹酱，浓郁蒜香黄油与迷你零乳糖马苏里拉奶酪。',
+  },
+  content: {
+    ru: 'На республиканском каравай-фесте «Бацькава булка» в Свислочи интерактивная площадка «Молочного Мира» стала центром притяжения тысяч гостей. Настоящий ажиотаж вызвали премьеры: оригинальное масло со вкусом чеснока, лука и шкварок, безлактозная моцарелла мини и острый творожный крем со вкусами «Джу Сай», «Том Ям Тай» и «Ким Чи». Выдержанные сыры «Президентский», «ГуберТ», «Гродненская Вежа» и «Кронес» с белым трюфелем разлетались на ура!',
+    be: 'На каравай-фэсце «Бацькава булка» прадпрыемства прадставіла новае масла са шкваркамі, вострыя тварожныя сыры і знакаміты пломбір.',
+    en: 'Crowds sampled Molochny Mir novelty butter spreads with cracklings and herbs, spiced Asian cheeses, and reserve cheeses at the Svisloch loaf festival.',
+    zh: '在国家级传统美食文化节上，企业创新推出的特色调味黄油与亚洲风味乳酪博得满堂彩。',
+  },
+  image: 'https://milk.by/upload/iblock/c77/en1eshn2x9dzemi3wzf4bq4c078x41l6.jpg',
+  published: true,
+  relatedIds: ['v-grodno-prokhodit-xiii-syrnyy-festival', 'vkusnyy-prazdnik-dlya-vsey-semi'],
+  seo: {
+    title: {
+      ru: 'Новинки Молочного Мира на каравай-фесте в Свислочи | Новости',
+      be: 'Навінкі Малочнага Міру на каравай-фэсце ў Свіслачы | Навіны',
+      en: 'Molochny Mir Unveils Dairy Innovations at Svisloch Festival | News',
+      zh: '斯维斯洛奇面包文化节重磅推新 | Molochny Mir',
+    },
+    description: {
+      ru: 'Оригинальные сыры с азиатскими вкусами, масло со шкварками и безлактозная моцарелла на фестивале в Свислочи.',
+      be: 'Прэзентацыя новых прадуктаў ААТ «Малочны Мір» у Свіслачы.',
+      en: 'Novelty culinary cheeses, savory butter, and mozzarella showcased at national bread festival.',
+      zh: '展出包括微辣风味调味乳酪、特色动物黄油在内的全新创新乳品。',
+    },
+  },
+},
+{
+  id: 'vii-letnyaya-spartakiada-oao-molochnyy-mir',
+  slug: 'vii-letnyaya-spartakiada-oao-molochnyy-mir',
+  date: '2026-08-01',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'VII летняя спартакиада ОАО «Молочный Мир» объединила команды цехов и филиалов',
+    be: 'VII летняя спартакіяда ААТ «Малочны Мір» аб’яднала каманды цэхаў і філіялаў',
+    en: '7th Summer Sports Olympiad of Molochny Mir Brings Divisions Together',
+    zh: '第七届 Molochny Mir 职工夏季运动会激情开幕',
+  },
+  excerpt: {
+    ru: 'Спортивный праздник здорового образа жизни: соревнования по волейболу, эстафетам и командному многоборью среди подразделений завода.',
+    be: 'Спартыўнае свята здаровага ладу жыцця: валейбол, эстафеты і шматборства.',
+    en: 'Factory divisions and regional branches competed in volleyball, athletics, and team relays.',
+    zh: '涵盖排球、田径接力、拔河等多个传统项目，增强全体职工凝聚力与拼搏精神。',
+  },
+  content: {
+    ru: 'На спортивных объектах предприятия прошла традиционная VII летняя спартакиада работников ОАО «Молочный Мир». В бескомпромиссной и дружеской борьбе сошлись команды головного завода в Гродно, Щучинского и Дятловского филиалов, цехов «Скидель» и «Берестовица». Праздник в очередной раз доказал: сплоченность и командный дух — залог успеха как в спорте, так и на производстве!',
+    be: 'Каманды цэхаў і філіялаў завода пазмагаліся за кубак спартакіяды ў валейболе і шматборстве.',
+    en: 'Teams from Grodno, Shchuchin, Dyatlovo, Skidel, and Berestovitsa competed in friendly summer athletic challenges.',
+    zh: '来自格罗德诺总部、休钦分厂、佳特洛沃分厂等各代表队赛出风采，展现团结拼搏的工业风貌。',
+  },
+  image: ASSETS.heroDairyShowcase,
+  published: true,
+  relatedIds: ['oao-molochnyy-mir-chestvovali-otlichnikov', 'gordost-regiona-i-flagman-otrasli'],
+  seo: {
+    title: {
+      ru: 'VII летняя спартакиада работников ОАО «Молочный Мир» | Новости',
+      be: 'VII летняя спартакіяда ААТ «Малочны Мір» | Навіны',
+      en: '7th Summer Sports Olympiad | Molochny Mir',
+      zh: '第七届职工运动会圆满举办 | Molochny Mir',
+    },
+    description: {
+      ru: 'Традиционные спортивные состязания коллективов ОАО «Молочный Мир».',
+      be: 'Спартыўныя спаборніцтвы калектыву ААТ «Малочны Мір».',
+      en: 'Annual corporate athletic competitions among dairy plant departments.',
+      zh: 'Molochny Mir 举办全厂职工夏季运动会，强健体魄共创佳绩。',
+    },
+  },
+},
+{
+  id: 'oao-molochnyy-mir-chestvovali-otlichnikov',
+  slug: 'oao-molochnyy-mir-chestvovali-otlichnikov',
+  date: '2026-08-29',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'В ОАО «Молочный Мир» в преддверии Дня знаний чествовали отличников учебы',
+    be: 'У ААТ «Малочны Мір» ушанавалі выдатнікаў вучобы',
+    en: 'Molochny Mir Celebrates Academic Achievers Ahead of Knowledge Day',
+    zh: '金秋助学：企业在开学日前夕嘉奖职工优秀学子',
+  },
+  excerpt: {
+    ru: 'Добрые корпоративные традиции: детям сотрудников, окончившим учебный год на отлично, вручили памятные дипломы и подарки.',
+    be: 'Добрыя традыцыі: дзецям супрацоўнікаў-выдатнікам уручылі падарункі.',
+    en: 'Honoring children of enterprise workers with academic honors and school supply awards.',
+    zh: '践行企业社会责任与员工关怀，向取得优异学业成绩的职工子女颁发奖学金与纪念礼品。',
+  },
+  content: {
+    ru: 'В канун 1 сентября руководство и профсоюзный комитет ОАО «Молочный Мир» поздравили детей сотрудников, продемонстрировавших высшие результаты в учебе. Отличники получили ценные подарки, школьные наборы и сладкие угощения от родного предприятия.',
+    be: 'Кіраўніцтва і прафкам павіншавалі дзяцей работнікаў з выдатнымі поспехамі ў вучобе.',
+    en: 'Leadership and trade union committees recognized students of factory workers who completed the school year with top academic marks.',
+    zh: '公司管理层与工会向品学兼优的员工子女致以开学祝福并颁发荣誉奖励。',
+  },
+  image: ASSETS.productGreekYogurt,
+  published: true,
+  relatedIds: ['vii-letnyaya-spartakiada-oao-molochnyy-mir', 'preemstvennost-pokoleniy'],
+  seo: {
+    title: {
+      ru: 'Чествование отличников учебы в ОАО «Молочный Мир» | Новости',
+      be: 'Ушанаванне выдатнікаў вучобы | Малочны Мір',
+      en: 'Rewarding Academic Excellence | Molochny Mir',
+      zh: '关爱员工下一代：表彰学业优秀学子 | Molochny Mir',
+    },
+    description: {
+      ru: 'Корпоративная поддержка детей работников ОАО «Молочный Мир» ко Дню знаний.',
+      be: 'Падтрымка дзяцей работнікаў прадпрыемства да Дня ведаў.',
+      en: 'Annual school preparation awards for children of Molochny Mir employees.',
+      zh: '企业组织开展开学季关爱慰问活动，助力学子扬帆远航。',
+    },
+  },
+},
+{
+  id: 'aleksandr-lukashenko-vruchil-gosnagrady',
+  slug: 'aleksandr-lukashenko-vruchil-gosnagrady',
+  date: '2026-09-14',
+  year: 2026,
+  categoryId: 'awards',
+  title: {
+    ru: 'Президент вручил орден Отечества III степени генеральному директору ОАО «Молочный Мир»',
+    be: 'Прэзідэнт уручыў ордэн Айчыны III ступені генеральнаму дырэктару ААТ «Малочны Мір»',
+    en: 'President Awards Order of the Fatherland to Molochny Mir CEO Marina Anikeeva',
+    zh: '白俄罗斯总统向前来受勋的 Marina Anikeeva 颁授三级祖国勋章',
+  },
+  excerpt: {
+    ru: 'Во Дворце Независимости состоялась торжественная церемония: Марина Аникеева удостоена ордена Отечества III степени.',
+    be: 'У Палацы Незалежнасці Марына Анікеева ўзнагароджана ордэнам Айчыны III ступені.',
+    en: 'At the Palace of Independence, CEO Marina Anikeeva received the Order of the Fatherland 3rd Class for transformative dairy leadership.',
+    zh: '在独立宫授勋大厅，Marina Anikeeva 因领导乳制品企业实现跨越式现代化发展荣膺国家级勋章。',
+  },
+  content: {
+    ru: 'Президент Беларуси Александр Лукашенко в преддверии Дня народного единства во Дворце Независимости вручил государственные награды заслуженным представителям отраслей. Ордена Отечества III степени удостоена генеральный директор ОАО «Молочный Мир» Марина Евгеньевна Аникеева! Глава государства поблагодарил награжденных за честный труд, преданность делу и высокие результаты, которыми гордится вся страна.',
+    be: 'Прэзідэнт Беларусі ўручыў дзяржаўныя ўзнагароды. Ордэна Айчыны III ступені ўдастоена генеральны дырэктар ААТ «Малочны Мір» Марына Анікеева!',
+    en: 'President Alexander Lukashenko decorated CEO Marina Anikeeva with the Order of the Fatherland 3rd Class, acknowledging Molochny Mir modern industrial standards and global export milestones.',
+    zh: '白俄罗斯总统向带领企业实现高精尖深加工、大幅提高乳业国际竞争力的优秀企业家颁授国家三级祖国勋章。',
+  },
+  image: 'https://milk.by/upload/iblock/680/gkv11z9x8rndufhqisvmoe80iqe1tbyr.jpg',
+  published: true,
+  relatedIds: ['vysokaya-gosudarstvennaya-nagrada', 'gordost-regiona-i-flagman-otrasli'],
+  seo: {
+    title: {
+      ru: 'Орден Отечества III степени генеральному директору Молочного Мира | Новости',
+      be: 'Ордэн Айчыны генеральнаму дырэктару Малочнага Міру | Навіны',
+      en: 'Order of the Fatherland Bestowed on Molochny Mir CEO | News',
+      zh: '总经理荣获白俄罗斯国家三级祖国勋章 | Molochny Mir',
+    },
+    description: {
+      ru: 'Генеральный директор ОАО «Молочный Мир» Марина Аникеева награждена орденом Отечества III степени.',
+      be: 'Узнагароджанне кіраўніка ААТ «Малочны Мір» ордэнам Айчыны.',
+      en: 'President of Belarus decorates Molochny Mir CEO Marina Anikeeva at Independence Palace.',
+      zh: '企业最高管理层荣获国家级崇高嘉奖，树立乳品行业现代经营典范。',
+    },
+  },
+},
+{
+  id: 'itogi-sotsialno-ekonomicheskogo-razvitiya',
+  slug: 'itogi-sotsialno-ekonomicheskogo-razvitiya',
+  date: '2026-11-12',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Итоги социально-экономического развития региона за девять месяцев: успехи молочной отрасли',
+    be: 'Вынікі сацыяльна-эканамічнага развіцця рэгіёна: поспехі малочнай галіны',
+    en: 'Regional Socio-Economic Review: Dairy Sector Records 1.32M Tons of Milk',
+    zh: '格罗德诺州前九个月经济运行分析：原奶产量突破132万吨创历史新高',
+  },
+  excerpt: {
+    ru: 'В Гродненской области надоено свыше 1,32 млн тонн молока. Экспорт АПК достиг 730 млн долларов в 48 стран мира.',
+    be: 'Надоена звыш 1,32 млн тон малака. Экспарт АПК дасягнуў 730 млн долараў.',
+    en: 'Grodno regional farms produced 1.32 million metric tons of raw milk with agri-food exports reaching $730M across 48 nations.',
+    zh: '全州牧场累计产奶132万吨，农工综合体外贸出口突破7.3亿美元，畅销全球48个国家和地区。',
+  },
+  content: {
+    ru: 'На заседании Гродненского облисполкома подвели итоги 9 месяцев 2026 года. В молочной отрасли получено свыше 1,32 млн тонн молока (+20,1 тыс. тонн к прошлому году). Средний удой составил 6 022 кг на корову. Экспорт товаров АПК достиг 730 млн долларов в 48 стран мира. ОАО «Молочный Мир» как ключевой переработчик региона обеспечивает непрерывный выпуск сыров, сухого молока и сливочного масла на экспорт.',
+    be: 'У вобласці надоена больш за 1,32 млн тон малака. ААТ «Малочны Мір» забяспечвае перапрацоўку і стабільны экспарт малочнай прадукцыі.',
+    en: 'Regional governor sessions highlighted milk yields exceeding 6,022 kg per cow and steady industrial processing capacity provided by Molochny Mir.',
+    zh: '政府常务会议高度评价以 Molochny Mir 为核心的乳业产业链在拉动全省外贸与农工经济中的顶梁柱作用。',
+  },
+  image: 'https://milk.by/upload/iblock/0f2/1wuq30i5i8ape62qt4k71v1payolo9t3.jpg',
+  published: true,
+  relatedIds: ['gordost-regiona-i-flagman-otrasli', 'pochetnye-gosti-s-pozdravleniyami'],
+  seo: {
+    title: {
+      ru: 'Итоги развития АПК Гродненщины за 9 месяцев 2026 года | Новости',
+      be: 'Вынікі развіцця АПК Гродзеншчыны | Малочны Мір',
+      en: 'Regional Dairy Achievements & 9-Month Report | News',
+      zh: '格罗德诺州农牧业发展前三季度数据公布 | Molochny Mir',
+    },
+    description: {
+      ru: '1,32 млн тонн молока и 730 млн долларов экспорта: результаты агропромышленного комплекса Гродненской области.',
+      be: 'Вынікі працы малочнай галіны Гродзенскай вобласці.',
+      en: 'Grodno region reports 1.32M tons of milk and $730M in agricultural exports.',
+      zh: '格罗德诺州农业总产出与深加工乳品出口保持强劲平稳增长势头。',
+    },
+  },
+},
+{
+  id: 'okolo-200-molodykh-spetsialistov-forum',
+  slug: 'okolo-200-molodykh-spetsialistov-forum',
+  date: '2026-11-12',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Около 200 молодых специалистов приняли участие во II Городском форуме в Гродно',
+    be: 'Каля 200 маладых спецыялістаў прынялі ўдзел у Гарадскім форуме ў Гродне',
+    en: 'Around 200 Young Specialists Attend 2nd Grodno Municipal Career Forum',
+    zh: '近二百位青年专业人才齐聚格罗德诺第二届城市发展论坛',
+  },
+  excerpt: {
+    ru: 'Открытый диалог с мэром Гродно Андреем Хмелем: поддержка молодых кадров на предприятиях перерабатывающей промышленности.',
+    be: 'Адкрыты дыялог з мэрам Гродна Андрэем Хмелем аб замацаванні кадраў на вытворчасці.',
+    en: 'Open dialogue between Mayor Andrey Khmel and early-career factory professionals regarding housing and career advancement.',
+    zh: '格罗德诺市市长与包括乳制品骨干在内的广大青年面对面交流，畅谈住房保障与职业规划。',
+  },
+  content: {
+    ru: 'В Гродно прошел II Городской форум молодых специалистов, объединивший около 200 юношей и девушек, прибывших на предприятия по распределению. Центральным событием стал открытый диалог с председателем горисполкома Андреем Хмелем, подчеркнувшим: «Каждый должен быть на своем рабочем месте — у станка, на ферме, в цеху. Задача предприятий — окружить молодежь заботой и условиями для созидательного труда». Делегация ОАО «Молочный Мир» активно представила инициативы завода.',
+    be: 'Адкрыты дыялог моладзі з кіраўніцтвам горада закрануў жыллёвыя праграмы і падтрымку маладых работнікаў прамысловых гігантаў.',
+    en: 'City leadership affirmed strong municipal backing for young factory specialists, highlighting housing support and industrial mentoring.',
+    zh: '市政领导层强调将全力为制造企业青年提供拎包入住公寓及持续成长的广阔舞台。',
+  },
+  image: 'https://milk.by/upload/iblock/23a/j9ucvuswokoc2pfr0wvf4obsqiicet3j.jpg',
+  published: true,
+  relatedIds: ['forum-molodykh-spetsialistov', 'preemstvennost-pokoleniy'],
+  seo: {
+    title: {
+      ru: 'II Городской форум молодых специалистов в Гродно | Новости',
+      be: 'II Гарадскі форум маладых спецыялістаў у Гродне | Навіны',
+      en: '2nd Grodno Youth Specialists Forum | News',
+      zh: '格罗德诺青年人才峰会成功闭幕 | Molochny Mir',
+    },
+    description: {
+      ru: 'Диалог молодых специалистов перерабатывающих предприятий с мэром Гродно.',
+      be: 'Форум маладых кадраў перапрацоўчых прадпрыемстваў у Гродне.',
+      en: 'Mayor Andrey Khmel convenes 200 young specialists across Grodno enterprises.',
+      zh: '聚焦工业制造业青年人才引进、培养与全方位安居服务保障。',
+    },
+  },
+},
+{
+  id: 'klyuchevye-tochki-rosta-mongoliya',
+  slug: 'klyuchevye-tochki-rosta-mongoliya',
+  date: '2026-10-28',
+  year: 2026,
+  categoryId: 'export',
+  title: {
+    ru: 'Ключевые точки роста: поставки белорусской молочной продукции в Монголию',
+    be: 'Ключавыя кропкі росту: пастаўкі беларускай малочнай прадукцыі ў Манголію',
+    en: 'Strategic Growth Vectors: Dairy and Food Supply Agreements with Mongolia',
+    zh: '战略新契机：白俄罗斯优质乳品深耕蒙古国与内陆新市场',
+  },
+  excerpt: {
+    ru: 'Использование преференциального режима ЕАЭС для роста поставок сухого обезжиренного молока и сыров.',
+    be: 'Выкарыстанне рэжыму ЕАЭС для росту экспарту малочнай прадукцыі ў Манголію.',
+    en: 'Leveraging EAEU preferential trade channels to expand shipments of dry dairy ingredients and aged cheeses to Mongolia.',
+    zh: '依托欧亚经济联盟自贸便利政策，加速全脂/脱脂奶粉及耐久成熟干酪开拓蒙古国商超餐饮。',
+  },
+  content: {
+    ru: 'В рамках переговоров лидеров Беларуси и Монголии определены ключевые точки экономического роста. Стороны рассчитывают на задействование преференциального торгового режима ЕАЭС для наращивания поставок сухого обезжиренного молока, сливочного масла и сыров. ОАО «Молочный Мир» готово обеспечить контейнерные отгрузки продукции длительного хранения.',
+    be: 'Беларусь і Манголія пашыраюць гандлёва-эканамічнае супрацоўніцтва ў аграрным сектары і пастаўках сухога малака.',
+    en: 'Bilateral talks outlined major avenues for agro-industrial exports, including SMP, butter monoliths, and specialized long-shelf cheeses.',
+    zh: '两国高层会晤明确将绿色安全乳制品列为优先互补进出口目录，提供全套检疫检验互认支持。',
+  },
+  image: 'https://milk.by/upload/medialibrary/9c3/az2fomod6kcr9zfaacuzmgxie2ub576k.jpg',
+  published: true,
+  relatedIds: ['grodnenskie-proizvoditeli-pokazali-kachestvo', 'rabochiy-vizit-ministra'],
+  seo: {
+    title: {
+      ru: 'Поставки молочной продукции в Монголию | Новости экспорта',
+      be: 'Пастаўкі малочнай прадукцыі ў Манголію | Навіны экспарту',
+      en: 'Dairy Export Growth to Mongolia | Molochny Mir',
+      zh: '乳制品出口蒙古国新商机 | Molochny Mir',
+    },
+    description: {
+      ru: 'Экспорт сухого молока и сыров ОАО «Молочный Мир» в страны Центральной Азии и Монголию.',
+      be: 'Экспарт малочнай прадукцыі ААТ «Малочны Мір» у Манголію.',
+      en: 'Expanding Belarusian dairy export presence across Mongolian markets.',
+      zh: 'Molochny Mir 依托中欧联运班列推进常温干乳与高端奶酪出口。',
+    },
+  },
+},
+{
+  id: 'andrey-khmel-lichnyy-priem',
+  slug: 'andrey-khmel-lichnyy-priem',
+  date: '2026-11-06',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Развитие торговых площадок и инфраструктуры города Гродно',
+    be: 'Развіццё гандлёвых пляцовак і інфраструктуры горада Гродна',
+    en: 'Urban Retail Infrastructure and Citizen Reception by Grodno Mayor',
+    zh: '格罗德诺市长主持民生接访：优化商贸网点与便民基础设施',
+  },
+  excerpt: {
+    ru: 'Мэр Гродно Андрей Хмель обсудил вопросы работы социальных торговых рядов, благоустройства и правил торговли.',
+    be: 'Мэр Гродна Андрэй Хмель правёў асабісты прыём грамадзян па пытаннях гандлю і добраўпарадкавання.',
+    en: 'Mayor Andrey Khmel reviewed municipal retail kiosks, commercial zones, and urban infrastructure enhancements.',
+    zh: '市长就社区便民菜场布局、规范商业用地及城市水系综合整治听取市民建言。',
+  },
+  content: {
+    ru: 'Председатель Гродненского горисполкома Андрей Хмель провел личный прием граждан. Подняты темы благоустройства прибрежной зоны озера Юбилейное, земельных процедур, а также соблюдения правил торговли на коммерческих площадях и развития социальных торговых рядов для местных производителей пищевой продукции.',
+    be: 'Абмеркаваны пытанні работы сацыяльных гандлёвых радоў, добраўпарадкавання і падтрымкі вытворцаў прадуктаў харчавання.',
+    en: 'Municipal consultations addressed social retail rows for regional agricultural and dairy goods alongside city beautification programs.',
+    zh: '格罗德诺市政府统筹推进特色农副产品便民展销网点规范化建设，打造整洁宜居市容。',
+  },
+  image: 'https://milk.by/upload/iblock/a83/0erx4t64bu79fuzntbixu2sfv6x9v800.jpg',
+  published: true,
+  relatedIds: ['okolo-200-molodykh-spetsialistov-forum', 'itogi-sotsialno-ekonomicheskogo-razvitiya'],
+  seo: {
+    title: {
+      ru: 'Прием граждан мэром Гродно: торговые ряды и инфраструктура | Новости',
+      be: 'Прыём грамадзян мэрам Гродна | Навіны',
+      en: 'City Infrastructure & Social Retail in Grodno | News',
+      zh: '格罗德诺便民商业与基础设施接访纪实 | Molochny Mir',
+    },
+    description: {
+      ru: 'Вопросы работы торговых рядов и инфраструктуры Гродно на личном приеме мэра.',
+      be: 'Прыём грамадзян па пытаннях гарадской інфраструктуры.',
+      en: 'Citizen reception with Grodno Mayor on commerce regulations and public spaces.',
+      zh: '格罗德诺市长接待市民来访，协调推进社区商贸基础设施配套。',
+    },
+  },
+},
+{
+  id: 'rabochaya-poezdka-v-shklovskiy-rayon',
+  slug: 'rabochaya-poezdka-v-shklovskiy-rayon',
+  date: '2026-09-18',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Модернизация молочно-товарных комплексов: передовые технологии содержания стада',
+    be: 'Мадэрнізацыя малочна-таварных комплексаў: перадавыя тэхналогіі',
+    en: 'Modernizing Dairy Cattle Complexes: Advanced Herd Management Standards',
+    zh: '现代化奶牛养殖示范基地：精细化日粮与智能化产奶新标杆',
+  },
+  excerpt: {
+    ru: 'В центре внимания аграрного сектора — нулевой падеж, дисциплина рационов, чистота молока сорта «Экстра» и строительство профилакториев.',
+    be: 'У цэнтры ўвагі — нулявы падзёж, чысціня малака гатунку «Экстра» і дысцыпліна кармлення.',
+    en: 'Evaluating automated feeding, animal welfare, and Extra-grade raw milk hygiene across Belarusian dairy complexes.',
+    zh: '聚焦牧场生鲜乳源头控制、科学配方饲养与恒温极速冷却，确保入厂原奶特级指标。',
+  },
+  content: {
+    ru: 'Развитие молочного животноводства требует непрерывного контроля технологической цепочки: от здоровья телят в специализированных профилакториях до автоматизированного доения и мгновенного охлаждения молока. ОАО «Молочный Мир» активно внедряет эти передовые стандарты на базе собственных агропредприятий СУП «Милк-Агро» и ОАО «Дворец-Агро», обеспечивая головной завод эталонным сырьем класса «Экстра».',
+    be: 'Развіццё малочнай жывёлагадоўлі патрабуе кантролю ўсіх этапаў. Прадпрыемства ўкараняе стандарты на базе сваіх гаспадарак «Мілк-Агра» і «Дварэц-Агра».',
+    en: 'Ensuring Extra-grade raw milk quality through modern calf care, balanced nutritional silage, and continuous veterinary auditing.',
+    zh: '全天候智能温控监测与全封闭无菌冷链转运，为全线高品质乳制品构筑最坚固的原奶护城河。',
+  },
+  image: ASSETS.newsDairyFacility,
+  published: true,
+  relatedIds: ['itogi-sotsialno-ekonomicheskogo-razvitiya', 'nagrady-nashli-vsekh-svoikh-geroev'],
+  seo: {
+    title: {
+      ru: 'Технологии сырого молока сорта «Экстра» | Молочный Мир',
+      be: 'Тэхналогіі сырога малака гатунку «Экстра» | Малочны Мір',
+      en: 'Extra-Grade Raw Milk Technology & Herd Standards | News',
+      zh: '特级生牛乳源头管控与现代化牧场技术 | Molochny Mir',
+    },
+    description: {
+      ru: 'Передовые технологии содержания дойного стада и получения сырья сорта «Экстра» на агропредприятиях Молочного Мира.',
+      be: 'Тэхналогіі атрымання малака гатунку «Экстра».',
+      en: 'State-of-the-art cattle management delivering Extra-grade raw milk for cheese production.',
+      zh: '介绍自有现代化牧场如何实现原奶全程可追溯与理化指标双优。',
+    },
+  },
+},
+{
+  id: 'torzhestvennyy-miting-den-edinstva',
+  slug: 'torzhestvennyy-miting-den-edinstva',
+  date: '2026-09-17',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'В Гродно прошел торжественный митинг у Кургана Славы ко Дню народного единства',
+    be: 'У Гродне прайшоў урачысты мітынг каля Кургана Славы',
+    en: 'Ceremonial Rally at the Mound of Glory Marks Day of National Unity in Grodno',
+    zh: '格罗德诺各界在光荣岗举行民族团结日盛大纪念集会',
+  },
+  excerpt: {
+    ru: 'Трудовые коллективы, молодежь и ветераны Гродно почтили память героев у мемориального комплекса Курган Славы.',
+    be: 'Працоўныя калектывы Гродна ўшанавалі памяць герояў ля Кургана Славы.',
+    en: 'Labor collectives and civic representatives assembled at the Mound of Glory to honor national history.',
+    zh: '各界代表齐聚光荣岗纪念碑前默哀献花，弘扬爱国团结与崇高劳动奉献精神。',
+  },
+  content: {
+    ru: 'У подножия Кургана Славы в Гродно собрались представители органов власти, трудовых коллективов ОАО «Молочный Мир», молодежь и ветераны. Собравшиеся почтили память тех, кто отдал жизнь за свободу и единство белорусского народа, минутой молчания и возложили венки к вечному огню.',
+    be: 'Прадстаўнікі прадпрыемстваў і жыхары горада ўсклалі кветкі да падножжа Кургана Славы ў гонар Дня народнага адзінства.',
+    en: 'Factory staff joined civic assemblies at the Grodno Mound of Glory to celebrate solidarity and civic pride.',
+    zh: 'Molochny Mir 干部职工代表深切缅怀先烈，凝聚投身现代化工业建设的坚定信念。',
+  },
+  image: ASSETS.heroDairyShowcase,
+  published: true,
+  relatedIds: ['aleksandr-lukashenko-vruchil-gosnagrady', 'forum-molodykh-spetsialistov'],
+  seo: {
+    title: {
+      ru: 'Торжественный митинг ко Дню народного единства в Гродно | Новости',
+      be: 'Мітынг да Дня народнага адзінства ў Гродне | Навіны',
+      en: 'Day of National Unity Celebrations in Grodno | News',
+      zh: '格罗德诺民族团结日集会纪实 | Molochny Mir',
+    },
+    description: {
+      ru: 'Коллектив ОАО «Молочный Мир» принял участие в торжествах ко Дню народного единства.',
+      be: 'Удзел калектыву ААТ «Малочны Мір» ва ўрачыстым мітынгу.',
+      en: 'Molochny Mir workers join national unity ceremonies in Grodno.',
+      zh: '企业员工代表出席盛大纪念活动，展现团结奋进的工匠情怀。',
+    },
+  },
+},
+{
+  id: 'trete-zasedanie-vsebelorusskogo-sobraniya',
+  slug: 'trete-zasedanie-vsebelorusskogo-sobraniya',
+  date: '2026-09-14',
+  year: 2026,
+  categoryId: 'company',
+  title: {
+    ru: 'Третье заседание VII Всебелорусского народного собрания пройдет в Минске',
+    be: 'Трэцяе пасяджэнне VII Усебеларускага народнага сходу пройдзе ў Мінску',
+    en: '3rd Session of 7th All-Belarusian People’s Assembly Scheduled for December',
+    zh: '第七届全白俄罗斯人民大会第三次全体会议将于十二月在明斯克召开',
+  },
+  excerpt: {
+    ru: 'Определены даты заседания высшего представительного органа народовластия — 17–18 декабря 2026 года.',
+    be: 'Вызначаны даты пасяджэння — 17–18 снежня 2026 года.',
+    en: 'National assembly sets 17-18 December 2026 as the session dates to outline five-year strategic development targets.',
+    zh: '大会将深入商定国家中长期发展纲领并聚焦实体经济与先进制造业战略布局。',
+  },
+  content: {
+    ru: 'Третье заседание VII Всебелорусского народного собрания пройдет в Минске 17–18 декабря 2026 года. Нынешний год для ВНС юбилейный — исполняется 30 лет с даты проведения первого собрания в октябре 1996 года. Делегаты обсудят стратегические ориентиры развития экономики, АПК и социальной политики.',
+    be: 'Дэлеґаты сходу абмяркуюць стратэгічныя арыенціры развіцця рэальнага сектара эканомікі і прамысловасці.',
+    en: 'Delegates from industry and agriculture will convene in Minsk to debate socio-economic roadmaps and manufacturing investments.',
+    zh: '来自全国实体经济战线的各界代表将深入讨论未来五年工业与民生发展新坐标。',
+  },
+  image: ASSETS.newsDairyFacility,
+  published: true,
+  relatedIds: ['aleksandr-lukashenko-vruchil-gosnagrady', 'itogi-sotsialno-ekonomicheskogo-razvitiya'],
+  seo: {
+    title: {
+      ru: 'Третье заседание Всебелорусского народного собрания | Новости',
+      be: 'Трэцяе пасяджэнне Усебеларускага народнага сходу | Навіны',
+      en: 'Session of All-Belarusian People’s Assembly | News',
+      zh: '全白俄罗斯人民大会召开日程公布 | Molochny Mir',
+    },
+    description: {
+      ru: 'Определены даты проведения заседания Всебелорусского народного собрания.',
+      be: 'Пасяджэнне Усебеларускага народнага сходу пройдзе ў снежні.',
+      en: 'National assembly session scheduled in Minsk to address industrial strategy.',
+      zh: '公布大会举行日程，聚焦实体经济与农工现代化的深远规划。',
+    },
+  },
+},
 ];
 ```
 
@@ -11047,14 +12029,14 @@ interface CatalogStoreContextValue {
   resetDemoData: () => void;
 }
 
-const STORAGE_PRODUCTS_KEY = 'milk_world_products_v1';
-const STORAGE_CATEGORIES_KEY = 'milk_world_categories_v1';
-const STORAGE_NEWS_KEY = 'milk_world_news_v1';
-const STORAGE_REDIRECTS_KEY = 'milk_world_redirects_v1';
-const STORAGE_SITE_SETTINGS_KEY = 'milk_world_site_settings_v1';
-const STORAGE_TEAM_KEY = 'milk_world_team_v1';
-const STORAGE_CONTACTS_KEY = 'milk_world_contacts_v1';
-const STORAGE_LOCATIONS_KEY = 'milk_world_locations_v1';
+const STORAGE_PRODUCTS_KEY = 'milk_world_products_v2';
+const STORAGE_CATEGORIES_KEY = 'milk_world_categories_v2';
+const STORAGE_NEWS_KEY = 'milk_world_news_v2';
+const STORAGE_REDIRECTS_KEY = 'milk_world_redirects_v2';
+const STORAGE_SITE_SETTINGS_KEY = 'milk_world_site_settings_v2';
+const STORAGE_TEAM_KEY = 'milk_world_team_v2';
+const STORAGE_CONTACTS_KEY = 'milk_world_contacts_v2';
+const STORAGE_LOCATIONS_KEY = 'milk_world_locations_v2';
 
 const CatalogStoreContext = createContext<CatalogStoreContextValue | undefined>(undefined);
 

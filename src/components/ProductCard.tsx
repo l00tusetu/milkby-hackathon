@@ -12,10 +12,10 @@ interface ProductCardProps {
 }
 
 function getPromoBadge(product: Product, language: Language): string {
-  if (product.id === 'mozzarella-pizza') {
+  if (product.id === 'syr-myagkiy-slivochnyy-goroden') {
     return { ru: 'Хит HoReCa', be: 'Хіт HoReCa', en: 'HoReCa Hit', zh: '餐饮热销' }[language];
   }
-  if (product.id === 'goroden-aged') {
+  if (product.id === 'syr-gubert' || product.id === 'syr-grodnenskaya-vezha') {
     return {
       ru: 'Серия «ГороденЪ»',
       be: 'Серыя «ГорадзенЪ»',
@@ -31,10 +31,10 @@ function getPromoBadge(product: Product, language: Language): string {
       zh: '零乳糖',
     }[language];
   }
-  if (product.id === 'butter-825') {
+  if (product.id === 'maslo-goroden' || product.id === 'maslo-vesovoe') {
     return {
-      ru: 'ГОСТ 82,5%',
-      be: 'ДАСТ 82,5%',
+      ru: 'Сливки 82,5%',
+      be: 'Вяршкі 82,5%',
       en: '82.5% Cream',
       zh: '82.5% 纯脂',
     }[language];
@@ -47,7 +47,7 @@ function getPromoBadge(product: Product, language: Language): string {
       zh: '高蛋白',
     }[language];
   }
-  if (product.id === 'milk-classic') {
+  if (product.id === 'moloko-sterilizovannoe' || product.id === 'moloko-goroden') {
     return {
       ru: 'Сорт «Экстра»',
       be: 'Гатунак «Экстра»',
@@ -91,6 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'de
       <div className="relative aspect-[16/10] w-full bg-slate-50 overflow-hidden border-b border-slate-100 shrink-0">
       <ImageWithFallback
       src={product.image}
+      fallbackSrc={product.localImage}
       alt={productName}
       fallbackTitle={productName}
       className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300 ease-out"
@@ -166,6 +167,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'de
     <div className="aspect-[4/3] w-full bg-slate-50 overflow-hidden border-b border-slate-100 shrink-0">
     <ImageWithFallback
     src={product.image}
+    fallbackSrc={product.localImage}
     alt={productName}
     fallbackTitle={productName}
     className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300 ease-out"

@@ -27,9 +27,9 @@ import { Product } from '../types';
 type PartnerSegmentId = 'retail' | 'horeca' | 'industrial';
 
 const SEGMENT_PRODUCT_IDS: Record<PartnerSegmentId, string[]> = {
-  retail: ['milk-classic', 'greek-yogurt-protein', 'mozzarella', 'goroden-aged'],
-  horeca: ['mozzarella-pizza', 'cream-33', 'butter-825', 'sour-cream-20'],
-  industrial: ['butter-825', 'skim-milk-powder-b2b', 'mozzarella-pizza', 'cream-33'],
+  retail: ['moloko-goroden', 'yogurt-grecheskiy', 'syr-gauda-premium', 'syr-goroden'],
+  horeca: ['syr-myagkiy-slivochnyy-goroden', 'slivochnyy-krem', 'maslo-vesovoe', 'plombir-vesovoy'],
+  industrial: ['maslo-vesovoe', 'moloko-sukhoe-obezzhirennoe', 'syvorotka-sd-40', 'slivki-sterilizovannye'],
 };
 
 export const Partners: React.FC = () => {
@@ -71,17 +71,17 @@ export const Partners: React.FC = () => {
         horeca: {
           title: 'HoReCa, пиццерии и кофейни',
           tagline: 'Профессиональные форматы для кухни шефа',
-          desc: 'Термостабильная моцарелла для печей до 400 °C, сливки 33% без растительных жиров для взбивания и ганаша, сметана и безлактозное молоко для бариста.',
+          desc: 'Мягкий сливочный сыр «ГороденЪ» в вёдрах до 11 кг, сливки 33% без растительных жиров для взбивания и ганаша, весовое масло и мороженое HoReCa.',
           bullets: [
-            'Удобные форматы 500 г, 1 кг, 2,5 кг и 4 кг без лишних отходов на кухне',
-            'Стабильная плавкость, эластичная нить и равномерное запекание без подгорания',
+            'Удобные форматы 1 кг, 2,4 кг, 2,7 кг и 11 кг без лишних отходов на кухне',
+            'Стабильная структура для роллов, чизкейков, выпечки и пиццы',
             'Отгрузка тестовых образцов технологам и бренд-шефам сети',
           ],
         },
         industrial: {
           title: 'Пищевые производства и пекарни',
           tagline: 'Индустриальное сырьё и крупный опт',
-          desc: 'Сливочное масло 82,5% в монолитах по 20 кг для слоёного теста и кремов, распылительное сухое молоко (СОМ) в крафт-мешках по 25 кг и стабильный творог.',
+          desc: 'Сливочное масло 82,5% в монолитах по 20 кг для слоёного теста и кремов, распылительное сухое молоко (СОМ) и сыворотка СД-40 в крафт-мешках по 25 кг.',
           bullets: [
             'Каждая партия сопровождается паспортом качества и протоколом лаборатории',
             'Ритмичные контрактные отгрузки по фиксированному графику',
@@ -100,7 +100,7 @@ export const Partners: React.FC = () => {
         { num: '04', title: 'Холодовая доставка', desc: 'Отгружаем с роботизированного хаба с непрерывным контролем температуры.' },
       ],
       features: [
-        { title: 'Форматы HoReCa и B2B', desc: 'Моцарелла для пиццы 1 кг и 2,5 кг, сливки 33% 1 л, масло монолит 20 кг, СОМ 25 кг.' },
+        { title: 'Форматы HoReCa и B2B', desc: 'Крем-сыр 1,1–11 кг, сливки 33% 980 г, масло монолит 20 кг, СОМ и СД-40 25 кг.' },
         { title: 'Собственный автопарк', desc: 'Ежедневная доставка рефрижераторным транспортом с соблюдением режима +2…+6 °C.' },
         { title: 'EDI и документооборот', desc: 'Электронные накладные, GTIN-маркировка и декларации соответствия ЕАЭС.' },
       ],
@@ -136,17 +136,17 @@ export const Partners: React.FC = () => {
         horeca: {
           title: 'HoReCa, піцэрыі і кавярні',
           tagline: 'Прафесійныя фарматы для кухні шэфа',
-          desc: 'Тэрмастабільная мацарэла для печаў да 400 °C, вяршкі 33% без раслінных тлушчаў, смятана і безлактознае малако для барыста.',
+          desc: 'Мяккі сметанковы сыр у вёдрах да 11 кг, вяршкі 33% без раслінных тлушчаў, вагавое масла і пломбір HoReCa.',
           bullets: [
-            'Зручныя фарматы 500 г, 1 кг, 2,5 кг і 4 кг без лішніх адходаў',
-            'Стабільная плаўкасць і эластычная нітка без падгарання',
+            'Зручныя фарматы 1 кг, 2,4 кг, 2,7 кг і 11 кг без лішніх адходаў',
+            'Стабільная структура для сушы, чызкейкаў і выпечкі',
             'Адгрузка тэставых узораў тэхнолагам і брэнд-шэфам сеткі',
           ],
         },
         industrial: {
           title: 'Харчовыя вытворчасці і пякарні',
           tagline: 'Індустрыяльная сыравіна і буйны опт',
-          desc: 'Сметанковае масла 82,5% у маналітах па 20 кг, сухое малако (САМ) у крафт-мяшках па 25 кг і стабільны тварог.',
+          desc: 'Сметанковае масла 82,5% у маналітах па 20 кг, сухое малако (САМ) і сыроватка СД-40 у крафт-мяшках па 25 кг.',
           bullets: [
             'Кожная партыя суправаджаецца пашпартам якасці і пратаколам лабараторыі',
             'Рытмічныя кантрактныя адгрузкі па фіксаваным графіку',
@@ -165,7 +165,7 @@ export const Partners: React.FC = () => {
         { num: '04', title: 'Халадовая дастаўка', desc: 'Адгружаем з рабатызаванага хаба з бесперапынным кантролем тэмпературы.' },
       ],
       features: [
-        { title: 'Фарматы HoReCa і B2B', desc: 'Мацарэла для піцы 1 кг і 2,5 кг, вяршкі 33% 1 л, масла маналіт 20 кг, САМ 25 кг.' },
+        { title: 'Фарматы HoReCa і B2B', desc: 'Крэм-сыр 1,1–11 кг, вяршкі 33% 980 г, масла маналіт 20 кг, САМ 25 кг.' },
         { title: 'Уласны аўтапарк', desc: 'Штодзённая дастаўка рэфрыжэратарным транспартам з захаваннем рэжыму +2…+6 °C.' },
         { title: 'EDI і дакументаабарот', desc: 'Электронныя накладныя, GTIN-маркіроўка і дэкларацыі адпаведнасці ЕАЭС.' },
       ],
@@ -201,17 +201,17 @@ export const Partners: React.FC = () => {
         horeca: {
           title: 'HoReCa, Pizzerias & Cafés',
           tagline: 'Engineered performance for commercial kitchens',
-          desc: 'High-heat pizza mozzarella rated up to 400 °C, pure 33% dairy whipping cream, thick sour cream, and lactose-free barista milk.',
+          desc: 'Cream cheese buckets up to 11 kg, pure 33% dairy whipping cream, bulk butter blocks, and 2.7 kg foodservice plombir tubs.',
           bullets: [
-            'Practical 500g, 1kg, 2.5kg, and 4kg packs minimizing prep time and waste',
-            'Uniform melting, clean stretch, and golden blistering without oil separation',
+            'Practical 1 kg, 2.4 kg, 2.7 kg, and 11 kg packs minimizing prep time and waste',
+            'Consistent performance for cheesecakes, sushi, sauces, and baking',
             'Trial sample boxes dispatched directly to culinary directors and chefs',
           ],
         },
         industrial: {
           title: 'Food Processing & Bakeries',
           tagline: 'Industrial dairy fats & milk ingredients',
-          desc: '20kg blocks of 82.5% sweet cream butter for pastry lamination, 25kg spray-dried Skimmed Milk Powder (SMP), and bulk dairy bases.',
+          desc: '20kg blocks of 82.5% sweet cream butter for pastry lamination, 25kg spray-dried Skimmed Milk Powder (SMP), and demineralized whey SD-40.',
           bullets: [
             'Every shipment backed by accredited lab certificates and batch assays',
             'Scheduled contract deliveries aligned with your production calendar',
@@ -230,7 +230,7 @@ export const Partners: React.FC = () => {
         { num: '04', title: 'Cold Fulfillment', desc: 'Dispatched from our automated cold hub with +2…+6 °C telemetry.' },
       ],
       features: [
-        { title: 'HoReCa & Bulk Formats', desc: 'Pizza mozzarella 1kg/2.5kg, whipping cream 33% 1L, butter 20kg blocks, SMP 25kg bags.' },
+        { title: 'HoReCa & Bulk Formats', desc: 'Cream cheese 1.1–11 kg, whipping cream 33%, butter 20kg blocks, SMP 25kg bags.' },
         { title: 'Dedicated Fleet', desc: 'Daily chilled deliveries maintaining strict +2…+6 °C cold chain integrity.' },
         { title: 'Digital EDI & Docs', desc: 'Electronic invoices, GS1 GTIN barcodes, and full quality declarations.' },
       ],
@@ -266,17 +266,17 @@ export const Partners: React.FC = () => {
         horeca: {
           title: 'HoReCa 餐饮、披萨与咖啡吧台',
           tagline: '专为商用厨房与星厨打造的稳定表现',
-          desc: '耐 400 °C 高温拉丝马苏里拉奶酪、33% 纯动物淡奶油、浓稠酸奶油及咖啡专用零乳糖牛奶。',
+          desc: '1.1–11公斤商用奶油奶酪桶、33%纯动物淡奶油、20公斤黄油及2.7公斤餐饮冰淇淋桶。',
           bullets: [
-            '500克、1公斤、2.5公斤及4公斤商用规格，显著降低后厨损耗',
-            '融化均匀、拉丝绵长且高温烘烤不易焦糊析油',
+            '1公斤、2.4公斤、2.7公斤及11公斤商用规格，显著降低后厨损耗',
+            '适用于芝士蛋糕、寿司料理、烘焙打发与咖啡制作',
             '支持向餐饮研发中心与主厨团队寄送测试样品',
           ],
         },
         industrial: {
           title: '食品加工厂与工业烘焙',
           tagline: '工业级大包装乳脂与乳粉原料',
-          desc: '20公斤出口规格 82.5% 天然无盐黄油、25公斤喷雾干燥脱脂奶粉 (SMP) 及高蛋白凝乳原料。',
+          desc: '20公斤出口规格 82.5% 天然无盐黄油、25公斤喷雾干燥脱脂奶粉 (SMP) 及脱盐乳清粉 SD-40。',
           bullets: [
             '每批次均附带权威实验室质检报告与原厂质量合格证',
             '按工厂排产计划执行长期稳定的合约化发运',
@@ -295,7 +295,7 @@ export const Partners: React.FC = () => {
         { num: '04', title: '全程温控冷链交付', desc: '由智能冷链物流中心完成标准化打托并全程温控发运。' },
       ],
       features: [
-        { title: 'HoReCa 餐饮专供包装', desc: '1公斤/2.5公斤披萨马苏里拉奶酪、1升装33%淡奶油、20公斤块状黄油、25公斤脱脂奶粉。' },
+        { title: 'HoReCa 餐饮专供包装', desc: '1.1–11公斤奶油奶酪桶、980克33%淡奶油、20公斤黄油、25公斤脱脂奶粉。' },
         { title: '自有冷链车队', desc: '每日冷藏专车配送，严格保持 +2…+6 °C 恒温冷链。' },
         { title: '电子单据与合规溯源', desc: '支持 EDI 电子单证、GS1 GTIN 国际条码及完整质量合规声明。' },
       ],
@@ -402,8 +402,8 @@ export const Partners: React.FC = () => {
     </div>
     <div className="flex items-center gap-2.5">
     <Phone className="w-4 h-4 text-[#0057B8] shrink-0" />
-    <a href="tel:+375152445501" className="hover:text-[#0057B8] font-medium">
-    +375 (152) 44-55-01
+    <a href="tel:+375152453942" className="hover:text-[#0057B8] font-medium">
+    +375 (152) 45-39-42
     </a>
     </div>
     <div className="pt-1.5 border-t border-slate-200 text-xs text-slate-500 font-sans">
@@ -426,7 +426,7 @@ export const Partners: React.FC = () => {
     </div>
     </section>
 
-    {/* 2. Interactive Business Segment Selector + Real Segment SKUs */}
+    {/* 2. Interactive Business Segment Selector */}
     <section className="space-y-6">
     <div className="space-y-1.5">
     <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
@@ -435,7 +435,6 @@ export const Partners: React.FC = () => {
     <p className="text-sm sm:text-base text-slate-600">{copy.segmentsSub}</p>
     </div>
 
-    {/* Segment Tabs */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4" role="tablist">
     {segmentTabs.map(({ id, icon: Icon }) => {
       const seg = copy.segments[id];
@@ -471,7 +470,6 @@ export const Partners: React.FC = () => {
     })}
     </div>
 
-    {/* Segment Spotlight Panel */}
     <div
     role="tabpanel"
     className="border border-slate-200 rounded-2xl bg-slate-50/70 p-5 sm:p-8 space-y-6"
@@ -512,6 +510,7 @@ export const Partners: React.FC = () => {
         >
         <ImageWithFallback
         src={prod.image}
+        fallbackSrc={prod.localImage}
         alt={localize(prod.name)}
         className="w-full h-full object-cover"
         />
@@ -526,7 +525,7 @@ export const Partners: React.FC = () => {
         </Link>
         <div className="text-xs text-slate-500 tabular-nums">
         {prod.fatContent !== undefined ? `${prod.fatContent}% · ` : ''}
-        {prod.packages.map((p) => p.weight).join(' / ')}
+        {prod.packages.map((p) => p.weight).slice(0, 2).join(' / ')}
         </div>
         </div>
         </div>

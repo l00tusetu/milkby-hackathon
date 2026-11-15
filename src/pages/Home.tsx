@@ -17,7 +17,12 @@ import { HomeTeamSlider } from '../components/home/HomeTeamSlider';
 import { HomeLocationsSection } from '../components/home/HomeLocationsSection';
 import { Product, PromoBannerTheme } from '../types';
 
-const FLAGSHIP_ORDER = ['mozzarella-pizza', 'goroden-aged', 'milk-lactose-free', 'butter-825'];
+const FLAGSHIP_ORDER = [
+  'syr-gubert',
+'syr-myagkiy-slivochnyy-goroden',
+'moloko-sterilizovannoe-bezlaktoznoe',
+'maslo-goroden',
+];
 
 export const Home: React.FC = () => {
   const { t, language, localize } = useLanguage();
@@ -123,7 +128,7 @@ export const Home: React.FC = () => {
     {/* 1. Full-bleed Hero + Live Smart Search */}
     <HomeHeroSection />
 
-    {/* 2. Promotional Product Plaque (Toggleable & Editable in CMS) + Category Filter Tabs + Smart Finder */}
+    {/* 2. Promotional Product Plaque + Category Filter Tabs + Smart Finder */}
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-5">
     {promoBanner.enabled && (
       <div

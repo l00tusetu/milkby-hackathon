@@ -34,7 +34,8 @@ function parseShelfLifeDays(text: string): number {
   if (!nums || nums.length === 0) return 0;
   const val = parseInt(nums[0], 10);
   if (!Number.isFinite(val)) return 0;
-  if (/месяц|month|月/i.test(text)) return val * 30;
+  if (/год|года|лет|year|年/i.test(text)) return val * 365;
+  if (/месяц|мес|month|月/i.test(text)) return val * 30;
   return val;
 }
 
@@ -106,9 +107,10 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
         return false;
       }
       if (filterState.fatRange !== 'all') {
-        const fat = p.fatContent ?? 0;
+        if (p.fatContent === undefined) return false;
+        const fat = p.fatContent;
         if (filterState.fatRange === 'low' && fat > 5) return false;
-        if (filterState.fatRange === 'medium' && (fat < 15 || fat > 35)) return false;
+        if (filterState.fatRange === 'medium' && (fat <= 5 || fat > 35)) return false;
         if (filterState.fatRange === 'high' && fat < 45) return false;
       }
       if (filterState.weightRange !== 'all') {
@@ -242,7 +244,7 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   <p className="text-sm sm:text-base text-slate-600 max-w-3xl">{pageDesc}</p>
   </div>
 
-  {/* Enlarged Category Tiles with milk.by-inspired modernized icons */}
+  {/* Category Tiles */}
   <div className="flex overflow-x-auto no-scrollbar -mx-4 px-4 pb-1 sm:pb-0 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2.5 sm:gap-3">
   <Link
   to="/catalog"

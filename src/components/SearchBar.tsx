@@ -194,6 +194,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmitS
             <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200/80 shrink-0">
             <ImageWithFallback
             src={item.image}
+            fallbackSrc={item.localImage}
             alt={localize(item.name)}
             className="w-full h-full object-cover"
             />

@@ -48,7 +48,7 @@ export const Filters: React.FC<FiltersProps> = ({
       fat: 'Жирность',
       fatAll: 'Любая',
       fatLow: 'До 5% (лёгкие)',
-      fatMed: '15% – 35%',
+      fatMed: '6% – 35%',
       fatHigh: '45%+ (сыры и масло)',
       weight: 'Фасовка / вес',
       weightAll: 'Любая фасовка',
@@ -87,7 +87,7 @@ export const Filters: React.FC<FiltersProps> = ({
       fat: 'Тлустасць',
       fatAll: 'Любая',
       fatLow: 'Да 5% (лёгкія)',
-      fatMed: '15% – 35%',
+      fatMed: '6% – 35%',
       fatHigh: '45%+ (сыры і масла)',
       weight: 'Фасоўка / вага',
       weightAll: 'Любая фасоўка',
@@ -126,7 +126,7 @@ export const Filters: React.FC<FiltersProps> = ({
       fat: 'Fat content',
       fatAll: 'Any',
       fatLow: 'Up to 5%',
-      fatMed: '15% – 35%',
+      fatMed: '6% – 35%',
       fatHigh: '45%+ (cheese & butter)',
       weight: 'Pack weight',
       weightAll: 'Any format',
@@ -165,7 +165,7 @@ export const Filters: React.FC<FiltersProps> = ({
       fat: '乳脂含量',
       fatAll: '不限',
       fatLow: '≤ 5% 低脂',
-      fatMed: '15% – 35%',
+      fatMed: '6% – 35%',
       fatHigh: '≥ 45% 奶酪黄油',
       weight: '包装规格',
       weightAll: '不限规格',
@@ -215,7 +215,7 @@ export const Filters: React.FC<FiltersProps> = ({
          options: Array.from(optionSet),
       };
     })
-    .filter((f) => f.options.length > 0);
+    .filter((f) => f.options.length > 0 && f.options.length <= 20);
   }, [activeCategory, products, localize]);
 
   const showLactoseFilter = !activeCategory || activeCategory.filterKeys.includes('lactoseFree');

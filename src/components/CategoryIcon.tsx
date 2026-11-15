@@ -29,7 +29,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'milk':
-            // Bottle silhouette with curved milk wave (inspired by milk.by)
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <rect x="19" y="6" width="10" height="3.5" rx="1.75" fill="currentColor" />
@@ -46,7 +45,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'cheese':
-            // 3D Cheese wheel with separated wedge slice (inspired by milk.by)
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <path
@@ -68,7 +66,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
                 fill="currentColor"
                 fillOpacity="0.25"
                 />
-                {/* Separated front wedge */}
                 <path
                 d="M26.5 24.2L41 23.6C40.4 26.9 36.3 29.7 31 30.9L26.5 24.2Z"
                 fill="currentColor"
@@ -87,7 +84,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'butter':
-            // Isometric 3D butter brick on base plate (inspired by milk.by)
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <path
@@ -110,7 +106,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'desserts':
-            // Dessert cup with diagonal spoon (inspired by milk.by)
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <path
@@ -126,7 +121,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'yogurt':
-            // Greek yogurt cup with creamy dome swirl & spoon
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <path
@@ -148,7 +142,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'fermented':
-            // Kefir bottle with probiotic bubbles
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <rect x="18.5" y="6" width="11" height="3.5" rx="1.75" fill="currentColor" />
@@ -168,7 +161,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'sour-cream':
-            // Wide sour cream pot with lid & spoon
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <path
@@ -185,7 +177,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'tvorog':
-            // Bowl with crumbly cottage cheese / tvorog curds
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <circle cx="17.5" cy="20" r="4" fill="currentColor" fillOpacity="0.48" />
@@ -199,7 +190,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'ice-cream':
-            // Classic rounded popsicle on stick (inspired by milk.by)
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <rect x="15.5" y="7" width="17" height="25" rx="8.5" fill="currentColor" />
@@ -221,7 +211,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'cream':
-            // Aseptic Tetra Pak / Gable carton with droplet
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <path d="M15 16.5L24 9L33 16.5H15Z" fill="currentColor" fillOpacity="0.45" />
@@ -239,7 +228,6 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
             );
 
         case 'dry-dairy':
-            // Gusseted kraft bag with folded seal (inspired by milk.by)
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <rect x="14.5" y="7.5" width="19" height="4.5" rx="1.5" fill="currentColor" />
@@ -253,8 +241,24 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
                 </svg>
             );
 
+        case 'water':
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M24 8C24 8 34 20.5 34 28.5C34 34.299 29.523 39 24 39C18.477 39 14 34.299 14 28.5C14 20.5 24 8 24 8Z"
+                fill="currentColor"
+                />
+                <path
+                d="M20 27.5C20 30.2 21.8 32.5 24.2 33.2"
+                stroke="white"
+                strokeOpacity="0.65"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                />
+                </svg>
+            );
+
         case 'other':
-            // Drinking glass with water/whey droplet inside (inspired by milk.by)
             return (
                 <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
                 <path

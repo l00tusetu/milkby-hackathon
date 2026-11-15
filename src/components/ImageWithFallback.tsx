@@ -3,6 +3,7 @@ import { Milk } from 'lucide-react';
 
 interface ImageWithFallbackProps {
   src: string;
+  fallbackSrc?: string;
   alt: string;
   className?: string;
   fallbackTitle?: string;
@@ -10,17 +11,22 @@ interface ImageWithFallbackProps {
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   src,
+  fallbackSrc,
   alt,
   className = '',
   fallbackTitle,
 }) => {
-  const [failed, setFailed] = useState(false);
+  const [step, setStep] = useState<'primary' | 'fallback' | 'error'>(() =>
+  src ? 'primary' : fallbackSrc ? 'fallback' : 'error'
+  );
 
   useEffect(() => {
-    setFailed(false);
-  }, [src]);
+    setStep(src ? 'primary' : fallbackSrc ? 'fallback' : 'error');
+  }, [src, fallbackSrc]);
 
-  if (failed || !src) {
+  const activeSrc = step === 'primary' ? src : step === 'fallback' ? fallbackSrc || '' : '';
+
+  if (step === 'error' || !activeSrc) {
     return (
       <div
       className={`flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-slate-50 to-blue-50/50 text-slate-400 p-4 text-center ${className}`}
@@ -39,11 +45,17 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
 
   return (
     <img
-    src={src}
+    src={activeSrc}
     alt={alt}
     referrerPolicy="no-referrer"
     loading="lazy"
-    onError={() => setFailed(true)}
+    onError={() => {
+      if (step === 'primary' && fallbackSrc && fallbackSrc !== src) {
+        setStep('fallback');
+      } else {
+        setStep('error');
+      }
+    }}
     className={className}
     />
   );
