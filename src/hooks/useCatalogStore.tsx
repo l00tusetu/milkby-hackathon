@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import {
   Category,
   DirectoryEntry,
+  LocalizedText,
   NewsArticle,
   PlantLocation,
   Product,
@@ -109,9 +110,47 @@ function saveStorage<T>(key: string, value: T): void {
   }
 }
 
+function mergeLocalizedText(
+  saved: LocalizedText | undefined,
+  defaults: LocalizedText
+): LocalizedText {
+  const merged = { ...defaults, ...(saved || {}) };
+  const sourceRu = saved?.ru || defaults.ru;
+
+  for (const language of ['be', 'en', 'zh'] as const) {
+    if (!merged[language] || merged[language] === sourceRu) {
+      merged[language] = defaults[language];
+    }
+  }
+
+  return merged;
+}
+
+function loadProducts(): Product[] {
+  const storedProducts = loadStorage(STORAGE_PRODUCTS_KEY, initialProducts);
+  const initialProductsById = new Map(initialProducts.map((product) => [product.id, product]));
+
+  return storedProducts.map((product) => {
+    const defaults = initialProductsById.get(product.id);
+    if (!defaults) return product;
+
+    return {
+      ...product,
+      name: mergeLocalizedText(product.name, defaults.name),
+      description: mergeLocalizedText(product.description, defaults.description),
+      seo: {
+        ...product.seo,
+        title: mergeLocalizedText(product.seo?.title, defaults.seo.title),
+        description: mergeLocalizedText(product.seo?.description, defaults.seo.description),
+        h1: mergeLocalizedText(product.seo?.h1, defaults.seo.h1),
+      },
+    };
+  });
+}
+
 export const CatalogStoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [products, setProducts] = useState<Product[]>(() =>
-  loadStorage(STORAGE_PRODUCTS_KEY, initialProducts)
+  loadProducts()
   );
   const [categories, setCategories] = useState<Category[]>(() =>
   loadStorage(STORAGE_CATEGORIES_KEY, initialCategories)

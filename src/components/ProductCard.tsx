@@ -4,11 +4,29 @@ import { ArrowRight, ArrowUpRight, Sparkles } from 'lucide-react';
 import { Language, Product } from '../types';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
+import { packageLabelTranslations } from '../data/packageLabelTranslations';
 import { ImageWithFallback } from './ImageWithFallback';
 
 interface ProductCardProps {
   product: Product;
   variant?: 'default' | 'promo';
+}
+
+const reportedMissingPackageLabels = new Set<string>();
+
+function localizePackageLabel(weight: string, language: Language): string {
+  if (language === 'ru') return weight;
+
+  const translation = packageLabelTranslations[weight]?.[language];
+  if (!translation) {
+    const key = `${language}:${weight}`;
+    if (!reportedMissingPackageLabels.has(key)) {
+      console.warn(`Missing ${language} package label translation for "${weight}"`);
+      reportedMissingPackageLabels.add(key);
+    }
+    return weight;
+  }
+  return translation;
 }
 
 function getPromoBadge(product: Product, language: Language): string {
@@ -41,8 +59,8 @@ function getPromoBadge(product: Product, language: Language): string {
   }
   if ((product.proteinContent ?? 0) >= 8) {
     return {
-      ru: 'High Protein',
-      be: 'High Protein',
+      ru: 'Высокобелковый',
+      be: 'Высокабялковы',
       en: 'High Protein',
       zh: '高蛋白',
     }[language];
@@ -127,7 +145,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'de
       <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2 text-xs tabular-nums">
       <span className="text-slate-500 truncate">
       {product.packages
-        .map((p) => p.weight)
+        .map((p) => localizePackageLabel(p.weight, language))
         .slice(0, 2)
         .join(' · ')}
         </span>
@@ -210,7 +228,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'de
     <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs text-slate-500 tabular-nums">
     <span className="truncate">
     {product.packages
-      .map((p) => p.weight)
+      .map((p) => localizePackageLabel(p.weight, language))
       .slice(0, 3)
       .join(' / ')}
       {product.packages.length > 3 ? ` · ${packCountLabel}` : ''}

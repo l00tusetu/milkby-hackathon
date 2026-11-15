@@ -10,6 +10,7 @@ import { ProductGrid } from '../components/ProductGrid';
 import { SmartFinder } from '../components/SmartFinder';
 import { CategoryIcon } from '../components/CategoryIcon';
 import { runSmartSearch } from '../utils/smartMatch';
+import { Language } from '../types';
 
 interface CatalogProps {
   initialCategorySlug?: string;
@@ -37,6 +38,32 @@ function parseShelfLifeDays(text: string): number {
   if (/год|года|лет|year|年/i.test(text)) return val * 365;
   if (/месяц|мес|month|月/i.test(text)) return val * 30;
   return val;
+}
+
+function formatProductCount(count: number, language: Language): string {
+  if (language === 'ru' || language === 'be') {
+    const lastTwoDigits = count % 100;
+    const lastDigit = count % 10;
+    const form =
+      lastTwoDigits >= 11 && lastTwoDigits <= 14
+        ? 2
+        : lastDigit === 1
+          ? 0
+          : lastDigit >= 2 && lastDigit <= 4
+            ? 1
+            : 2;
+    const forms =
+      language === 'ru'
+        ? ['товар', 'товара', 'товаров']
+        : ['тавар', 'тавары', 'тавараў'];
+    return `${count} ${forms[form]}`;
+  }
+
+  if (language === 'en') {
+    return `${count} ${count === 1 ? 'product' : 'products'}`;
+  }
+
+  return `${count} 件产品`;
 }
 
 export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
@@ -268,7 +295,7 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
     !activeCategory ? 'text-blue-100' : 'text-slate-400'
   }`}
   >
-  {countsByCategory.total} товаров
+  {formatProductCount(countsByCategory.total, language)}
   </div>
   </div>
   </Link>
@@ -302,7 +329,7 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
         active ? 'text-blue-100' : 'text-slate-400'
       }`}
       >
-      {count} товаров
+      {formatProductCount(count, language)}
       </div>
       </div>
       </Link>

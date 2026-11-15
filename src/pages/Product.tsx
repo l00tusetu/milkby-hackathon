@@ -388,11 +388,11 @@ export const Product: React.FC = () => {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-1">
+      <div className="flex flex-col gap-3 pt-1">
       <button
       type="button"
       onClick={() => setModalOpen(true)}
-      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0057B8] rounded-xl hover:bg-[#004494] transition-colors shadow-xs"
+      className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-white bg-[#0057B8] rounded-xl hover:bg-[#004494] transition-colors shadow-xs"
       >
       <MessageSquare className="w-4 h-4 shrink-0" />
       <span>{t('requestSalesBtn')}</span>
@@ -400,7 +400,7 @@ export const Product: React.FC = () => {
       <button
       type="button"
       onClick={() => downloadProductB2BSpec(product, category, language)}
-      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors"
+      className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors"
       >
       <Download className="w-4 h-4 shrink-0" />
       <span>{t('downloadSpecBtn')}</span>

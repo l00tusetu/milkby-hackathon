@@ -1,4 +1,5 @@
 import { LocalizedText, PackageVariant, Product, RedirectRule } from '../types';
+import { productTranslations } from './productTranslations';
 
 const l = (ru: string, en = '', be = '', zh = ''): LocalizedText => ({ ru, be, en, zh });
 
@@ -60,6 +61,23 @@ interface CompactProductInput {
 }
 
 const makeProduct = (input: CompactProductInput): Product => {
+  const translations = productTranslations[input.id];
+  if (!translations?.be || !translations.en || !translations.zh) {
+    throw new Error(`Missing product card translations for "${input.id}"`);
+  }
+
+  const name: LocalizedText = {
+    ru: input.name,
+    be: translations.be.name,
+    en: translations.en.name,
+    zh: translations.zh.name,
+  };
+  const description: LocalizedText = {
+    ru: input.desc,
+    be: translations.be.description,
+    en: translations.en.description,
+    zh: translations.zh.description,
+  };
   const characteristics: Record<string, LocalizedText> = {};
   for (const [k, v] of Object.entries(input.chars)) {
     characteristics[k] = l(v);
@@ -69,8 +87,8 @@ const makeProduct = (input: CompactProductInput): Product => {
     slug: input.id,
     category: input.category,
     subcategory: input.sub,
-    name: l(input.name),
-    description: l(input.desc),
+    name,
+    description,
     image: `https://milk.by/upload/${input.img}`,
     localImage: `./images/${input.local}`,
     fatContent: input.fat,
@@ -84,9 +102,19 @@ const makeProduct = (input: CompactProductInput): Product => {
     useCases: input.uses,
     relatedIds: input.rel,
     seo: {
-      title: l(`${input.name} — ОАО «Молочный Мир»`),
-      description: l(input.desc.split('\n')[0].slice(0, 160)),
-      h1: l(input.name),
+      title: {
+        ru: `${name.ru} — ОАО «Молочный Мир»`,
+        be: `${name.be} — ААТ «Малочны Мір»`,
+        en: `${name.en} — Molochny Mir`,
+        zh: `${name.zh} — Molochny Mir`,
+      },
+      description: {
+        ru: description.ru.split('\n')[0].slice(0, 160),
+        be: description.be.split('\n')[0].slice(0, 160),
+        en: description.en.split('\n')[0].slice(0, 160),
+        zh: description.zh.split('\n')[0].slice(0, 160),
+      },
+      h1: name,
     },
   };
 };
