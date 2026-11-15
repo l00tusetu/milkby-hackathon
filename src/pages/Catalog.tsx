@@ -268,7 +268,7 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
     !activeCategory ? 'text-blue-100' : 'text-slate-400'
   }`}
   >
-  {countsByCategory.total} SKU
+  {countsByCategory.total} товаров
   </div>
   </div>
   </Link>
@@ -302,7 +302,7 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
         active ? 'text-blue-100' : 'text-slate-400'
       }`}
       >
-      {count} SKU
+      {count} товаров
       </div>
       </div>
       </Link>
