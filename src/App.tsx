@@ -23,6 +23,7 @@ import { Contacts } from './pages/Contacts';
 import { Admin } from './pages/Admin';
 import { SitemapPage } from './pages/SitemapPage';
 import { Language } from './types';
+import { MilkingCowWidget } from './components/MilkingCowWidget';
 
 const SUPPORTED_LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
 
@@ -151,6 +152,7 @@ export default function App() {
     </Routes>
     </main>
     <Footer />
+    <MilkingCowWidget />
     </div>
     </HashRouter>
     </CatalogStoreProvider>
