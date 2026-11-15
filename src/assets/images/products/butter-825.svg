@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#fff9e9"/><stop offset="1" stop-color="#f7e5b7"/></linearGradient><linearGradient id="foil" x2="0" y2="1"><stop stop-color="#fff7d5"/><stop offset="1" stop-color="#f2cf71"/></linearGradient></defs>
+  <rect width="640" height="480" rx="28" fill="url(#bg)"/><circle cx="500" cy="104" r="76" fill="#fff" opacity=".58"/><circle cx="117" cy="365" r="90" fill="#fff" opacity=".4"/>
+  <ellipse cx="320" cy="389" rx="147" ry="19" fill="#9c7d43" opacity=".18"/>
+  <path d="M197 191l107-60 151 44-107 63z" fill="#fff1b9" stroke="#d1ac54" stroke-width="4"/>
+  <path d="M197 191l151 47v118l-151-48z" fill="url(#foil)" stroke="#d1ac54" stroke-width="4"/>
+  <path d="M348 238l107-63v116l-107 65z" fill="#e6bf5e" stroke="#d1ac54" stroke-width="4"/>
+  <path d="M208 210l128 40v82l-128-40z" fill="#fff2be" opacity=".8"/><path d="M224 227l95 30" stroke="#d1a947" stroke-width="6" opacity=".65"/>
+  <text x="322" y="291" text-anchor="middle" fill="#8c6824" font-family="Georgia,serif" font-size="25" font-weight="700">BUTTER</text>
+  <text x="322" y="322" text-anchor="middle" fill="#8c6824" font-family="Arial,sans-serif" font-size="20" font-weight="700">82.5% • UNSALTED</text>
+</svg>

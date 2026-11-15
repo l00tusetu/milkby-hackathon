@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f0fbf9"/><stop offset="1" stop-color="#d4f1ea"/></linearGradient><linearGradient id="carton" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#effbf8"/></linearGradient></defs>
+  <rect width="640" height="480" rx="28" fill="url(#bg)"/><circle cx="500" cy="102" r="76" fill="#fff" opacity=".58"/><circle cx="117" cy="365" r="89" fill="#fff" opacity=".42"/>
+  <ellipse cx="320" cy="391" rx="112" ry="19" fill="#538e7e" opacity=".17"/>
+  <path d="M250 115l38-43h65l38 43v243H250z" fill="url(#carton)" stroke="#add4c8" stroke-width="4"/>
+  <path d="M250 115l38-43h65l38 43-70 37z" fill="#fff" stroke="#add4c8" stroke-width="4"/><path d="M320 152l71-37v243q-35 22-71 0z" fill="#d6f1e8"/>
+  <path d="M250 237h141v72q-70 27-141 0z" fill="#20a487"/><circle cx="321" cy="202" r="27" fill="#fff"/><path d="M310 202l8 8 15-18" fill="none" stroke="#20a487" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="320" y="280" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="22" font-weight="700">LACTOSE FREE</text>
+  <text x="320" y="340" text-anchor="middle" fill="#287c6d" font-family="Arial,sans-serif" font-size="20" font-weight="700">ACTIVE LIFE • 2.5%</text>
+</svg>

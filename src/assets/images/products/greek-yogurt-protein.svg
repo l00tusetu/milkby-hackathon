@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f8f3ff"/><stop offset="1" stop-color="#e8dcf8"/></linearGradient><linearGradient id="cup" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#f3edfc"/></linearGradient></defs>
+  <rect width="640" height="480" rx="28" fill="url(#bg)"/><circle cx="500" cy="104" r="75" fill="#fff" opacity=".6"/><circle cx="116" cy="365" r="89" fill="#fff" opacity=".42"/>
+  <ellipse cx="320" cy="389" rx="123" ry="19" fill="#827099" opacity=".17"/>
+  <path d="M222 147h196l-23 204q-75 31-150 0z" fill="url(#cup)" stroke="#c5b4df" stroke-width="4"/>
+  <ellipse cx="320" cy="147" rx="98" ry="24" fill="#fff" stroke="#c5b4df" stroke-width="4"/><ellipse cx="320" cy="151" rx="80" ry="14" fill="#b9a2df"/>
+  <path d="M211 231h218l-9 85q-100 34-200 0z" fill="#7853aa"/><circle cx="320" cy="198" r="24" fill="#dfcefb"/>
+  <text x="320" y="271" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="22" font-weight="700">GREEK</text>
+  <text x="320" y="299" text-anchor="middle" fill="#f1e9ff" font-family="Arial,sans-serif" font-size="16" font-weight="700">HIGH PROTEIN</text>
+</svg>

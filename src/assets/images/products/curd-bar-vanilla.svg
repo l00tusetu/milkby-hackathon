@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#fff7ee"/><stop offset="1" stop-color="#f6e1d0"/></linearGradient><linearGradient id="bar" x2="0" y2="1"><stop stop-color="#81533d"/><stop offset="1" stop-color="#543523"/></linearGradient></defs>
+  <rect width="640" height="480" rx="28" fill="url(#bg)"/><circle cx="500" cy="104" r="76" fill="#fff" opacity=".6"/><circle cx="117" cy="366" r="89" fill="#fff" opacity=".4"/>
+  <ellipse cx="320" cy="385" rx="160" ry="20" fill="#916f56" opacity=".17"/>
+  <path d="M176 192l124-69 165 49-126 72z" fill="#fff6df" stroke="#ddc59f" stroke-width="4"/>
+  <path d="M176 192l163 52v112l-163-51z" fill="#f3d9b8" stroke="#ddc59f" stroke-width="4"/>
+  <path d="M339 244l126-72v111l-126 73z" fill="#e9c9a1" stroke="#ddc59f" stroke-width="4"/>
+  <path d="M230 218l88 28v49l-88-28z" fill="url(#bar)" stroke="#543523" stroke-width="3"/><path d="M339 247l83-48v49l-83 48z" fill="#70452f"/>
+  <text x="320" y="316" text-anchor="middle" fill="#6a4934" font-family="Arial,sans-serif" font-size="18" font-weight="700">VANILLA CURD BAR</text>
+  <text x="320" y="344" text-anchor="middle" fill="#96704f" font-family="Arial,sans-serif" font-size="17" font-weight="700">CHOCOLATE COATED</text>
+</svg>
