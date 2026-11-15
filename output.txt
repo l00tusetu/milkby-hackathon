@@ -195,7 +195,7 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
     <h2 className="font-display text-lg font-semibold text-slate-900">
     {defaultChannel === 'export' ? copy.titleExport : copy.titleSales}
     </h2>
-    <p className="text-xs text-slate-500">export@milk.by · sales@milk.by</p>
+    <p className="text-xs text-slate-500">ved@milk.by · sales@milk.by</p>
     </div>
     <button
     type="button"
@@ -345,6 +345,296 @@ export const B2BInquiryModal: React.FC<B2BInquiryModalProps> = ({
     </div>
     </div>
   );
+};
+```
+
+`/home/july/Projects/milkby-hackathon/src/components/CategoryIcon.tsx`:
+```
+import React from 'react';
+
+interface CategoryIconProps {
+    categoryId: string;
+    className?: string;
+}
+
+export const CategoryIcon: React.FC<CategoryIconProps> = ({
+    categoryId,
+    className = 'w-9 h-9',
+}) => {
+    switch (categoryId) {
+        case 'all':
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <rect x="8" y="8" width="13.5" height="13.5" rx="4" fill="currentColor" />
+                <rect
+                x="26.5"
+                y="8"
+                width="13.5"
+                height="13.5"
+                rx="4"
+                fill="currentColor"
+                fillOpacity="0.4"
+                />
+                <rect x="8" y="26.5" width="13.5" height="13.5" rx="4" fill="currentColor" />
+                <rect x="26.5" y="26.5" width="13.5" height="13.5" rx="4" fill="currentColor" />
+                </svg>
+            );
+
+        case 'milk':
+            // Bottle silhouette with curved milk wave (inspired by milk.by)
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <rect x="19" y="6" width="10" height="3.5" rx="1.75" fill="currentColor" />
+                <path
+                d="M20 9.5H28V13.2C28 15.6 33 17.6 33 22.8V24.6C29.5 22.8 26.8 22.8 24 24.6C21.2 26.4 18.5 26.4 15 24.6V22.8C15 17.6 20 15.6 20 13.2V9.5Z"
+                fill="currentColor"
+                fillOpacity="0.28"
+                />
+                <path
+                d="M15 24.6C18.5 26.4 21.2 26.4 24 24.6C26.8 22.8 29.5 22.8 33 24.6V37.5C33 39.985 30.985 42 28.5 42H19.5C17.015 42 15 39.985 15 37.5V24.6Z"
+                fill="currentColor"
+                />
+                </svg>
+            );
+
+        case 'cheese':
+            // 3D Cheese wheel with separated wedge slice (inspired by milk.by)
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M22 21L36.2 20.5C35.7 15.6 29.6 12 22 12C13.7 12 7 15.8 7 20.5C7 24.7 12.4 28.2 19.6 28.8L22 21Z"
+                fill="currentColor"
+                fillOpacity="0.45"
+                />
+                <path
+                d="M7 20.5C7 24.7 12.4 28.2 19.6 28.8V37.2C12.4 36.6 7 33.1 7 28.9V20.5Z"
+                fill="currentColor"
+                />
+                <path
+                d="M19.6 28.8L22 21V29.4L19.6 37.2V28.8Z"
+                fill="currentColor"
+                fillOpacity="0.72"
+                />
+                <path
+                d="M22 21L36.2 20.5V28.6L22 29.4V21Z"
+                fill="currentColor"
+                fillOpacity="0.25"
+                />
+                {/* Separated front wedge */}
+                <path
+                d="M26.5 24.2L41 23.6C40.4 26.9 36.3 29.7 31 30.9L26.5 24.2Z"
+                fill="currentColor"
+                fillOpacity="0.58"
+                />
+                <path
+                d="M31 30.9C36.3 29.7 40.4 26.9 41 23.6V31.8C40.4 35.1 36.3 37.9 31 39.1V30.9Z"
+                fill="currentColor"
+                />
+                <path
+                d="M26.5 24.2L31 30.9V39.1L26.5 32.4V24.2Z"
+                fill="currentColor"
+                fillOpacity="0.8"
+                />
+                </svg>
+            );
+
+        case 'butter':
+            // Isometric 3D butter brick on base plate (inspired by milk.by)
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M7 26.8L22 35.2L41 24.8V28.5L22 39L7 30.5V26.8Z"
+                fill="currentColor"
+                fillOpacity="0.35"
+                />
+                <path
+                d="M11 21.5L24.2 14L37.4 21.5L24.2 29L11 21.5Z"
+                fill="currentColor"
+                fillOpacity="0.55"
+                />
+                <path d="M11 21.5L24.2 29V34.8L11 27.3V21.5Z" fill="currentColor" />
+                <path
+                d="M24.2 29L37.4 21.5V27.3L24.2 34.8V29Z"
+                fill="currentColor"
+                fillOpacity="0.78"
+                />
+                </svg>
+            );
+
+        case 'desserts':
+            // Dessert cup with diagonal spoon (inspired by milk.by)
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M29.4 17.5L34.5 9.4C35.1 8.4 36.4 8.1 37.3 8.7C38.2 9.3 38.5 10.6 37.9 11.5L34 17.8L29.4 17.5Z"
+                fill="currentColor"
+                />
+                <rect x="12.5" y="17" width="23" height="4" rx="2" fill="currentColor" fillOpacity="0.45" />
+                <path
+                d="M14.5 21H33.5L31.2 37.6C30.9 39.6 29.2 41 27.2 41H20.8C18.8 41 17.1 39.6 16.8 37.6L14.5 21Z"
+                fill="currentColor"
+                />
+                </svg>
+            );
+
+        case 'yogurt':
+            // Greek yogurt cup with creamy dome swirl & spoon
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M29 15.5L33.8 8.8C34.4 7.9 35.6 7.7 36.5 8.3C37.4 8.9 37.6 10.1 37 11L33 16.5L29 15.5Z"
+                fill="currentColor"
+                fillOpacity="0.65"
+                />
+                <path
+                d="M15.5 18.5C15.5 13.8 19.3 10.5 24 10.5C28.7 10.5 32.5 13.8 32.5 18.5H15.5Z"
+                fill="currentColor"
+                fillOpacity="0.4"
+                />
+                <rect x="12" y="18" width="24" height="3.5" rx="1.75" fill="currentColor" fillOpacity="0.6" />
+                <path
+                d="M14 21.5H34L31.7 37.6C31.4 39.6 29.7 41 27.7 41H20.3C18.3 41 16.6 39.6 16.3 37.6L14 21.5Z"
+                fill="currentColor"
+                />
+                </svg>
+            );
+
+        case 'fermented':
+            // Kefir bottle with probiotic bubbles
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <rect x="18.5" y="6" width="11" height="3.5" rx="1.75" fill="currentColor" />
+                <path
+                d="M19.5 9.5H28.5V13.5C28.5 15.8 33.5 17.8 33.5 23V37.5C33.5 39.985 31.485 42 29 42H19C16.515 42 14.5 39.985 14.5 37.5V23C14.5 17.8 19.5 15.8 19.5 13.5V9.5Z"
+                fill="currentColor"
+                fillOpacity="0.28"
+                />
+                <path
+                d="M14.5 22C14.5 18.8 17.5 17 19.5 15.5H28.5C30.5 17 33.5 18.8 33.5 22V37.5C33.5 39.985 31.485 42 29 42H19C16.515 42 14.5 39.985 14.5 37.5V22Z"
+                fill="currentColor"
+                />
+                <circle cx="21" cy="27" r="2.2" fill="white" fillOpacity="0.45" />
+                <circle cx="27" cy="33" r="1.7" fill="white" fillOpacity="0.45" />
+                <circle cx="26.5" cy="24" r="1.2" fill="white" fillOpacity="0.45" />
+                </svg>
+            );
+
+        case 'sour-cream':
+            // Wide sour cream pot with lid & spoon
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M28 16L33.5 9.5C34.2 8.7 35.4 8.6 36.2 9.3C37 10 37.1 11.2 36.4 12L32.5 16.5L28 16Z"
+                fill="currentColor"
+                fillOpacity="0.65"
+                />
+                <rect x="9.5" y="16" width="29" height="4" rx="2" fill="currentColor" fillOpacity="0.45" />
+                <path
+                d="M12 20H36L33.6 37.6C33.3 39.6 31.6 41 29.6 41H18.4C16.4 41 14.7 39.6 14.4 37.6L12 20Z"
+                fill="currentColor"
+                />
+                </svg>
+            );
+
+        case 'tvorog':
+            // Bowl with crumbly cottage cheese / tvorog curds
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <circle cx="17.5" cy="20" r="4" fill="currentColor" fillOpacity="0.48" />
+                <circle cx="24" cy="17.5" r="4.5" fill="currentColor" fillOpacity="0.65" />
+                <circle cx="30.5" cy="20" r="4" fill="currentColor" fillOpacity="0.48" />
+                <path
+                d="M9 23.5H39C39 32.889 32.284 40.5 24 40.5C15.716 40.5 9 32.889 9 23.5Z"
+                fill="currentColor"
+                />
+                </svg>
+            );
+
+        case 'ice-cream':
+            // Classic rounded popsicle on stick (inspired by milk.by)
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <rect x="15.5" y="7" width="17" height="25" rx="8.5" fill="currentColor" />
+                <path
+                d="M15.5 23.5C18.5 25.2 21 25.2 24 23.5C27 21.8 29.5 21.8 32.5 23.5C32.5 28.2 28.7 32 24 32C19.3 32 15.5 28.2 15.5 23.5Z"
+                fill="currentColor"
+                fillOpacity="0.65"
+                />
+                <rect
+                x="21.5"
+                y="32"
+                width="5"
+                height="10"
+                rx="2.5"
+                fill="currentColor"
+                fillOpacity="0.52"
+                />
+                </svg>
+            );
+
+        case 'cream':
+            // Aseptic Tetra Pak / Gable carton with droplet
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path d="M15 16.5L24 9L33 16.5H15Z" fill="currentColor" fillOpacity="0.45" />
+                <rect x="19" y="6.5" width="10" height="2.8" rx="1.4" fill="currentColor" />
+                <path
+                d="M15 16.5H33V38.5C33 39.881 31.881 41 30.5 41H17.5C16.119 41 15 39.881 15 38.5V16.5Z"
+                fill="currentColor"
+                />
+                <path
+                d="M24 22.5C24 22.5 28 27.3 28 30.1C28 32.3 26.2 34.1 24 34.1C21.8 34.1 20 32.3 20 30.1C20 27.3 24 22.5 24 22.5Z"
+                fill="white"
+                fillOpacity="0.4"
+                />
+                </svg>
+            );
+
+        case 'dry-dairy':
+            // Gusseted kraft bag with folded seal (inspired by milk.by)
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <rect x="14.5" y="7.5" width="19" height="4.5" rx="1.5" fill="currentColor" />
+                <path
+                d="M15 13.5H33L36.5 39.5C36.6 40.3 36 41 35.2 41H12.8C12 41 11.4 40.3 11.5 39.5L15 13.5Z"
+                fill="currentColor"
+                fillOpacity="0.88"
+                />
+                <path d="M16 41L19.5 32.5L23 41H16Z" fill="currentColor" fillOpacity="0.45" />
+                <path d="M25 41L28.5 32.5L32 41H25Z" fill="currentColor" fillOpacity="0.45" />
+                </svg>
+            );
+
+        case 'other':
+            // Drinking glass with water/whey droplet inside (inspired by milk.by)
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M12.5 10.5H35.5L32.1 38.4C31.9 40.2 30.4 41.5 28.6 41.5H19.4C17.6 41.5 16.1 40.2 15.9 38.4L12.5 10.5Z"
+                fill="currentColor"
+                fillOpacity="0.22"
+                stroke="currentColor"
+                strokeWidth="2.8"
+                strokeLinejoin="round"
+                />
+                <path
+                d="M24 18.5C24 18.5 29.2 24.7 29.2 28.4C29.2 31.3 26.9 33.6 24 33.6C21.1 33.6 18.8 31.3 18.8 28.4C18.8 24.7 24 18.5 24 18.5Z"
+                fill="currentColor"
+                />
+                </svg>
+            );
+
+        default:
+            return (
+                <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+                <path
+                d="M24 9C24 9 35 21.8 35 29.5C35 35.8 30.1 40.5 24 40.5C17.9 40.5 13 35.8 13 29.5C13 21.8 24 9 24 9Z"
+                fill="currentColor"
+                fillOpacity="0.88"
+                />
+                </svg>
+            );
+    }
 };
 ```
 
@@ -1025,7 +1315,7 @@ export const Footer: React.FC = () => {
     </Link>
     </li>
     <li className="font-mono text-xs text-slate-500 pt-0.5 tabular-nums">
-    export@milk.by · +375 (152) 44-55-12
+    ved@milk.by · +375 (152) 60-07-52
     </li>
     </ul>
     </div>
@@ -2729,17 +3019,70 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
 ```
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
-import { Product } from '../types';
+import { ArrowRight, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Language, Product } from '../types';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { ImageWithFallback } from './ImageWithFallback';
 
 interface ProductCardProps {
   product: Product;
+  variant?: 'default' | 'promo';
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+function getPromoBadge(product: Product, language: Language): string {
+  if (product.id === 'mozzarella-pizza') {
+    return { ru: 'Хит HoReCa', be: 'Хіт HoReCa', en: 'HoReCa Hit', zh: '餐饮热销' }[language];
+  }
+  if (product.id === 'goroden-aged') {
+    return {
+      ru: 'Серия «ГороденЪ»',
+      be: 'Серыя «ГорадзенЪ»',
+      en: 'Goroden Reserve',
+      zh: 'Goroden 臻选',
+    }[language];
+  }
+  if (product.lactoseFree) {
+    return {
+      ru: '0% лактозы',
+      be: '0% лактозы',
+      en: 'Lactose-Free',
+      zh: '零乳糖',
+    }[language];
+  }
+  if (product.id === 'butter-825') {
+    return {
+      ru: 'ГОСТ 82,5%',
+      be: 'ДАСТ 82,5%',
+      en: '82.5% Cream',
+      zh: '82.5% 纯脂',
+    }[language];
+  }
+  if ((product.proteinContent ?? 0) >= 8) {
+    return {
+      ru: 'High Protein',
+      be: 'High Protein',
+      en: 'High Protein',
+      zh: '高蛋白',
+    }[language];
+  }
+  if (product.id === 'milk-classic') {
+    return {
+      ru: 'Сорт «Экстра»',
+      be: 'Гатунак «Экстра»',
+      en: 'Extra Grade',
+      zh: '特级鲜奶',
+    }[language];
+  }
+  return {
+    ru: 'Выбор покупателей',
+    be: 'Выбар пакупнікоў',
+    en: 'Bestseller',
+    zh: '口碑精选',
+  }[language];
+}
+
+export const ProductCard: React.FC<ProductCardProps> = ({ product, variant = 'default' }) => {
   const { language, localize } = useLanguage();
   const { categories } = useCatalogStore();
 
@@ -2747,6 +3090,74 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const categoryName = category ? localize(category.name) : product.category;
   const productName = localize(product.name);
   const productDesc = localize(product.description);
+
+  if (variant === 'promo') {
+    const promoBadge = getPromoBadge(product, language);
+    const selectLabel =
+    language === 'ru'
+    ? 'Выбрать'
+    : language === 'be'
+    ? 'Выбраць'
+    : language === 'zh'
+    ? '查看'
+    : 'View';
+
+    return (
+      <Link
+      to={`/product/${product.slug}`}
+      className="group h-full flex flex-col bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs hover:border-[#0057B8]/50 hover:-translate-y-1 hover:shadow-xl transition-all duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0057B8]"
+      >
+      <div className="relative aspect-[16/10] w-full bg-slate-50 overflow-hidden border-b border-slate-100 shrink-0">
+      <ImageWithFallback
+      src={product.image}
+      alt={productName}
+      fallbackTitle={productName}
+      className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-300 ease-out"
+      />
+
+      <div className="absolute inset-x-0 top-0 p-2.5 flex items-start justify-between gap-2 pointer-events-none">
+      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#0057B8]/95 text-white text-[11px] font-semibold shadow-sm backdrop-blur-xs">
+      <Sparkles className="w-3 h-3 shrink-0" />
+      <span>{promoBadge}</span>
+      </span>
+
+      {product.fatContent !== undefined && (
+        <span className="px-2 py-0.5 rounded-full bg-white/95 text-slate-900 border border-slate-200/80 text-[11px] font-bold tabular-nums shadow-xs">
+        {product.fatContent}%
+        </span>
+      )}
+      </div>
+      </div>
+
+      <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between gap-2.5">
+      <div className="space-y-1.5">
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-[#0057B8]">
+      {categoryName}
+      </div>
+
+      <h3 className="font-display text-[15px] font-bold text-slate-900 group-hover:text-[#0057B8] transition-colors duration-200 leading-snug line-clamp-2">
+      {productName}
+      </h3>
+
+      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{productDesc}</p>
+      </div>
+
+      <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2 text-xs tabular-nums">
+      <span className="text-slate-500 truncate">
+      {product.packages
+        .map((p) => p.weight)
+        .slice(0, 2)
+        .join(' · ')}
+        </span>
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-[#0057B8] font-semibold group-hover:bg-[#0057B8] group-hover:text-white transition-colors duration-200 whitespace-nowrap shrink-0">
+        <span>{selectLabel}</span>
+        <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-0.5" />
+        </span>
+        </div>
+        </div>
+        </Link>
+    );
+  }
 
   const packCountLabel =
   language === 'ru'
@@ -2810,23 +3221,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     {productName}
     </h3>
 
-    <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
-    {productDesc}
-    </p>
+    <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">{productDesc}</p>
     </div>
 
     <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs text-slate-500 tabular-nums">
     <span className="truncate">
-    {product.packages.map((p) => p.weight).slice(0, 3).join(' / ')}
-    {product.packages.length > 3 ? ` · ${packCountLabel}` : ''}
-    </span>
-    <span className="inline-flex items-center gap-1 font-medium text-slate-700 group-hover:text-[#0057B8] transition-colors duration-200 whitespace-nowrap shrink-0">
-    {viewLabel}
-    <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-    </span>
-    </div>
-    </div>
-    </Link>
+    {product.packages
+      .map((p) => p.weight)
+      .slice(0, 3)
+      .join(' / ')}
+      {product.packages.length > 3 ? ` · ${packCountLabel}` : ''}
+      </span>
+      <span className="inline-flex items-center gap-1 font-medium text-slate-700 group-hover:text-[#0057B8] transition-colors duration-200 whitespace-nowrap shrink-0">
+      {viewLabel}
+      <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </span>
+      </div>
+      </div>
+      </Link>
   );
 };
 ```
@@ -2844,6 +3256,8 @@ interface ProductGridProps {
   onResetFilters?: () => void;
   mobileCarousel?: boolean;
   scrollResetKey?: string;
+  variant?: 'default' | 'promo';
+  desktopCols?: 3 | 4;
 }
 
 export const ProductGrid: React.FC<ProductGridProps> = ({
@@ -2851,6 +3265,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   onResetFilters,
   mobileCarousel = false,
   scrollResetKey,
+  variant = 'default',
+  desktopCols = 3,
 }) => {
   const { language } = useLanguage();
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -3000,6 +3416,11 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     );
   }
 
+  const desktopGridClasses =
+  desktopCols === 4
+  ? 'sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-4 lg:gap-5'
+  : 'sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6';
+
   if (mobileCarousel) {
     return (
       <div className="space-y-4">
@@ -3008,7 +3429,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       className="overflow-hidden sm:overflow-visible touch-pan-y select-none sm:select-auto"
       >
       <div
-      className="flex gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6 max-sm:[transform:var(--mobile-track-transform)] max-sm:will-change-transform motion-reduce:transition-none"
+      className={`flex gap-4 ${desktopGridClasses} max-sm:[transform:var(--mobile-track-transform)] max-sm:will-change-transform motion-reduce:transition-none`}
       style={
         {
           '--mobile-track-transform': `translate3d(calc(-${activeIndex} * (100% + 16px) + ${dragOffset}px), 0, 0)`,
@@ -3019,11 +3440,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       }
       >
       {products.map((product) => (
-        <div
-        key={product.id}
-        className="w-full min-w-0 shrink-0 sm:w-auto sm:shrink"
-        >
-        <ProductCard product={product} />
+        <div key={product.id} className="w-full min-w-0 shrink-0 sm:w-auto sm:shrink">
+        <ProductCard product={product} variant={variant} />
         </div>
       ))}
       </div>
@@ -3076,9 +3494,15 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+    <div
+    className={
+      desktopCols === 4
+      ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5'
+      : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6'
+    }
+    >
     {products.map((product) => (
-      <ProductCard key={product.id} product={product} />
+      <ProductCard key={product.id} product={product} variant={variant} />
     ))}
     </div>
   );
@@ -6067,8 +6491,20 @@ export function useLanguage(): LanguageContextValue {
 
 `/home/july/Projects/milkby-hackathon/src/pages/About.tsx`:
 ```
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  Award,
+  Building2,
+  CheckCircle2,
+  Factory,
+  Globe2,
+  History,
+  ShieldCheck,
+  Sparkles,
+  ArrowRight,
+  MapPin,
+} from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { ASSETS } from '../data/assets';
 import { SeoHead } from '../components/SeoHead';
@@ -6076,85 +6512,445 @@ import { ImageWithFallback } from '../components/ImageWithFallback';
 
 export const About: React.FC = () => {
   const { language, t } = useLanguage();
+  const [selectedStructureFilter, setSelectedStructureFilter] = useState<'all' | 'plants' | 'agro'>('all');
 
   const copy = {
     ru: {
-      seoDesc: 'О предприятии ОАО «Молочный Мир»: история с 1938 года, производственные площадки, контроль качества и экспорт.',
-      kicker: 'Основано в 1938 году · г. Гродно',
-      h1: 'ОАО «Молочный Мир» — один из лидеров молочной отрасли Беларуси',
-      lead: 'Предприятие объединяет современные производственные площадки в Гродно, Щучине, Берестовице и Слониме, перерабатывая свыше 1 500 тонн свежего молока ежесуточно и выпуская более 142 наименований продукции.',
-      boxes: [
-        { metric: '1 500+ т/сут', title: 'Переработка молока', desc: 'Сырьё исключительно высшего и сорта «Экстра» с собственных и партнёрских ферм.' },
-        { metric: '142 SKU', title: 'Широкий ассортимент', desc: 'От цельномолочной продукции и йогуртов до выдержанных сыров, масла и сухих ингредиентов.' },
-        { metric: '25+ стран', title: 'География экспорта', desc: 'Регулярные отгрузки в страны СНГ, Китай, Ближний Восток и Юго-Восточную Азию.' },
+      seoDesc:
+      'ОАО «Молочный Мир» (milk.by): история с 1938 года, производственная структура в Гродно, Щучине и Дятлово, системы менеджмента качества, награды и экспорт.',
+      badge: 'Орден Трудовой Славы · Основано в 1938 году',
+      h1: 'ОАО «Молочный Мир» — эталон молочной отрасли Беларуси',
+      lead:
+      'Предприятие непрерывного цикла и один из крупнейших производителей молочной продукции в Республике Беларусь. Ежегодно на площадках компании перерабатывается около 600 тысяч тонн молока и выпускается свыше 200 наименований продукции — от более чем 60 сортов сыра и цельномолочной линейки до масла, мороженого, сухих молочных ингредиентов и минеральной воды «Поречье».',
+      stats: [
+        { metric: '~600 тыс. т', title: 'Переработка в год', desc: 'Около 1 500 тонн свежего молока ежесуточно от проверенных ферм.' },
+        { metric: '200+ / 60+', title: 'Ассортимент и сыры', desc: 'Более 200 видов продукции, в том числе свыше 60 видов твёрдых и полутвёрдых сыров.' },
+        { metric: '73%+ экспорт', title: '30+ стран мира', desc: 'Прямые поставки в СНГ, Китай, Юго-Восточную Азию и на Ближний Восток.' },
+        { metric: '100%', title: 'Автоматизация и бережливость', desc: 'Современные закрытые линии переработки и собственный роботизированный логистический хаб.' },
       ],
+      leadershipEyebrow: 'Стратегия и руководство',
+      leadershipTitle: 'Три составляющие успеха: Инновации · Маркетинг · Инвестиции',
+      leadershipBody:
+      'С 2012 года предприятие возглавляет генеральный директор Марина Евгеньевна Аникеева — заслуженный работник сельского хозяйства Республики Беларусь. За более чем десятилетие комплексной модернизации ОАО «Молочный Мир» стало признанным драйвером качества и экспорта, объединив традиции гродненских сыроделов, принципы бережливого производства и 100%-ю автоматизацию ключевых технологических процессов.',
+      missionTitle: 'Миссия предприятия',
+      missionText:
+      'Выпуск высококачественной, безопасной и конкурентоспособной молочной продукции, максимально удовлетворяющей запросы потребителей, за счёт постоянного обновления и совершенствования технологий и реализации потенциала каждого работника.',
+      visionTitle: 'Стратегическое видение',
+      visionText:
+      'Удерживать лидерство среди производителей молочной продукции Республики Беларусь, развивать прямые контракты с ведущим мировым ритейлом, открывать новые рынки сбыта и повышать благосостояние коллектива.',
+      historyEyebrow: 'Летопись предприятия',
+      historyTitle: 'История развития с 1938 года',
+      history: [
+        {
+          year: '1938',
+          title: 'Основание гормолзавода в Гродно',
+          desc: 'В октябре 1938 года введён в строй Гродненский городской молочный завод мощностью до 10 тонн переработки молока в сутки.',
+        },
+        {
+          year: '1967',
+          title: 'Первая крупная реконструкция',
+          desc: 'Запуск обновлённых производственных мощностей, увеличение объёма переработки до 50 тонн молока в сутки.',
+        },
+        {
+          year: '1993',
+          title: 'Масштабное расширение',
+          desc: 'Вторая комплексная реконструкция и строительство новых цехов на ул. Гаспадарчей — мощность выросла до 240 тонн в сутки.',
+        },
+        {
+          year: '1996',
+          title: 'Акционирование предприятия',
+          desc: 'Преобразование государственного завода в открытое акционерное общество «Гродненский молочный комбинат».',
+        },
+        {
+          year: '2007',
+          title: 'Имя ОАО «Молочный Мир»',
+          desc: 'Решением администрации СЭЗ «Гродноинвест» № 30 от 22.05.2007 предприятие получило современное название ОАО «Молочный Мир».',
+        },
+        {
+          year: '2019',
+          title: 'Присоединение филиалов',
+          desc: 'В состав ОАО «Молочный Мир» вошли Щучинский и Дятловский маслосырзаводы, сформировав мощный региональный сыродельный кластер.',
+        },
+        {
+          year: '2023–2026',
+          title: 'Орден Трудовой Славы и экспортный прорыв',
+          desc: 'Указом Президента РБ № 33 от 10.02.2023 коллектив удостоен ордена Трудовой Славы; запущена линия Паста Филата HoReCa, автоматизированный хаб на 4 200 паллетомест и получено звание «Лучший экспортёр года».',
+        },
+      ],
+      structureEyebrow: 'География и структура',
+      structureTitle: 'Производственные площадки и сырьевая база',
+      filterAll: 'Все подразделения',
+      filterPlants: 'Производство и филиалы',
+      filterAgro: 'Сырьевая база',
+      structure: [
+        {
+          kind: 'plants' as const,
+          name: 'Головная площадка — г. Гродно',
+          address: 'ул. Гаспадарчая, 28, г. Гродно',
+          desc: 'Цех цельномолочной продукции, сыродельный цех, цех мороженого и сухих молочных продуктов, аккредитованная лаборатория.',
+        },
+        {
+          kind: 'plants' as const,
+          name: 'Щучинский филиал',
+          address: 'ул. 17 Сентября, 45, г. Щучин',
+          desc: 'Производство твёрдых и полутвёрдых сычужных сыров, сливочного масла и сухой деминерализованной сыворотки.',
+        },
+        {
+          kind: 'plants' as const,
+          name: 'Дятловский филиал',
+          address: 'ул. Октябрьская, 105, г. Дятлово',
+          desc: 'Элитные сорта сыра, плавленые сыры и цельномолочная продукция (бренд Cheeseland).',
+        },
+        {
+          kind: 'plants' as const,
+          name: 'Производственный цех «Берестовица»',
+          address: 'ул. Дзержинского, 15, г.п. Большая Берестовица',
+          desc: 'Выпуск полутвёрдых, выдержанных и рассольных сыров в розничной и промышленной фасовке.',
+        },
+        {
+          kind: 'plants' as const,
+          name: 'Производственный цех «Скидель»',
+          address: 'ул. Зелёная, 1, г. Скидель',
+          desc: 'Сыродельная площадка и автоматизированный экспортно-логистический центр на 4 200 паллетомест.',
+        },
+        {
+          kind: 'plants' as const,
+          name: 'Участок «Поречье» (воды и напитки)',
+          address: 'ул. Озерская, д. Поречье',
+          desc: 'Добыча и розлив минеральной лечебно-столовой и питьевой воды «Поречье», «Родная», «Aquaville» и доставка 19 л.',
+        },
+        {
+          kind: 'agro' as const,
+          name: 'Молокоприёмный пункт «Индура»',
+          address: 'аг. Индура, Гродненский район',
+          desc: 'Первичный приём, охлаждение и лабораторный контроль входящего сырого молока высшего и сорта «Экстра».',
+        },
+        {
+          kind: 'agro' as const,
+          name: 'Собственные сельхозпредприятия',
+          address: 'СУП «МилкАгро» (Берестовица) · ОАО «Дворец-Агро» (Дятловский р-н)',
+          desc: 'Собственная кормовая и животноводческая база для гарантированного качества сырья от фермы до прилавка.',
+        },
+      ],
+      qualityTitle: 'Сертифицированные системы менеджмента',
+      qualityDesc:
+      'Безопасность, прозрачность и прослеживаемость каждой партии подтверждены независимыми национальными и международными аудитами.',
+      certs: [
+        { code: 'СТБ ISO 9001', title: 'Менеджмент качества', desc: 'Единые стандарты управления всеми производственными и бизнес-процессами.' },
+        { code: 'FSSC 22000 & ISO 22000', title: 'Безопасность пищевой продукции', desc: 'Полный цикл контроля критических точек HACCP (СТБ 1470) от фермы до отгрузки.' },
+        { code: 'СТБ ISO 45001-2020', title: 'Охрана труда и безопасность', desc: 'Международный стандарт защиты здоровья и безопасности сотрудников на производстве.' },
+        { code: 'СТБ ISO 37001-2020', title: 'Антикоррупционный комплаенс', desc: 'Прозрачность закупок, контрактной политики и деловой этики предприятия.' },
+        { code: 'Halal & China GACC', title: 'Экспортные допуски', desc: 'Аккредитация для регулярных поставок в Китай, страны Ближнего Востока и Азии.' },
+      ],
+      awardsTitle: 'Награды и международное признание',
+      awards: [
+        { title: 'Орден Трудовой Славы', detail: 'Государственная награда Республики Беларусь (Указ Президента № 33 от 10.02.2023).' },
+        { title: '«Лучший экспортёр года»', detail: 'Многократный победитель республиканского конкурса (включая 2024 и 2025 гг.).' },
+        { title: '7× Премия Правительства РБ', detail: 'Семикратный лауреат Премии Правительства за достижения в области качества.' },
+        { title: 'Республиканская доска Почёта', detail: 'Занесение по итогам социально-экономического развития (2014, 2018, 2023 гг.).' },
+        { title: 'Международные золотые медали', detail: 'Гран-при «Продэкспо», «Продукт года», «Чемпион вкуса», Углич; участник Gulfood и Foodex Japan.' },
+      ],
+      brandsTitle: 'Ключевые бренды и линейки',
+      brands: [
+        {
+          name: 'Линейка «ГороденЪ»',
+          desc: 'Флагманская серия из отборного молока сорта «Экстра» с повышенным содержанием белка: выдержанные сыры, пломбир 20%, глазированные сырки и масло.',
+          to: '/catalog/cheese',
+        },
+        {
+          name: 'Линейка Active Life',
+          desc: 'Функциональное питание: безлактозное молоко (<0,01% лактозы) и высокобелковый греческий йогурт без добавленного сахара.',
+          to: '/catalog/yogurt',
+        },
+        {
+          name: 'HoReCa & Экспорт B2B',
+          desc: 'Термостабильная моцарелла для пиццы до 400 °C, сливки 33%, масло 20 кг и сухое обезжиренное молоко (СОМ) в крафт-мешках 25 кг.',
+          to: '/export',
+        },
+      ],
+      ctaCatalog: 'Перейти в каталог',
+      ctaExport: 'Экспорт и B2B',
+      ctaContacts: 'Контакты подразделений',
     },
     be: {
-      seoDesc: 'Аб прадпрыемстве ААТ «Малочны Мір»: гісторыя з 1938 года, вытворчыя пляцоўкі, кантроль якасці і экспарт.',
-      kicker: 'Заснавана ў 1938 годзе · г. Гродна',
-      h1: 'ААТ «Малочны Мір» — адзін з лідараў малочнай галіны Беларусі',
-      lead: 'Прадпрыемства аб’ядноўвае сучасныя вытворчыя пляцоўкі ў Гродне, Шчучыне, Бераставіцы і Слонiме, перапрацоўваючы звыш 1 500 тон свежага малака штосутачна і выпускаючы больш за 142 найменні прадукцыі.',
-      boxes: [
-        { metric: '1 500+ т/сут', title: 'Перапрацоўка малака', desc: 'Сыравіна выключна вышэйшага і гатунку «Экстра» з уласных і партнёрскіх ферм.' },
-        { metric: '142 SKU', title: 'Шырокі асартымент', desc: 'Ад цэльнамалочнай прадукцыі і ёгуртаў да вытрыманых сыроў, масла і сухіх інгрэдыентаў.' },
-        { metric: '25+ краін', title: 'Геаграфія экспарту', desc: 'Рэгулярныя адгрузкі ў краіны СНД, Кітай, Блізкі Усход і Паўднёва-Усходнюю Азію.' },
+      seoDesc:
+      'ААТ «Малочны Мір» (milk.by): гісторыя з 1938 года, вытворчая структура ў Гродне, Шчучыне і Дзятлаве, сістэмы якасці і ўзнагароды.',
+      badge: 'Ордэн Працоўнай Славы · Заснавана ў 1938 годзе',
+      h1: 'ААТ «Малочны Мір» — эталон малочнай галіны Беларусі',
+      lead:
+      'Прадпрыемства бесперапыннага цыклу і адзін з найбуйнейшых вытворцаў малочнай прадукцыі ў Рэспубліцы Беларусь. Штогод перапрацоўваецца каля 600 тысяч тон малака і выпускаецца звыш 200 найменняў прадукцыі — у тым ліку больш за 60 відаў сыроў, цэльнамалочная лінейка, масла, марожанае, сухія інгрэдыенты і мінеральная вада «Парэчча».',
+      stats: [
+        { metric: '~600 тыс. т', title: 'Перапрацоўка за год', desc: 'Каля 1 500 тон свежага малака штосутачна з правераных гаспадарак.' },
+        { metric: '200+ / 60+', title: 'Асартымент і сыры', desc: 'Больш за 200 відаў прадукцыі, у тым ліку звыш 60 гатункаў сыру.' },
+        { metric: '73%+ экспарт', title: '30+ краін свету', desc: 'Прамыя пастаўкі ў СНД, Кітай, Паўднёва-Усходнюю Азію і на Блізкі Усход.' },
+        { metric: '100%', title: 'Аўтаматызацыя', desc: 'Сучасныя закрытыя лініі перапрацоўкі і рабатызаваны хаб на 4 200 палетамесцаў.' },
       ],
+      leadershipEyebrow: 'Стратэгія і кіраўніцтва',
+      leadershipTitle: 'Тры складнікі поспеху: Інавацыі · Маркетынг · Інвестыцыі',
+      leadershipBody:
+      'З 2012 года прадпрыемства ўзначальвае генеральны дырэктар Марына Яўгенаўна Анікеева — заслужаны работнік сельскай гаспадаркі Рэспублікі Беларусь. За дзесяцігоддзе мадэрнізацыі кампанія аб’яднала традыцыі гродзенскіх сыраробаў, прынцыпы беражлівай вытворчасці і поўную аўтаматызацыю працэсаў.',
+      missionTitle: 'Місія прадпрыемства',
+      missionText:
+      'Выпуск высакаякаснай, бяспечнай і канкурэнтаздольнай малочнай прадукцыі, якая максімальна задавальняе запыты спажыўцоў, за кошт пастаяннага абнаўлення тэхналогій і развіцця патэнцыялу кожнага работніка.',
+      visionTitle: 'Стратэгічнае бачанне',
+      visionText:
+      'Замацоўваць лідарства сярод вытворцаў малочнай прадукцыі Беларусі, развіваць прамыя пастаўкі ў сусветны рытэйл і павышаць дабрабыт калектыву.',
+      historyEyebrow: 'Летапіс прадпрыемства',
+      historyTitle: 'Гісторыя развіцця з 1938 года',
+      history: [
+        { year: '1938', title: 'Заснаванне гармолзавода ў Гродне', desc: 'У кастрычніку 1938 года запрацаваў Гродзенскі гарадскі малочны завод магутнасцю да 10 тон у суткі.' },
+        { year: '1967', title: 'Першая рэканструкцыя', desc: 'Павелічэнне вытворчай магутнасці прадпрыемства да 50 тон малака ў суткі.' },
+        { year: '1993', title: 'Маштабнае пашырэнне', desc: 'Будаўніцтва новых цэхаў на вул. Гаспадарчай — магутнасць вырасла да 240 тон у суткі.' },
+        { year: '1996', title: 'Акцыянаванне', desc: 'Пераўтварэнне прадпрыемства ў ААТ «Гродзенскі малочны камбінат».' },
+        { year: '2007', title: 'Імя ААТ «Малочны Мір»', desc: 'Рашэннем СЭЗ «Гроднаінвест» № 30 ад 22.05.2007 зацверджана сучасная назва ААТ «Малочны Мір».' },
+        { year: '2019', title: 'Далучэнне філіялаў', desc: 'У склад увайшлі Шчучынскі і Дзятлаўскі масласырзаводы, утварыўшы буйны сыраробны кластар.' },
+        { year: '2023–2026', title: 'Ордэн Працоўнай Славы і рост экспарту', desc: 'Указам № 33 ад 10.02.2023 прадпрыемства ўзнагароджана ордэнам Працоўнай Славы; запушчана лінія Паста Філата і хаб на 4 200 палетамесцаў.' },
+      ],
+      structureEyebrow: 'Геаграфія і структура',
+      structureTitle: 'Вытворчыя пляцоўкі і сыравінная база',
+      filterAll: 'Усе падраздзяленні',
+      filterPlants: 'Вытворчасць і філіялы',
+      filterAgro: 'Сыравінная база',
+      structure: [
+        { kind: 'plants' as const, name: 'Галаўная пляцоўка — г. Гродна', address: 'вул. Гаспадарчая, 28, г. Гродна', desc: 'Цэх цэльнамалочнай прадукцыі, сыраробны цэх, цэх марожанага і сухіх прадуктаў, лабараторыя.' },
+        { kind: 'plants' as const, name: 'Шчучынскі філіял', address: 'вул. 17 Верасня, 45, г. Шчучын', desc: 'Цвёрдыя і сычужныя сыры, сметанковае масла, сухая дэмінералізаваная сыроватка.' },
+        { kind: 'plants' as const, name: 'Дзятлаўскі філіял', address: 'вул. Кастрычніцкая, 105, г. Дзятлава', desc: 'Элітныя гатункі сыру, плаўленыя сыры і цэльнамалочная прадукцыя.' },
+        { kind: 'plants' as const, name: 'Вытворчы цэх «Бераставіца»', address: 'вул. Дзяржынскага, 15, г.п. Вялікая Бераставіца', desc: 'Паўцвёрдыя, вытрыманыя і расольныя сыры ў рознічнай і прамысловай фасоўцы.' },
+        { kind: 'plants' as const, name: 'Вытворчы цэх «Скідзель»', address: 'вул. Зялёная, 1, г. Скідзель', desc: 'Сыраробная пляцоўка і экспартна-лагістычны цэнтр на 4 200 палетамесцаў.' },
+        { kind: 'plants' as const, name: 'Участак «Парэчча»', address: 'вул. Азерская, в. Парэчча', desc: 'Мінеральныя і пітныя воды «Парэчча», «Родная», «Aquaville» і дастаўка 19 л.' },
+        { kind: 'agro' as const, name: 'Малакапрыёмны пункт «Індура»', address: 'аг. Індура, Гродзенскі раён', desc: 'Прыём, ахалоджванне і лабараторны кантроль сырога малака гатунку «Экстра».' },
+        { kind: 'agro' as const, name: 'Уласныя сельгаспрадпрыемствы', address: 'СУП «МілкАгра» · ААТ «Дварэц-Агра»', desc: 'Уласная сыравінная база для гарантаванай якасці малака ад фермы да прылаўка.' },
+      ],
+      qualityTitle: 'Сертыфікаваныя сістэмы менеджменту',
+      qualityDesc: 'Бяспека і прасочвальнасць кожнай партыі пацверджаны незалежнымі нацыянальнымі і міжнароднымі аўдытамі.',
+      certs: [
+        { code: 'СТБ ISO 9001', title: 'Менеджмент якасці', desc: 'Адзіныя стандарты кіравання вытворчымі і бізнес-працэсамі.' },
+        { code: 'FSSC 22000 & ISO 22000', title: 'Бяспека харчовай прадукцыі', desc: 'Кантроль крытычных кропак НАССР (СТБ 1470) на ўсім ланцугу.' },
+        { code: 'СТБ ISO 45001-2020', title: 'Ахова працы', desc: 'Міжнародны стандарт бяспекі і аховы здароўя персаналу.' },
+        { code: 'СТБ ISO 37001-2020', title: 'Антыкарупцыйны менеджмент', desc: 'Празрыстасць закупак і дзелавой этыкі прадпрыемства.' },
+        { code: 'Halal & China GACC', title: 'Экспартныя допускі', desc: 'Акрэдытацыя для паставак у Кітай, краіны Блізкага Усходу і Азіі.' },
+      ],
+      awardsTitle: 'Узнагароды і міжнароднае прызнанне',
+      awards: [
+        { title: 'Ордэн Працоўнай Славы', detail: 'Дзяржаўная ўзнагарода Рэспублікі Беларусь (Указ № 33 ад 10.02.2023).' },
+        { title: '«Лепшы экспарцёр года»', detail: 'Шматразовы пераможца рэспубліканскага конкурсу (уключаючы 2024 і 2025 гг.).' },
+        { title: '7× Прэмія Урада РБ', detail: 'Сяміразовы лаўрэат Прэміі Урада за дасягненні ў галіне якасці.' },
+        { title: 'Рэспубліканская дошка Пашаны', detail: 'Занясенне па выніках развіцця (2014, 2018, 2023 гг.).' },
+        { title: 'Міжнародныя залатыя медалі', detail: 'Гран-пры «Прадэкспа», «Чэмпіён смаку», «Лепшыя тавары РБ», Gulfood, Foodex Japan.' },
+      ],
+      brandsTitle: 'Ключавыя брэнды і лінейкі',
+      brands: [
+        { name: 'Лінейка «ГорадзенЪ»', desc: 'Флагманская серыя з адборнага малака гатунку «Экстра» з павышаным бялком: сыры, пломбір 20%, сыркі і масла.', to: '/catalog/cheese' },
+        { name: 'Лінейка Active Life', desc: 'Функцыянальнае харчаванне: безлактознае малако (<0,01% лактозы) і высокабялковы грэчаскі ёгурт.', to: '/catalog/yogurt' },
+        { name: 'HoReCa & Экспарт B2B', desc: 'Тэрмастабільная мацарэла для піцы, вяршкі 33%, масла 20 кг і сухое малако САМ 25 кг.', to: '/export' },
+      ],
+      ctaCatalog: 'Перайсці ў каталог',
+      ctaExport: 'Экспарт і B2B',
+      ctaContacts: 'Кантакты падраздзяленняў',
     },
     en: {
-      seoDesc: 'About Molochny Mir JSC: heritage since 1938, modern production facilities, quality control, and global export.',
-      kicker: 'Established 1938 · Grodno, Belarus',
-      h1: 'Molochny Mir — Leading Belarusian Dairy Producer',
-      lead: 'Operating modern plants across Grodno, Shchuchin, Berestovitsa, and Slonim, the company processes over 1,500 tons of raw milk daily across 142+ dairy SKUs.',
-      boxes: [
-        { metric: '1,500+ t/day', title: 'Daily Milk Intake', desc: 'Extra-grade raw milk sourced from audited farms within a strict cold radius.' },
-        { metric: '142 SKU', title: 'Product Portfolio', desc: 'From fresh milk and yogurts to aged cheeses, sweet cream butter, and dry dairy.' },
-        { metric: '25+ countries', title: 'Global Presence', desc: 'Regular shipments to CIS, China, Middle East, and Southeast Asia.' },
+      seoDesc:
+      'About OJSC Molochny Mir (milk.by): heritage since 1938, plants in Grodno, Shchuchin, Dyatlovo, ISO/FSSC certifications, awards, and 30+ export markets.',
+      badge: 'Order of Labor Glory · Established 1938',
+      h1: 'OJSC "Molochny Mir" — Benchmark of Belarusian Dairy Craft',
+      lead:
+      'A continuous-cycle enterprise and one of the largest dairy producers in Belarus. Every year, our plants process roughly 600,000 tons of extra-grade raw milk across more than 200 products — including over 60 hard and semi-hard cheeses, whole-milk dairy, butter, ice cream, dry dairy ingredients, and Porechye mineral waters.',
+      stats: [
+        { metric: '~600k t/yr', title: 'Annual Milk Processing', desc: 'Around 1,500 tons of farm-fresh milk processed every single day.' },
+        { metric: '200+ / 60+', title: 'SKUs & Cheese Varieties', desc: 'Over 200 dairy items including more than 60 aged and semi-hard cheeses.' },
+        { metric: '73%+ Export', title: '30+ Countries', desc: 'Direct shipments across CIS, China, Southeast Asia, and the Middle East.' },
+        { metric: '100%', title: 'Automated Processing', desc: 'Closed European production lines and an automated 4,200-pallet cold-chain hub.' },
       ],
+      leadershipEyebrow: 'Strategy & Leadership',
+      leadershipTitle: 'Three Pillars of Success: Innovation · Marketing · Investment',
+      leadershipBody:
+      'Led since 2012 by General Director Marina Anikeeva — Honored Worker of Agriculture of Belarus — the enterprise has completed a decade-long modernization combining Grodno cheesemaking craft, lean manufacturing, and 100% process automation.',
+      missionTitle: 'Our Mission',
+      missionText:
+      'Delivering safe, high-quality, and globally competitive dairy products that exceed consumer expectations through continuous technology upgrades and employee excellence.',
+      visionTitle: 'Strategic Vision',
+      visionText:
+      'Sustaining national leadership in Belarus while expanding direct contracts with international retail chains, new export geographies, and employee prosperity.',
+      historyEyebrow: 'Company Heritage',
+      historyTitle: 'Milestones Since 1938',
+      history: [
+        { year: '1938', title: 'Grodno City Dairy Plant Founded', desc: 'Commissioned in October 1938 with initial daily processing capacity of up to 10 tons.' },
+        { year: '1967', title: 'First Major Reconstruction', desc: 'Capacity expanded fivefold to 50 tons of raw milk per day.' },
+        { year: '1993', title: 'Large-Scale Plant Expansion', desc: 'New processing shops commissioned on Gaspadarchaya Street, raising capacity to 240 tons/day.' },
+        { year: '1996', title: 'Joint-Stock Transformation', desc: 'Reorganized into Open Joint-Stock Company "Grodno Dairy Plant".' },
+        { year: '2007', title: 'Rebranded as OJSC "Molochny Mir"', desc: 'Official corporate name adopted under FEZ "Grodnoinvest" Decision No. 30 (May 22, 2007).' },
+        { year: '2019', title: 'Regional Branch Integration', desc: 'Merged with Shchuchin and Dyatlovo cheese & butter plants, forming a major dairy cluster.' },
+        { year: '2023–2026', title: 'Order of Labor Glory & Export Surge', desc: 'Awarded the Order of Labor Glory (2023); launched automated HoReCa mozzarella line, 4,200-pallet hub, and "Best Exporter of the Year" recognition.' },
+      ],
+      structureEyebrow: 'Production Network',
+      structureTitle: 'Manufacturing Plants & Agricultural Base',
+      filterAll: 'All Units',
+      filterPlants: 'Plants & Branches',
+      filterAgro: 'Raw Milk Base',
+      structure: [
+        { kind: 'plants' as const, name: 'Headquarters — Grodno Main Plant', address: '28 Gaspadarchaya St, Grodno', desc: 'Fresh dairy, cheese, ice cream & dry milk powder shops plus accredited QA laboratory.' },
+        { kind: 'plants' as const, name: 'Shchuchin Branch', address: '45 17 Sentyabrya St, Shchuchin', desc: 'Hard and semi-hard rennet cheeses, sweet cream butter, and demineralized whey powder.' },
+        { kind: 'plants' as const, name: 'Dyatlovo Branch', address: '105 Oktyabrskaya St, Dyatlovo', desc: 'Specialty reserve cheeses, processed cheeses, and fresh dairy (Cheeseland brand).' },
+        { kind: 'plants' as const, name: 'Berestovitsa Cheese Plant', address: '15 Dzerzhinskogo St, Bolshaya Berestovitsa', desc: 'Semi-hard, aged, and brined cheeses for retail and bulk HoReCa supply.' },
+        { kind: 'plants' as const, name: 'Skidel Production & Logistics Site', address: '1 Zelenaya St, Skidel', desc: 'Cheese manufacturing and 4,200-pallet automated cold-chain export hub.' },
+        { kind: 'plants' as const, name: 'Porechye Mineral Water & Beverage Plant', address: 'Ozerskaya St, Porechye', desc: 'Natural mineral & drinking waters ("Porechye", "Rodnaya", "Aquaville") and 19L delivery.' },
+        { kind: 'agro' as const, name: 'Indura Milk Intake Station', address: 'Indura, Grodno District', desc: 'Primary chilling and incoming laboratory grading of extra-grade raw milk.' },
+        { kind: 'agro' as const, name: 'In-House Dairy Farms', address: 'MilkAgro (Berestovitsa) · Dvorets-Agro (Dyatlovo)', desc: 'Vertically integrated farms safeguarding raw milk traceability from farm to shelf.' },
+      ],
+      qualityTitle: 'Certified Management Systems',
+      qualityDesc: 'Traceability and food safety audited by accredited domestic and international bodies.',
+      certs: [
+        { code: 'ISO 9001', title: 'Quality Management', desc: 'Unified standards across procurement, production, and logistics.' },
+        { code: 'FSSC 22000 & ISO 22000', title: 'Food Safety & HACCP', desc: 'End-to-end CCP monitoring from raw milk intake to sealed packaging.' },
+        { code: 'ISO 45001-2020', title: 'Occupational Health & Safety', desc: 'International workplace safety and employee wellbeing standards.' },
+        { code: 'ISO 37001-2020', title: 'Anti-Bribery Compliance', desc: 'Transparent procurement, contract governance, and business ethics.' },
+        { code: 'Halal & China GACC', title: 'Global Export Accreditations', desc: 'Registered clearance for China, GCC, Middle East, and Asia.' },
+      ],
+      awardsTitle: 'Honors & International Recognition',
+      awards: [
+        { title: 'Order of Labor Glory', detail: 'State award of Belarus (Presidential Decree No. 33, Feb 10, 2023).' },
+        { title: '"Best Exporter of the Year"', detail: 'Repeated national export champion (including 2024 & 2025).' },
+        { title: '7× Government Quality Award', detail: 'Seven-time laureate of the Belarus Government Prize for Quality.' },
+        { title: 'Republican Board of Honor', detail: 'Recognized for industrial & economic performance (2014, 2018, 2023).' },
+        { title: 'Global Gold Medals & Exhibitions', detail: 'Prodexpo Grand Prix, Product of the Year, Uglich Cheese Contest; exhibitor at Gulfood & Foodex Japan.' },
+      ],
+      brandsTitle: 'Signature Product Lines',
+      brands: [
+        { name: 'Goroden Reserve Series', desc: 'Crafted from protein-rich Extra-grade milk: 90-day aged cheeses, 20% plombir, glazed curd bars, and butter.', to: '/catalog/cheese' },
+        { name: 'Active Life Range', desc: 'Functional nutrition: <0.01% lactose-free milk and 8g high-protein Greek yogurt with zero added sugar.', to: '/catalog/yogurt' },
+        { name: 'HoReCa & Export B2B', desc: '400°C pizza mozzarella, 33% whipping cream, 20kg butter blocks, and 25kg export SMP bags.', to: '/export' },
+      ],
+      ctaCatalog: 'Explore Catalog',
+      ctaExport: 'Export & B2B',
+      ctaContacts: 'Department Contacts',
     },
     zh: {
-      seoDesc: '关于白俄罗斯 Molochny Mir 乳业股份公司：始于1938年的历史、现代化工厂、质量管控与全球出口。',
-      kicker: '始创于 1938 年 · 白俄罗斯格罗德诺',
-      h1: 'Molochny Mir — 白俄罗斯领先乳制品生产企业',
-      lead: '公司在格罗德诺、休钦、别列斯托维察和斯洛尼姆拥有现代化生产基地，日处理优质生牛乳超过1,500吨，在产乳制品SKU超过142种。',
-      boxes: [
-        { metric: '1,500+ 吨/日', title: '日均鲜奶加工量', desc: '100%采用来自认证牧场的特级与优级生牛乳原料，冷链半径严格受控。' },
-        { metric: '142+ SKU', title: '全品类产品矩阵', desc: '涵盖鲜奶、酸奶、陈年与马苏里拉奶酪、天然黄油及工业干乳制品原料。' },
-        { metric: '25+ 国家/地区', title: '全球出口版图', desc: '常态化稳定出口独联体、中国、中东及东南亚市场。' },
+      seoDesc:
+      '关于白俄罗斯 Molochny Mir 乳业股份公司 (milk.by)：始创于1938年的历史沿革、格罗德诺/休钦/佳特洛沃生产基地、国际体系认证及出口成果。',
+      badge: '国家劳动光荣勋章企业 · 始创于 1938 年',
+      h1: 'Molochny Mir 股份公司 — 白俄罗斯乳制品工业品质标杆',
+      lead:
+      '白俄罗斯领先的连续化乳品加工企业。公司旗下基地每年加工约 60 万吨优质生牛乳，生产品类超过 200 种——涵盖 60 余种硬质与半硬质奶酪、鲜乳制品、天然黄油、冰淇淋、脱盐乳清与奶粉工业原料以及 Porechye 矿泉水系列。',
+      stats: [
+        { metric: '~60 万吨/年', title: '年均原奶加工量', desc: '每日稳定加工来自认证牧场约 1,500 吨特级生牛乳。' },
+        { metric: '200+ / 60+', title: '全品类与奶酪矩阵', desc: '超过 200 种乳品 SKU，其中涵盖 60 余种特色陈年及半硬质奶酪。' },
+        { metric: '73%+ 出口', title: '30+ 出口国家', desc: '直供独联体、中国、东南亚及中东海湾市场。' },
+        { metric: '100%', title: '全自动冷链工艺', desc: '封闭式欧洲自动化产线与 4,200 托盘位智能冷链物流枢纽。' },
       ],
+      leadershipEyebrow: '发展战略与管理',
+      leadershipTitle: '核心驱动力：技术创新 · 品牌营销 · 持续投资',
+      leadershipBody:
+      '自 2012 年起由白俄罗斯共和国功勋农业工作者 Marina Anikeeva 担任总经理。十余年来公司持续推进数字化与精益生产改造，将格罗德诺百年奶酪传统工艺与 100% 自动化封闭产线紧密结合。',
+      missionTitle: '企业使命',
+      missionText: '通过持续迭代加工工艺并激发每一位员工的潜能，生产安全、优质且具国际竞争力的乳制品，全面满足消费者需求。',
+      visionTitle: '战略愿景',
+      visionText: '巩固白俄罗斯乳制品行业领军地位，深化与国际大型商超零售的直供合作，拓展全球新市场并持续提升团队福祉。',
+      historyEyebrow: '发展历程',
+      historyTitle: '1938 年至今的重要里程碑',
+      history: [
+        { year: '1938', title: '格罗德诺城市乳品厂成立', desc: '1938 年 10 月正式投产，初期日处理鲜奶能力达 10 吨。' },
+        { year: '1967', title: '首次大规模技术改造', desc: '完成核心设备升级，日均鲜奶加工能力提升至 50 吨。' },
+        { year: '1993', title: '新厂区扩建投产', desc: '在 Gaspadarchaya 街建成现代化车间，日产能跃升至 240 吨。' },
+        { year: '1996', title: '股份制改革', desc: '改制为开放式股份公司“格罗德诺乳品联合体”。' },
+        { year: '2007', title: '正式更名 Molochny Mir', desc: '依据格罗德诺自由经济区第 30 号决议（2007.05.22）启用现用企业名称。' },
+        { year: '2019', title: '整合区域奶酪黄油分厂', desc: '正式并入休钦 (Shchuchin) 与佳特洛沃 (Dyatlovo) 乳品厂，形成区域专业奶酪产业集群。' },
+        { year: '2023–2026', title: '劳动光荣勋章与出口跨越', desc: '2023 年 2 月获颁白俄罗斯国家“劳动光荣勋章”；投产 HoReCa 披萨奶酪线及 4,200 托盘冷链中心，蝉联“年度最佳出口商”。' },
+      ],
+      structureEyebrow: '组织与产能网络',
+      structureTitle: '五大专业生产基地与自有牧场奶源',
+      filterAll: '全部单位',
+      filterPlants: '工厂与分厂',
+      filterAgro: '奶源与农业',
+      structure: [
+        { kind: 'plants' as const, name: '格罗德诺总部主厂区', address: '格罗德诺市 Gaspadarchaya 街 28 号', desc: '鲜乳车间、奶酪车间、冰淇淋与干乳粉车间及国家认证中心实验室。' },
+        { kind: 'plants' as const, name: '休钦分公司 (Shchuchin)', address: '休钦市 9月17日街 45 号', desc: '专业生产硬质/半硬质成熟奶酪、天然黄油及脱盐乳清粉。' },
+        { kind: 'plants' as const, name: '佳特洛沃分公司 (Dyatlovo)', address: '佳特洛沃市十月街 105 号', desc: '精品陈年奶酪、再制奶酪及鲜乳制品 (Cheeseland 系列)。' },
+        { kind: 'plants' as const, name: '别列斯托维察奶酪车间', address: '大别列斯托维察 Dzerzhinskogo 街 15 号', desc: '零售及餐饮商用半硬质、陈年与盐水奶酪基地。' },
+        { kind: 'plants' as const, name: '斯基德尔生产与物流基地', address: '斯基德尔市 Zelenaya 街 1 号', desc: '奶酪生产及 4,200 托盘位自动化冷链出口物流枢纽。' },
+        { kind: 'plants' as const, name: '波列奇耶矿泉水基地 (Porechye)', address: '波列奇耶村 Ozerskaya 街', desc: '天然矿泉水与饮用水 (Porechye, Aquaville) 灌装及 19 升桶装配送。' },
+        { kind: 'agro' as const, name: '因杜拉原奶收购站', address: '格罗德诺区 Indura 农庄', desc: '特级生牛乳一级冷却、快速化验及冷链转运中心。' },
+        { kind: 'agro' as const, name: '自有合作现代化牧场', address: 'MilkAgro · Dvorets-Agro 农业公司', desc: '从牧场饲料到货架的全链路可追溯优质生牛乳保障体系。' },
+      ],
+      qualityTitle: '国际质量与安全管理体系认证',
+      qualityDesc: '每一批次产品的安全性与可追溯性均通过国内外权威机构独立审核认证。',
+      certs: [
+        { code: 'ISO 9001', title: '质量管理体系', desc: '覆盖采购、加工与冷链发运的标准化质量管控。' },
+        { code: 'FSSC 22000 & ISO 22000', title: '食品安全与 HACCP', desc: '全流程关键控制点监测，确保生牛乳至成品包装零缺陷。' },
+        { code: 'ISO 45001-2020', title: '职业健康与安全', desc: '严格保障生产一线员工工作环境安全与健康标准。' },
+        { code: 'ISO 37001-2020', title: '反贿赂合规管理', desc: '确保招标采购、外贸合同及企业运营的公开透明。' },
+        { code: 'Halal & 中国 GACC', title: '国际出口准入资质', desc: '持有输华海关 GACC 注册及清真认证，畅行亚洲及中东市场。' },
+      ],
+      awardsTitle: '荣誉奖项与国际展会认可',
+      awards: [
+        { title: '国家“劳动光荣勋章”', detail: '根据白俄罗斯总统第 33 号令（2023.02.10）授予国家级最高荣誉。' },
+        { title: '“年度最佳出口商”', detail: '多次蝉联白俄罗斯国家级出口大赛优胜奖（含 2024 及 2025 年度）。' },
+        { title: '7 次政府质量大奖', detail: '七次荣获白俄罗斯共和国政府质量成就奖。' },
+        { title: '国家荣誉榜上榜企业', detail: '2014、2018 及 2023 年多次荣登白俄罗斯共和国荣誉榜。' },
+        { title: '国际金奖与行业盛会', detail: 'Prodexpo 食品展大奖、乌格利奇奶酪大赛金奖，并亮相 Gulfood 及日本 Foodex 国际食品展。' },
+      ],
+      brandsTitle: '核心品牌系列',
+      brands: [
+        { name: 'Goroden 臻选系列', desc: '采用高蛋白特级生牛乳打造：90 天陈年奶酪、20% 冰淇淋与纯脂黄油。', to: '/catalog/cheese' },
+        { name: 'Active Life 健康系列', desc: '功能性营养乳品：零乳糖牛奶 (<0.01%) 与零蔗糖高蛋白希腊酸奶。', to: '/catalog/yogurt' },
+        { name: 'HoReCa 与全球出口', desc: '耐 400°C 披萨马苏里拉奶酪、33% 淡奶油、20 公斤黄油及 25 公斤脱脂奶粉。', to: '/export' },
+      ],
+      ctaCatalog: '浏览产品目录',
+      ctaExport: '国际出口与合作',
+      ctaContacts: '各部门联系方式',
     },
   }[language];
 
+  const visibleStructure = copy.structure.filter(
+    (s) => selectedStructureFilter === 'all' || s.kind === selectedStructureFilter
+  );
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-14 sm:space-y-16">
     <SeoHead
     title={`${t('navAbout')} — ${t('brandName')} (milk.by)`}
     description={copy.seoDesc}
     canonicalHash="/about"
     />
 
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-    <div className="lg:col-span-6 space-y-4 flex flex-col justify-center">
-    <p className="text-xs font-semibold text-[#0057B8]">{copy.kicker}</p>
-    <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">{copy.h1}</h1>
-    <p className="text-base text-slate-600 leading-relaxed">{copy.lead}</p>
-    <div className="pt-2 flex flex-wrap gap-3">
+    {/* 1. Corporate Hero */}
+    <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+    <div className="lg:col-span-6 space-y-5 flex flex-col justify-center">
+    <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full bg-blue-50 text-[#0057B8] border border-blue-200/80 text-xs font-semibold">
+    <Award className="w-3.5 h-3.5 shrink-0" />
+    <span>{copy.badge}</span>
+    </div>
+
+    <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
+    {copy.h1}
+    </h1>
+
+    <p className="text-sm sm:text-base text-slate-600 leading-relaxed">{copy.lead}</p>
+
+    <div className="pt-1 flex flex-wrap gap-3">
     <Link
     to="/catalog"
-    className="px-4 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
+    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-xl hover:bg-[#004494] transition-colors"
     >
-    {t('heroPrimaryCta')}
+    <span>{copy.ctaCatalog}</span>
+    <ArrowRight className="w-4 h-4" />
+    </Link>
+    <Link
+    to="/export"
+    className="px-4 py-2.5 text-sm font-semibold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors"
+    >
+    {copy.ctaExport}
     </Link>
     <Link
     to="/contacts"
-    className="px-4 py-2.5 text-sm font-semibold text-slate-800 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+    className="px-4 py-2.5 text-sm font-semibold text-[#0057B8] bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors"
     >
-    {t('ctaContact')}
+    {copy.ctaContacts}
     </Link>
     </div>
     </div>
 
     <div className="lg:col-span-6">
-    <div className="h-full min-h-[260px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+    <div className="h-full min-h-[280px] rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 shadow-xs">
     <ImageWithFallback
     src={ASSETS.newsDairyFacility}
     alt={t('brandName')}
@@ -6162,19 +6958,226 @@ export const About: React.FC = () => {
     />
     </div>
     </div>
-    </div>
+    </section>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200">
-    {copy.boxes.map((box) => (
-      <div key={box.metric} className="border border-slate-200 rounded-xl p-6 space-y-2">
-      <div className="font-display text-2xl font-bold text-[#0057B8] tabular-nums">
+    {/* 2. Key Performance Metrics */}
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+    {copy.stats.map((box) => (
+      <div
+      key={box.metric}
+      className="border border-slate-200 rounded-2xl p-5 sm:p-6 bg-white space-y-2"
+      >
+      <div className="font-display text-2xl sm:text-3xl font-bold text-[#0057B8] tabular-nums">
       {box.metric}
       </div>
       <h2 className="font-display text-base font-semibold text-slate-900">{box.title}</h2>
-      <p className="text-sm text-slate-600 leading-relaxed">{box.desc}</p>
+      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{box.desc}</p>
+      </div>
+    ))}
+    </section>
+
+    {/* 3. Leadership, Mission & Vision */}
+    <section className="rounded-3xl bg-slate-50 border border-slate-200 p-6 sm:p-10 space-y-8">
+    <div className="max-w-3xl space-y-3">
+    <p className="text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+    {copy.leadershipEyebrow}
+    </p>
+    <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+    {copy.leadershipTitle}
+    </h2>
+    <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+    {copy.leadershipBody}
+    </p>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-2.5">
+    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+    <Sparkles className="w-4 h-4" />
+    <span>{copy.missionTitle}</span>
+    </div>
+    <p className="text-sm text-slate-700 leading-relaxed">{copy.missionText}</p>
+    </div>
+    <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-2.5">
+    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+    <Globe2 className="w-4 h-4" />
+    <span>{copy.visionTitle}</span>
+    </div>
+    <p className="text-sm text-slate-700 leading-relaxed">{copy.visionText}</p>
+    </div>
+    </div>
+    </section>
+
+    {/* 4. History Timeline (1938 -> 2026) */}
+    <section className="space-y-6">
+    <div className="space-y-1.5">
+    <p className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+    <History className="w-3.5 h-3.5" />
+    <span>{copy.historyEyebrow}</span>
+    </p>
+    <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+    {copy.historyTitle}
+    </h2>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    {copy.history.map((item, idx) => (
+      <div
+      key={item.year}
+      className={`border rounded-2xl p-5 space-y-2 ${
+        idx === copy.history.length - 1
+        ? 'lg:col-span-2 bg-blue-50/60 border-[#0057B8]/40'
+        : 'bg-white border-slate-200'
+      }`}
+      >
+      <div className="font-mono text-sm font-bold text-[#0057B8] tabular-nums">
+      {item.year}
+      </div>
+      <h3 className="font-display text-base font-semibold text-slate-900">{item.title}</h3>
+      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.desc}</p>
       </div>
     ))}
     </div>
+    </section>
+
+    {/* 5. Production Structure & Agricultural Base */}
+    <section className="space-y-6">
+    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+    <div className="space-y-1.5">
+    <p className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+    <Factory className="w-3.5 h-3.5" />
+    <span>{copy.structureEyebrow}</span>
+    </p>
+    <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+    {copy.structureTitle}
+    </h2>
+    </div>
+
+    <div className="inline-flex p-1 bg-slate-100 border border-slate-200 rounded-xl self-start sm:self-auto">
+    {(
+      [
+        ['all', copy.filterAll],
+      ['plants', copy.filterPlants],
+      ['agro', copy.filterAgro],
+      ] as const
+    ).map(([val, label]) => (
+      <button
+      key={val}
+      type="button"
+      onClick={() => setSelectedStructureFilter(val)}
+      className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap ${
+        selectedStructureFilter === val
+        ? 'bg-white text-[#0057B8] shadow-xs'
+        : 'text-slate-600 hover:text-slate-900'
+      }`}
+      >
+      {label}
+      </button>
+    ))}
+    </div>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    {visibleStructure.map((unit) => (
+      <div
+      key={unit.name}
+      className="border border-slate-200 rounded-2xl p-5 bg-white space-y-2.5 hover:border-[#0057B8]/40 transition-colors"
+      >
+      <div className="flex items-start gap-2">
+      <Building2 className="w-4 h-4 text-[#0057B8] shrink-0 mt-1" />
+      <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 leading-snug">
+      {unit.name}
+      </h3>
+      </div>
+      <div className="flex items-start gap-1.5 text-xs text-slate-500">
+      <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-slate-400" />
+      <span>{unit.address}</span>
+      </div>
+      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{unit.desc}</p>
+      </div>
+    ))}
+    </div>
+    </section>
+
+    {/* 6. Management Systems & Awards */}
+    <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div className="lg:col-span-6 border border-slate-200 rounded-2xl p-6 sm:p-7 bg-white space-y-5">
+    <div className="space-y-1.5">
+    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+    <ShieldCheck className="w-4 h-4" />
+    <span>ISO · FSSC 22000 · HACCP</span>
+    </div>
+    <h2 className="font-display text-xl sm:text-2xl font-bold text-slate-900">
+    {copy.qualityTitle}
+    </h2>
+    <p className="text-xs sm:text-sm text-slate-600">{copy.qualityDesc}</p>
+    </div>
+
+    <div className="divide-y divide-slate-100">
+    {copy.certs.map((c) => (
+      <div key={c.code} className="py-3 first:pt-0 last:pb-0 flex items-start gap-3">
+      <CheckCircle2 className="w-4 h-4 text-[#0057B8] shrink-0 mt-0.5" />
+      <div className="space-y-0.5">
+      <div className="text-sm font-semibold text-slate-900">
+      <span className="font-mono text-[#0057B8] mr-1.5">{c.code}</span>
+      <span>— {c.title}</span>
+      </div>
+      <p className="text-xs text-slate-600">{c.desc}</p>
+      </div>
+      </div>
+    ))}
+    </div>
+    </div>
+
+    <div className="lg:col-span-6 border border-slate-200 rounded-2xl p-6 sm:p-7 bg-slate-50/70 space-y-5">
+    <div className="space-y-1.5">
+    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+    <Award className="w-4 h-4" />
+    <span>milk.by</span>
+    </div>
+    <h2 className="font-display text-xl sm:text-2xl font-bold text-slate-900">
+    {copy.awardsTitle}
+    </h2>
+    </div>
+
+    <div className="space-y-3">
+    {copy.awards.map((a) => (
+      <div
+      key={a.title}
+      className="bg-white border border-slate-200 rounded-xl p-4 space-y-1"
+      >
+      <div className="font-display text-sm font-bold text-slate-900">{a.title}</div>
+      <p className="text-xs text-slate-600 leading-relaxed">{a.detail}</p>
+      </div>
+    ))}
+    </div>
+    </div>
+    </section>
+
+    {/* 7. Signature Product Lines */}
+    <section className="space-y-5">
+    <h2 className="font-display text-2xl font-bold text-slate-900">{copy.brandsTitle}</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+    {copy.brands.map((brand) => (
+      <Link
+      key={brand.name}
+      to={brand.to}
+      className="group border border-slate-200 rounded-2xl p-6 bg-white hover:border-[#0057B8]/50 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 flex flex-col justify-between gap-4"
+      >
+      <div className="space-y-2">
+      <h3 className="font-display text-lg font-bold text-slate-900 group-hover:text-[#0057B8] transition-colors">
+      {brand.name}
+      </h3>
+      <p className="text-sm text-slate-600 leading-relaxed">{brand.desc}</p>
+      </div>
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0057B8]">
+      <span>{copy.ctaCatalog}</span>
+      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+      </span>
+      </Link>
+    ))}
+    </div>
+    </section>
     </div>
   );
 };
@@ -7723,6 +8726,7 @@ import { SearchBar } from '../components/SearchBar';
 import { Filters, CatalogFilterState } from '../components/Filters';
 import { ProductGrid } from '../components/ProductGrid';
 import { SmartFinder } from '../components/SmartFinder';
+import { CategoryIcon } from '../components/CategoryIcon';
 import { runSmartSearch } from '../utils/smartMatch';
 
 interface CatalogProps {
@@ -7785,6 +8789,17 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   }, [resolvedCategoryId]);
 
   const activeCategory = categories.find((c) => c.id === filterState.categoryId);
+
+  const countsByCategory = useMemo(() => {
+    const map: Record<string, number> = {};
+    let total = 0;
+    for (const p of products) {
+      if (!p.visible) continue;
+      total++;
+      map[p.category] = (map[p.category] || 0) + 1;
+    }
+    return { map, total };
+  }, [products]);
 
   const smartSearch = useMemo(() => {
     const trimmed = query.trim();
@@ -7901,6 +8916,13 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
     zh: '智能搜索已识别:',
   }[language];
 
+  const allTileLabel = {
+    ru: 'Вся продукция',
+    be: 'Уся прадукцыя',
+    en: 'All Products',
+    zh: '全部产品',
+  }[language];
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
     <SeoHead
@@ -7938,36 +8960,67 @@ export const Catalog: React.FC<CatalogProps> = ({ initialCategorySlug }) => {
   <p className="text-sm sm:text-base text-slate-600 max-w-3xl">{pageDesc}</p>
   </div>
 
-  <div className="flex flex-wrap gap-2">
+  {/* Enlarged Category Tiles with milk.by-inspired modernized icons */}
+  <div className="flex overflow-x-auto no-scrollbar -mx-4 px-4 pb-1 sm:pb-0 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2.5 sm:gap-3">
   <Link
   to="/catalog"
-  className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
+  className={`group min-w-[122px] sm:min-w-0 p-3 sm:p-3.5 rounded-2xl border flex flex-col items-center justify-between gap-2 text-center transition-all duration-200 ${
     !activeCategory
-    ? 'bg-[#0057B8] text-white border-[#0057B8]'
-    : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
+    ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-md ring-2 ring-[#0057B8]/20'
+    : 'bg-white text-slate-800 border-slate-200 hover:border-[#0057B8]/45 hover:-translate-y-0.5 hover:shadow-md'
   }`}
   >
-  {language === 'ru'
-    ? 'Все'
-    : language === 'be'
-    ? 'Усе'
-    : language === 'zh'
-    ? '全部'
-  : 'All'}
+  <div
+  className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105 ${
+    !activeCategory ? 'bg-white/15 text-white' : 'bg-sky-50 text-[#0284c7]'
+  }`}
+  >
+  <CategoryIcon categoryId="all" className="w-8 h-8" />
+  </div>
+  <div className="space-y-0.5">
+  <div className="text-xs font-semibold leading-tight">{allTileLabel}</div>
+  <div
+  className={`text-[11px] font-mono tabular-nums ${
+    !activeCategory ? 'text-blue-100' : 'text-slate-400'
+  }`}
+  >
+  {countsByCategory.total} SKU
+  </div>
+  </div>
   </Link>
+
   {categories.map((cat) => {
     const active = activeCategory?.id === cat.id;
+    const count = countsByCategory.map[cat.id] || 0;
     return (
       <Link
       key={cat.id}
       to={`/catalog/${cat.slug}`}
-      className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
+      className={`group min-w-[122px] sm:min-w-0 p-3 sm:p-3.5 rounded-2xl border flex flex-col items-center justify-between gap-2 text-center transition-all duration-200 ${
         active
-        ? 'bg-[#0057B8] text-white border-[#0057B8]'
-        : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
+        ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-md ring-2 ring-[#0057B8]/20'
+        : 'bg-white text-slate-800 border-slate-200 hover:border-[#0057B8]/45 hover:-translate-y-0.5 hover:shadow-md'
       }`}
       >
+      <div
+      className={`w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105 ${
+        active ? 'bg-white/15 text-white' : 'bg-sky-50 text-[#0284c7]'
+      }`}
+      >
+      <CategoryIcon categoryId={cat.id} className="w-8 h-8" />
+      </div>
+      <div className="space-y-0.5">
+      <div className="text-xs font-semibold leading-tight line-clamp-2">
       {localize(cat.name)}
+      </div>
+      <div
+      className={`text-[11px] font-mono tabular-nums ${
+        active ? 'text-blue-100' : 'text-slate-400'
+      }`}
+      >
+      {count} SKU
+      </div>
+      </div>
       </Link>
     );
   })}
@@ -8036,28 +9089,947 @@ export const Category: React.FC = () => {
 
 `/home/july/Projects/milkby-hackathon/src/pages/Contacts.tsx`:
 ```
-import React, { useState } from 'react';
-import { Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  CheckCircle2,
+  Search,
+  X,
+  Building2,
+  Users,
+  Truck,
+  Globe2,
+  Briefcase,
+  ExternalLink,
+} from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { SeoHead } from '../components/SeoHead';
+import { Language } from '../types';
+
+type DirectoryTab = 'sales' | 'management' | 'departments' | 'branches';
+
+interface ContactPhone {
+  label?: Record<Language, string>;
+  number: string;
+}
+
+interface DirectoryEntry {
+  id: string;
+  group: DirectoryTab;
+  title: Record<Language, string>;
+  person?: Record<Language, string>;
+  address?: Record<Language, string>;
+  note?: Record<Language, string>;
+  phones: ContactPhone[];
+  emails?: { label?: string; address: string }[];
+  website?: string;
+}
+
+const DIRECTORY_ENTRIES: DirectoryEntry[] = [
+  // ======================== 1. SALES, ORDERS, EXPORT & DEALERS ========================
+  {
+    id: 'sales-logistics-head',
+    group: 'sales',
+    title: {
+      ru: 'Отдел логистики и продаж (РБ)',
+      be: 'Аддзел лагістыкі і продажаў (РБ)',
+      en: 'Logistics & Domestic Sales Department',
+      zh: '物流与国内销售部（白俄罗斯）',
+    },
+    person: {
+      ru: 'Начальник: Сидо Наталия Станиславовна',
+      be: 'Начальнік: Сідо Наталля Станіславаўна',
+      en: 'Head: Natalia Sido',
+      zh: '负责人: Natalia Sido',
+    },
+    phones: [{ number: '+375 (152) 45-39-42' }],
+    emails: [
+      { address: 'sales@milk.by' },
+      { label: 'Заявки / Orders', address: 'olip@milk.by' },
+    ],
+  },
+{
+  id: 'sales-grodno',
+  group: 'sales',
+  title: {
+    ru: 'Приём заявок — г. Гродно',
+    be: 'Прыём заявак — г. Гродна',
+    en: 'Order Desk — Grodno City',
+    zh: '订单受理 — 格罗德诺市区',
+  },
+  phones: [
+    { number: '+375 (152) 45-39-01' },
+    { number: '+375 (152) 45-39-56' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 117-99-99' },
+  ],
+  emails: [{ address: 'olip@milk.by' }],
+},
+{
+  id: 'sales-regions',
+  group: 'sales',
+  title: {
+    ru: 'Приём заявок — регионы Республики Беларусь',
+    be: 'Прыём заявак — рэгіёны Рэспублікі Беларусь',
+    en: 'Order Desk — Regions of Belarus',
+    zh: '订单受理 — 白俄罗斯其他地区',
+  },
+  phones: [
+    { number: '+375 (152) 45-39-02' },
+    { label: { ru: 'МТС', be: 'МТС', en: 'MTS', zh: 'MTS' }, number: '+375 (29) 289-99-99' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 698-72-07' },
+  ],
+},
+{
+  id: 'sales-water-19l',
+  group: 'sales',
+  title: {
+    ru: 'Заявки на доставку воды 19 л («Поречье» / Aquaville)',
+    be: 'Заяўкі на дастаўку вады 19 л («Парэчча» / Aquaville)',
+    en: '19L Water Delivery Orders (Porechye / Aquaville)',
+    zh: '19升桶装水配送订购热线',
+  },
+  phones: [
+    { number: '+375 (152) 60-40-27' },
+    { label: { ru: 'МТС', be: 'МТС', en: 'MTS', zh: 'MTS' }, number: '+375 (29) 282-22-22' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 382-22-22' },
+  ],
+},
+{
+  id: 'sales-ice-cream',
+  group: 'sales',
+  title: {
+    ru: 'Заявки на мороженое',
+    be: 'Заяўкі на марозіва',
+    en: 'Ice Cream Order Desk',
+    zh: '冰淇淋订购热线',
+  },
+  phones: [
+    { number: '+375 (152) 45-39-03' },
+    { number: '+375 (152) 45-39-04' },
+    { label: { ru: 'МТС', be: 'МТС', en: 'MTS', zh: 'MTS' }, number: '+375 (29) 287-77-77' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 117-88-88' },
+  ],
+},
+{
+  id: 'sales-ettn',
+  group: 'sales',
+  title: {
+    ru: 'Электронные товарно-транспортные накладные (ЭТТН)',
+    be: 'Электронныя таварна-транспартныя накладныя (ЭТТН)',
+    en: 'Electronic Waybills (eTTN / EDI Support)',
+    zh: '电子货运单据与 EDI 支持 (eTTN)',
+  },
+  phones: [{ label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (44) 523-49-18' }],
+},
+{
+  id: 'sales-ved-export',
+  group: 'sales',
+  title: {
+    ru: 'Отдел внешнеэкономической деятельности (Экспорт)',
+    be: 'Аддзел знешнеэканамічнай дзейнасці (Экспарт)',
+    en: 'Foreign Economic Activity / Export Department',
+    zh: '对外经济贸易与国际出口部',
+  },
+  person: {
+    ru: 'Начальник: Мелешко Светлана Ивановна',
+    be: 'Начальнік: Мялешка Святлана Іванаўна',
+    en: 'Head: Svetlana Meleshko',
+    zh: '负责人: Svetlana Meleshko',
+  },
+  phones: [
+    { number: '+375 (152) 60-07-52' },
+    { number: '+375 (152) 45-39-65' },
+    { number: '+375 (152) 48-06-53' },
+  ],
+  emails: [{ address: 'ved@milk.by' }],
+},
+{
+  id: 'rep-brest',
+  group: 'sales',
+  title: {
+    ru: 'Представитель в г. Бресте',
+    be: 'Прадстаўнік у г. Брэсце',
+    en: 'Regional Representative — Brest',
+    zh: '布列斯特地区代表处',
+  },
+  phones: [
+    { number: '+375 (162) 21-35-34' },
+    { label: { ru: 'МТС', be: 'МТС', en: 'MTS', zh: 'MTS' }, number: '+375 (33) 323-38-42' },
+    { number: '+375 (29) 792-18-00' },
+  ],
+},
+{
+  id: 'dealer-stolica',
+  group: 'sales',
+  title: {
+    ru: 'Официальный дилер в г. Минске — ООО «Молочный Мир - Столица»',
+    be: 'Афіцыйны дылер у г. Мінску — ТАА «Малочны Мір - Сталіца»',
+    en: 'Official Dealer (Minsk) — Molochny Mir - Stolitsa LLC',
+    zh: '明斯克官方经销商 — Molochny Mir - Stolitsa LLC',
+  },
+  address: {
+    ru: '220012, г. Минск, ул. К. Чорного, 25, офис 130',
+    be: '220012, г. Мінск, вул. К. Чорнага, 25, офіс 130',
+    en: 'Office 130, 25 K. Chornogo St, Minsk 220012',
+    zh: '明斯克市 K. Chornogo 街 25 号 130 室 (220012)',
+  },
+  phones: [
+    { number: '+375 (17) 395-79-99' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 352-33-50' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 176-33-50' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 182-33-50' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 187-33-50' },
+    { label: { ru: 'МТС', be: 'МТС', en: 'MTS', zh: 'MTS' }, number: '+375 (33) 376-02-65' },
+  ],
+  emails: [{ address: 'mm-stolica@yandex.by' }],
+},
+{
+  id: 'dealer-vostok',
+  group: 'sales',
+  title: {
+    ru: 'Официальный дилер (Минск, Гомель, Могилёв) — ООО «Молочный Мир - Восток»',
+    be: 'Афіцыйны дылер (Мінск, Гомель, Магілёў) — ТАА «Малочны Мір - Усход»',
+    en: 'Official Dealer (Minsk, Gomel, Mogilev) — Molochny Mir - Vostok LLC',
+    zh: '东部区域官方经销商（明斯克/戈梅利/莫吉廖夫）',
+  },
+  address: {
+    ru: '220012, г. Минск, ул. К. Чорного, 25, офис 130',
+    be: '220012, г. Мінск, вул. К. Чорнага, 25, офіс 130',
+    en: 'Office 130, 25 K. Chornogo St, Minsk 220012',
+    zh: '明斯克市 K. Chornogo 街 25 号 130 室 (220012)',
+  },
+  phones: [
+    { label: { ru: 'Минск', be: 'Мінск', en: 'Minsk', zh: '明斯克' }, number: '+375 (44) 700-78-69' },
+    { label: { ru: 'Гомель', be: 'Гомель', en: 'Gomel', zh: '戈梅利' }, number: '+375 (29) 641-27-26' },
+    { label: { ru: 'Гомель', be: 'Гомель', en: 'Gomel', zh: '戈梅利' }, number: '+375 (29) 672-07-69' },
+    { label: { ru: 'Могилёв', be: 'Магілёў', en: 'Mogilev', zh: '莫吉廖夫' }, number: '+375 (29) 606-62-71' },
+  ],
+  emails: [{ address: 'mm-vostok@yandex.by' }],
+},
+
+// ======================== 2. MANAGEMENT ========================
+{
+  id: 'mgmt-ceo',
+  group: 'management',
+  title: {
+    ru: 'Генеральный директор',
+    be: 'Генеральны дырэктар',
+    en: 'General Director',
+    zh: '总经理',
+  },
+  person: {
+    ru: 'Аникеева Марина Евгеньевна',
+    be: 'Анікеева Марына Яўгенаўна',
+    en: 'Marina Anikeeva',
+    zh: 'Marina Anikeeva',
+  },
+  note: {
+    ru: 'Приём граждан: Среда, 17:00 – 20:00',
+    be: 'Прыём грамадзян: Серада, 17:00 – 20:00',
+    en: 'Public Reception Hours: Wednesday, 17:00 – 20:00',
+    zh: '公众接待时间: 周三 17:00 – 20:00',
+  },
+  phones: [{ number: '+375 (152) 43-01-72' }],
+  emails: [{ address: 'director@milk.by' }],
+},
+{
+  id: 'mgmt-reception',
+  group: 'management',
+  title: {
+    ru: 'Приёмная / Помощник руководителя',
+    be: 'Прыёмная / Памочнік кіраўніка',
+    en: 'Reception / Executive Assistant',
+    zh: '总经理办公室 / 行政前台',
+  },
+  person: {
+    ru: 'Жарникова Олеся Александровна',
+    be: 'Жарнікава Алеся Аляксандраўна',
+    en: 'Olesya Zharnikova',
+    zh: 'Olesya Zharnikova',
+  },
+  phones: [
+    { number: '+375 (152) 43-01-72' },
+    { number: '+375 (152) 45-39-25' },
+    { number: '+375 (152) 45-39-69' },
+  ],
+  emails: [{ address: 'info@milk.by' }],
+},
+{
+  id: 'mgmt-first-deputy',
+  group: 'management',
+  title: {
+    ru: 'Первый заместитель генерального директора',
+    be: 'Першы намеснік генеральнага дырэктара',
+    en: 'First Deputy General Director (Production)',
+    zh: '第一副总经理（生产运营）',
+  },
+  person: {
+    ru: 'Михновец Ольга Кузьминична',
+    be: 'Міхнавец Вольга Кузьмінічна',
+    en: 'Olga Mikhnovets',
+    zh: 'Olga Mikhnovets',
+  },
+  phones: [{ number: '+375 (152) 45-39-35' }],
+  emails: [{ address: 'production@milk.by' }],
+},
+{
+  id: 'mgmt-chief-engineer',
+  group: 'management',
+  title: {
+    ru: 'Заместитель генерального директора — главный инженер',
+    be: 'Намеснік генеральнага дырэктара — галоўны інжынер',
+    en: 'Deputy General Director — Chief Engineer',
+    zh: '副总经理兼总工程师',
+  },
+  person: {
+    ru: 'Шапель Юрий Вацлавович',
+    be: 'Шапель Юрый Вацлававіч',
+    en: 'Yury Shapel',
+    zh: 'Yury Shapel',
+  },
+  phones: [{ number: '+375 (152) 43-21-81' }],
+  emails: [{ address: 'engineer@milk.by' }],
+},
+{
+  id: 'mgmt-development',
+  group: 'management',
+  title: {
+    ru: 'Заместитель генерального директора по развитию',
+    be: 'Намеснік генеральнага дырэктара па развіцці',
+    en: 'Deputy General Director for Development',
+    zh: '企业发展副总经理',
+  },
+  person: {
+    ru: 'Агейко Владимир Владимирович',
+    be: 'Агейка Уладзімір Уладзіміравіч',
+    en: 'Vladimir Ageiko',
+    zh: 'Vladimir Ageiko',
+  },
+  phones: [{ number: '+375 (152) 45-39-46' }],
+  emails: [{ address: 'tehotdel@milk.by' }],
+},
+{
+  id: 'mgmt-ideology',
+  group: 'management',
+  title: {
+    ru: 'Заместитель генерального директора по идеологической работе и социально-бытовым вопросам',
+    be: 'Намеснік генеральнага дырэктара па ідэалагічнай рабоце і сацыяльна-бытавых пытаннях',
+    en: 'Deputy General Director for Corporate Affairs & Social Policy',
+    zh: '企业文化与社会事务副总经理',
+  },
+  person: {
+    ru: 'Новицкий Игорь Чеславович',
+    be: 'Навіцкі Ігар Часлававіч',
+    en: 'Igor Novitsky',
+    zh: 'Igor Novitsky',
+  },
+  phones: [{ number: '+375 (152) 45-39-20' }],
+  emails: [{ address: 'ideolog@milk.by' }],
+},
+{
+  id: 'mgmt-econ-security',
+  group: 'management',
+  title: {
+    ru: 'Заместитель генерального директора по экономической и правовой безопасности',
+    be: 'Намеснік генеральнага дырэктара па эканамічнай і прававой бяспецы',
+    en: 'Deputy General Director for Economic & Legal Security',
+    zh: '经济与法务安全副总经理',
+  },
+  person: {
+    ru: 'Кривицкий Андрей Алексеевич',
+    be: 'Крывіцкі Андрэй Аляксеевіч',
+    en: 'Andrey Krivitsky',
+    zh: 'Andrey Krivitsky',
+  },
+  phones: [{ number: '+375 (152) 45-39-67' }],
+  emails: [{ address: 'safety@milk.by' }],
+},
+{
+  id: 'mgmt-hr-security',
+  group: 'management',
+  title: {
+    ru: 'Заместитель генерального директора по безопасности, режиму и кадрам',
+    be: 'Намеснік генеральнага дырэктара па бяспецы, рэжыму і кадрах',
+    en: 'Deputy General Director for Security & HR',
+    zh: '安全合规与人力资源副总经理',
+  },
+  person: {
+    ru: 'Галькин Василий Васильевич',
+    be: 'Галькін Васіль Васільевіч',
+    en: 'Vasily Galkin',
+    zh: 'Vasily Galkin',
+  },
+  phones: [],
+  emails: [{ address: 'brik@milk.by' }],
+},
+
+// ======================== 3. DEPARTMENTS & SERVICES ========================
+{
+  id: 'dept-marketing',
+  group: 'departments',
+  title: {
+    ru: 'Сектор маркетинга',
+    be: 'Сектар маркетынгу',
+    en: 'Marketing Sector',
+    zh: '市场营销部',
+  },
+  person: {
+    ru: 'Якимович Анастасия Геннадьевна',
+    be: 'Якімовіч Анастасія Генадзьеўна',
+    en: 'Anastasia Yakimovich',
+    zh: 'Anastasia Yakimovich',
+  },
+  phones: [{ number: '+375 (152) 41-25-29' }],
+  emails: [{ address: 'market@milk.by' }],
+},
+{
+  id: 'dept-brand-retail',
+  group: 'departments',
+  title: {
+    ru: 'Отдел фирменной торговли',
+    be: 'Аддзел фірменнага гандлю',
+    en: 'Branded Retail Department',
+    zh: '直营品牌零售部',
+  },
+  person: {
+    ru: 'Семенчук Ирина Брониславовна',
+    be: 'Семянчук Ірына Браніславаўна',
+    en: 'Irina Semenchuk',
+    zh: 'Irina Semenchuk',
+  },
+  phones: [{ number: '+375 (152) 41-62-01' }],
+  emails: [{ address: 'firmtorg@milk.by' }],
+},
+{
+  id: 'dept-quality',
+  group: 'departments',
+  title: {
+    ru: 'Отдел качества и стандартизации',
+    be: 'Аддзел якасці і стандартызацыі',
+    en: 'Quality & Standardization Department',
+    zh: '质量与标准化部',
+  },
+  person: {
+    ru: 'Черко Инна Николаевна',
+    be: 'Чарко Іна Мікалаеўна',
+    en: 'Inna Cherko',
+    zh: 'Inna Cherko',
+  },
+  phones: [{ number: '+375 (152) 43-00-06' }],
+  emails: [{ address: 'kis@milk.by' }],
+},
+{
+  id: 'dept-lab',
+  group: 'departments',
+  title: {
+    ru: 'Производственная лаборатория',
+    be: 'Вытворчая лабараторыя',
+    en: 'Accredited Production Laboratory',
+    zh: '中心生产质检实验室',
+  },
+  person: {
+    ru: 'Шалкевич Елена Борисовна',
+    be: 'Шалкевіч Алена Барысаўна',
+    en: 'Elena Shalkevich',
+    zh: 'Elena Shalkevich',
+  },
+  phones: [{ number: '+375 (152) 45-39-48' }],
+  emails: [{ address: 'lab@milk.by' }],
+},
+{
+  id: 'dept-raw-milk',
+  group: 'departments',
+  title: {
+    ru: 'Сырьевой отдел',
+    be: 'Сыравінны аддзел',
+    en: 'Raw Milk Procurement Department',
+    zh: '生牛乳原料采购部',
+  },
+  phones: [{ number: '+375 (152) 45-39-27' }],
+  emails: [{ address: 'syrevoyotdel@milk.by' }],
+},
+{
+  id: 'dept-procurement',
+  group: 'departments',
+  title: {
+    ru: 'Отдел материально-технического снабжения',
+    be: 'Аддзел матэрыяльна-тэхнічнага забеспячэння',
+    en: 'Material & Technical Supply Department',
+    zh: '物资与设备供应链采购部',
+  },
+  person: {
+    ru: 'Жук Михаил Николаевич',
+    be: 'Жук Міхаіл Мікалаевіч',
+    en: 'Mikhail Zhuk',
+    zh: 'Mikhail Zhuk',
+  },
+  phones: [{ number: '+375 (152) 45-39-44' }],
+  emails: [{ address: 'snab@milk.by' }],
+},
+{
+  id: 'dept-economics',
+  group: 'departments',
+  title: {
+    ru: 'Планово-экономический отдел',
+    be: 'Планава-эканамічны аддзел',
+    en: 'Planning & Economics Department',
+    zh: '计划与经济部',
+  },
+  person: {
+    ru: 'Барташ Наталия Александровна',
+    be: 'Барташ Наталля Аляксандраўна',
+    en: 'Natalia Bartash',
+    zh: 'Natalia Bartash',
+  },
+  phones: [{ number: '+375 (152) 45-39-23' }],
+  emails: [{ address: 'econom@milk.by' }],
+},
+{
+  id: 'dept-accounting',
+  group: 'departments',
+  title: {
+    ru: 'Бухгалтерия',
+    be: 'Бухгалтэрыя',
+    en: 'Accounting Department',
+    zh: '财务会计部',
+  },
+  person: {
+    ru: 'Маерович Инна Марьяновна',
+    be: 'Маяровіч Іна Мар’янаўна',
+    en: 'Inna Maerovich',
+    zh: 'Inna Maerovich',
+  },
+  phones: [{ number: '+375 (152) 45-39-34' }],
+  emails: [{ address: 'buh@milk.by' }],
+},
+{
+  id: 'dept-legal',
+  group: 'departments',
+  title: {
+    ru: 'Юридический отдел',
+    be: 'Юрыдычны аддзел',
+    en: 'Legal Department',
+    zh: '法务部',
+  },
+  person: {
+    ru: 'Иванов Александр Васильевич',
+    be: 'Іваноў Аляксандр Васільевіч',
+    en: 'Alexander Ivanov',
+    zh: 'Alexander Ivanov',
+  },
+  phones: [{ number: '+375 (152) 45-39-26' }],
+  emails: [{ address: 'pravo@milk.by' }],
+},
+{
+  id: 'dept-hr',
+  group: 'departments',
+  title: {
+    ru: 'Отдел кадров',
+    be: 'Аддзел кадраў',
+    en: 'Human Resources Department',
+    zh: '人力资源部',
+  },
+  person: {
+    ru: 'Зайко Тамара Борисовна',
+    be: 'Зайко Тамара Барысаўна',
+    en: 'Tamara Zaiko',
+    zh: 'Tamara Zaiko',
+  },
+  phones: [{ number: '+375 (152) 60-09-36' }],
+  emails: [{ address: 'kadry@milk.by' }],
+},
+{
+  id: 'dept-labor',
+  group: 'departments',
+  title: {
+    ru: 'Отдел труда и заработной платы',
+    be: 'Аддзел працы і заработнай платы',
+    en: 'Labor & Compensation Department',
+    zh: '薪酬与劳动管理部',
+  },
+  person: {
+    ru: 'Рудникевич Татьяна Ивановна',
+    be: 'Руднікевіч Таццяна Іванаўна',
+    en: 'Tatiana Rudnikevich',
+    zh: 'Tatiana Rudnikevich',
+  },
+  phones: [{ number: '+375 (152) 45-39-22' }],
+  emails: [{ address: 'otiz@milk.by' }],
+},
+{
+  id: 'dept-ice-dry',
+  group: 'departments',
+  title: {
+    ru: 'Цех мороженого и сухих молочных продуктов',
+    be: 'Цэх марозіва і сухіх малочных прадуктаў',
+    en: 'Ice Cream & Dry Dairy Production Shop',
+    zh: '冰淇淋与干乳制品生产车间',
+  },
+  person: {
+    ru: 'Воробей Ольга Васильевна',
+    be: 'Варабей Вольга Васільеўна',
+    en: 'Olga Vorobei',
+    zh: 'Olga Vorobei',
+  },
+  phones: [{ number: '+375 (152) 45-39-62' }],
+  emails: [{ address: 'ice@milk.by' }],
+},
+{
+  id: 'dept-transport',
+  group: 'departments',
+  title: {
+    ru: 'Транспортный цех',
+    be: 'Транспартны цэх',
+    en: 'Transport & Fleet Department',
+    zh: '冷链车队运输部',
+  },
+  person: {
+    ru: 'Гишкелюк Сергей Петрович',
+    be: 'Гішкелюк Сяргей Пятровіч',
+    en: 'Sergey Gishkelyuk',
+    zh: 'Sergey Gishkelyuk',
+  },
+  phones: [{ number: '+375 (152) 45-39-51' }],
+  emails: [{ address: 'transport@milk.by' }],
+},
+{
+  id: 'dept-construction',
+  group: 'departments',
+  title: {
+    ru: 'Отдел капитального строительства',
+    be: 'Аддзел капітальнага будаўніцтва',
+    en: 'Capital Construction Department',
+    zh: '基建工程部',
+  },
+  person: {
+    ru: 'Жук Сергей Константинович',
+    be: 'Жук Сяргей Канстанцінавіч',
+    en: 'Sergey Zhuk',
+    zh: 'Sergey Zhuk',
+  },
+  phones: [{ number: '+375 (152) 45-39-31' }],
+  emails: [{ address: 'oks@milk.by' }],
+},
+{
+  id: 'dept-energy',
+  group: 'departments',
+  title: {
+    ru: 'Главный энергетик',
+    be: 'Галоўны энергетык',
+    en: 'Chief Power Engineer',
+    zh: '总能源动力工程师',
+  },
+  person: {
+    ru: 'Воробей Артём Олегович',
+    be: 'Варабей Арцём Алегавіч',
+    en: 'Artem Vorobei',
+    zh: 'Artem Vorobei',
+  },
+  phones: [{ number: '+375 (152) 43-21-98' }],
+  emails: [{ address: 'energy@milk.by' }],
+},
+{
+  id: 'dept-mechanic',
+  group: 'departments',
+  title: {
+    ru: 'Главный механик',
+    be: 'Галоўны механік',
+    en: 'Chief Mechanical Engineer',
+    zh: '总机械设备工程师',
+  },
+  person: {
+    ru: 'Борейко Александр Вячеславович',
+    be: 'Барэйка Аляксандр Вячаслававіч',
+    en: 'Alexander Boreiko',
+    zh: 'Alexander Boreiko',
+  },
+  phones: [{ number: '+375 (152) 45-39-60' }],
+  emails: [{ address: 'mechan@milk.by' }],
+},
+{
+  id: 'dept-safety',
+  group: 'departments',
+  title: {
+    ru: 'Служба охраны труда',
+    be: 'Служба аховы працы',
+    en: 'Occupational Health & Safety Office',
+    zh: '职业安全与劳动保护处',
+  },
+  phones: [{ number: '+375 (152) 45-39-33' }],
+  emails: [{ address: 'ot@milk.by' }],
+},
+{
+  id: 'dept-medical',
+  group: 'departments',
+  title: {
+    ru: 'Здравпункт',
+    be: 'Здраўпункт',
+    en: 'On-Site Medical Unit',
+    zh: '企业医疗保健室',
+  },
+  person: {
+    ru: 'Смолина Ольга Михайловна',
+    be: 'Смоліна Вольга Міхайлаўна',
+    en: 'Olga Smolina',
+    zh: 'Olga Smolina',
+  },
+  phones: [{ number: '+375 (152) 45-39-32' }],
+  emails: [{ address: 'doctor@milk.by' }],
+},
+
+// ======================== 4. BRANCHES, PLANTS, FARMS & HOLDING ========================
+{
+  id: 'branch-shchuchin',
+  group: 'branches',
+  title: {
+    ru: 'Щучинский филиал ОАО «Молочный Мир»',
+    be: 'Шчучынскі філіял ААТ «Малочны Мір»',
+    en: 'Shchuchin Branch — OJSC "Molochny Mir"',
+    zh: '休钦分公司 (Shchuchin)',
+  },
+  person: {
+    ru: 'Директор: Пограновский Пётр Григорьевич',
+    be: 'Дырэктар: Паграноўскі Пётр Рыгоравіч',
+    en: 'Director: Petr Pogranovsky',
+    zh: '厂长: Petr Pogranovsky',
+  },
+  address: {
+    ru: '231513, г. Щучин, ул. 17 Сентября, 45',
+    be: '231513, г. Шчучын, вул. 17 Верасня, 45',
+    en: '45 17 Sentyabrya St, Shchuchin 231513',
+    zh: '休钦市 9月17日街 45 号 (231513)',
+  },
+  phones: [{ number: '+375 (1514) 20-4-03' }],
+  emails: [{ address: 'info_msz@schuchin-cheese.by' }],
+  website: 'https://schuchin-cheese.by',
+},
+{
+  id: 'branch-dyatlovo',
+  group: 'branches',
+  title: {
+    ru: 'Дятловский филиал ОАО «Молочный Мир»',
+    be: 'Дзятлаўскі філіял ААТ «Малочны Мір»',
+    en: 'Dyatlovo Branch — OJSC "Molochny Mir"',
+    zh: '佳特洛沃分公司 (Dyatlovo)',
+  },
+  person: {
+    ru: 'Директор: Жидко Андрей Павлович',
+    be: 'Дырэктар: Жыдко Андрэй Паўлавіч',
+    en: 'Director: Andrey Zhidko',
+    zh: '厂长: Andrey Zhidko',
+  },
+  address: {
+    ru: '231471, г. Дятлово, ул. Октябрьская, 105',
+    be: '231471, г. Дзятлава, вул. Кастрычніцкая, 105',
+    en: '105 Oktyabrskaya St, Dyatlovo 231471',
+    zh: '佳特洛沃市十月街 105 号 (231471)',
+  },
+  phones: [{ number: '+375 (1563) 64-7-44' }],
+  emails: [{ address: 'cheeseland@mail.ru' }],
+  website: 'https://cheeseland.by',
+},
+{
+  id: 'branch-berestovitsa',
+  group: 'branches',
+  title: {
+    ru: 'Производственный цех «Берестовица»',
+    be: 'Вытворчы цэх «Бераставіца»',
+    en: 'Berestovitsa Cheese Production Site',
+    zh: '别列斯托维察奶酪生产分厂',
+  },
+  person: {
+    ru: 'Начальник: Каскевич Олег Аркадьевич',
+    be: 'Начальнік: Каскевіч Алег Аркадзьевіч',
+    en: 'Head: Oleg Kaskevich',
+    zh: '负责人: Oleg Kaskevich',
+  },
+  address: {
+    ru: '231778, г.п. Большая Берестовица, ул. Дзержинского, 15',
+    be: '231778, г.п. Вялікая Бераставіца, вул. Дзяржынскага, 15',
+    en: '15 Dzerzhinskogo St, Bolshaya Berestovitsa 231778',
+    zh: '大别列斯托维察 Dzerzhinskogo 街 15 号 (231778)',
+  },
+  phones: [{ number: '+375 (1511) 7-44-48' }],
+  emails: [{ address: 'berestovica@milk.by' }],
+},
+{
+  id: 'branch-skidel',
+  group: 'branches',
+  title: {
+    ru: 'Производственный цех «Скидель»',
+    be: 'Вытворчы цэх «Скідзель»',
+    en: 'Skidel Production & Cold-Chain Site',
+    zh: '斯基德尔生产与冷链分厂',
+  },
+  person: {
+    ru: 'Начальник: Кочев Алексей Николаевич',
+    be: 'Начальнік: Кочаў Аляксей Мікалаевіч',
+    en: 'Head: Alexey Kochev',
+    zh: '负责人: Alexey Kochev',
+  },
+  address: {
+    ru: '231761, г. Скидель, ул. Зелёная, 1',
+    be: '231761, г. Скідзель, вул. Зялёная, 1',
+    en: '1 Zelenaya St, Skidel 231761',
+    zh: '斯基德尔市 Zelenaya 街 1 号 (231761)',
+  },
+  phones: [{ number: '+375 (152) 47-30-70' }],
+  emails: [{ address: 'skidel@milk.by' }],
+},
+{
+  id: 'branch-porechye',
+  group: 'branches',
+  title: {
+    ru: 'Участок б/а напитков и минеральных вод «Поречье»',
+    be: 'Участак б/а напояў і мінеральных вод «Парэчча»',
+    en: 'Porechye Mineral Water & Beverage Site',
+    zh: '波列奇耶矿泉水与饮品分厂',
+  },
+  person: {
+    ru: 'Начальник: Курман Александр Валерьянович',
+    be: 'Начальнік: Курман Аляксандр Валяр’янавіч',
+    en: 'Head: Alexander Kurman',
+    zh: '负责人: Alexander Kurman',
+  },
+  address: {
+    ru: 'д. Поречье, ул. Озерская, Гродненский район',
+    be: 'в. Парэчча, вул. Азерская, Гродзенскі раён',
+    en: 'Ozerskaya St, Porechye, Grodno District',
+    zh: '格罗德诺区波列奇耶村 Ozerskaya 街',
+  },
+  phones: [
+    { number: '+375 (152) 99-32-37' },
+    { label: { ru: 'A1', be: 'A1', en: 'A1', zh: 'A1' }, number: '+375 (29) 699-24-93' },
+  ],
+  emails: [{ address: 'porechye@milk.by' }],
+},
+{
+  id: 'branch-milkagro',
+  group: 'branches',
+  title: {
+    ru: 'СУП «МилкАгро» (сельхозпредприятие)',
+    be: 'СУП «МілкАгра» (сельгаспрадпрыемства)',
+    en: 'MilkAgro Agricultural Enterprise',
+    zh: 'MilkAgro 自有牧场企业',
+  },
+  person: {
+    ru: 'Директор: Гуз Николай Николаевич',
+    be: 'Дырэктар: Гуз Мікалай Мікалаевіч',
+    en: 'Director: Nikolay Guz',
+    zh: '总经理: Nikolay Guz',
+  },
+  address: {
+    ru: '231770, г.п. Большая Берестовица, ул. Дзержинского, 9',
+    be: '231770, г.п. Вялікая Бераставіца, вул. Дзяржынскага, 9',
+    en: '9 Dzerzhinskogo St, Bolshaya Berestovitsa 231770',
+    zh: '大别列斯托维察 Dzerzhinskogo 街 9 号 (231770)',
+  },
+  phones: [{ number: '+375 (1511) 46-1-55' }],
+  emails: [{ address: 'agromir@milk.by' }],
+},
+{
+  id: 'branch-dvorets',
+  group: 'branches',
+  title: {
+    ru: 'ОАО «Дворец-Агро» (сельхозпредприятие)',
+    be: 'ААТ «Дварэц-Агра» (сельгаспрадпрыемства)',
+    en: 'OJSC "Dvorets-Agro" Dairy Farm',
+    zh: 'Dvorets-Agro 自有牧场企业',
+  },
+  person: {
+    ru: 'Директор: Дожин Дмитрий Валентинович',
+    be: 'Дырэктар: Дожын Дзмітрый Валянцінавіч',
+    en: 'Director: Dmitry Dozhin',
+    zh: '总经理: Dmitry Dozhin',
+  },
+  address: {
+    ru: '231474, аг. Дворец, ул. Новая, 7А, Дятловский р-н',
+    be: '231474, аг. Дварэц, вул. Новая, 7А, Дзятлаўскі р-н',
+    en: '7A Novaya St, Dvorets 231474, Dyatlovo District',
+    zh: '佳特洛沃区 Dvorets 农庄 Novaya 街 7A 号 (231474)',
+  },
+  phones: [
+    { number: '+375 (1563) 34-1-18' },
+    { number: '+375 (1563) 34-0-99' },
+  ],
+  emails: [{ address: 'info@dvoretsagro.by' }],
+},
+{
+  id: 'branch-holding',
+  group: 'branches',
+  title: {
+    ru: 'Управляющая компания холдинга «Гродномясомолпром»',
+    be: 'Кіруючая кампанія холдынгу «Гроднамясамалпрам»',
+    en: 'Grodnomyasomolprom Holding Management Company',
+    zh: '格罗德诺肉乳工业控股集团管理公司',
+  },
+  phones: [
+    { number: '+375 (152) 62-10-02' },
+    { label: { ru: 'Факс', be: 'Факс', en: 'Fax', zh: '传真' }, number: '+375 (152) 39-33-99' },
+  ],
+  emails: [{ address: 'info@grodnommp.by' }],
+  website: 'https://grodnommp.by',
+},
+];
 
 export const Contacts: React.FC = () => {
   const { language, t } = useLanguage();
+
+  const [activeTab, setActiveTab] = useState<DirectoryTab>('sales');
+  const [directoryQuery, setDirectoryQuery] = useState('');
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [department, setDepartment] = useState('sales');
   const [message, setMessage] = useState('');
+  const [consent, setConsent] = useState(true);
   const [sent, setSent] = useState(false);
 
   const copy = {
     ru: {
-      seoDesc: 'Контакты ОАО «Молочный Мир»: приёмная, отдел оптовых продаж, отдел экспорта и пресс-служба.',
-      depts: [
-        { title: 'Отдел оптовых продаж (РБ / HoReCa)', phone: '+375 (152) 44-55-01', email: 'sales@milk.by' },
-        { title: 'Отдел внешнеэкономической деятельности (Экспорт)', phone: '+375 (152) 44-55-12', email: 'export@milk.by' },
-        { title: 'Приёмная и пресс-служба', phone: '+375 (152) 44-55-00', email: 'info@milk.by' },
+      seoDesc:
+      'Официальные контакты ОАО «Молочный Мир» (milk.by/kontakty): приёмная, руководство, отдел логистики и продаж, ВЭД/экспорт, заявки на воду 19 л и мороженое, филиалы и дилеры.',
+      h1: 'Контакты ОАО «Молочный Мир»',
+      lead: '230005, Республика Беларусь, г. Гродно, ул. Гаспадарчая, 28 · УНП 500040357',
+      schedule: 'Пн–Пт: 08:00 – 17:00 (обед: 13:00 – 14:00) · Сб–Вс: выходной',
+      topCards: [
+        {
+          title: 'Приёмная и канцелярия',
+          subtitle: 'Жарникова Олеся Александровна · Общие вопросы',
+          phones: ['+375 (152) 43-01-72', '+375 (152) 45-39-25', '+375 (152) 45-39-69'],
+          email: 'info@milk.by',
+        },
+        {
+          title: 'Отдел логистики и продаж (РБ)',
+          subtitle: 'Сидо Наталия Станиславовна · Заявки: olip@milk.by',
+          phones: ['+375 (152) 45-39-42', '+375 (152) 45-39-01'],
+          email: 'sales@milk.by',
+        },
+        {
+          title: 'Отдел внешнеэкономической деятельности',
+          subtitle: 'Мелешко Светлана Ивановна · Международный экспорт',
+          phones: ['+375 (152) 60-07-52', '+375 (152) 45-39-65', '+375 (152) 48-06-53'],
+          email: 'ved@milk.by',
+        },
       ],
-      hq: 'Адрес головного предприятия',
+      dirTitle: 'Справочник подразделений, филиалов и дилеров',
+      dirSubtitle: 'Актуальные контакты отделов, приёма заявок и производственных площадок.',
+      searchPlaceholder: 'Поиск по отделу, ФИО, телефону или городу (например, «вода», «экспорт», «Щучин»)…',
+      searchActiveHint: (n: number) => `Найдено по запросу во всех разделах: ${n}`,
+      tabs: {
+        sales: 'Продажи, заявки и дилеры',
+        management: 'Руководство',
+        departments: 'Отделы и службы',
+        branches: 'Филиалы, хозяйства и холдинг',
+      },
+      emptyDir: 'По вашему запросу контакты не найдены. Попробуйте изменить ключевое слово.',
+      resetSearch: 'Сбросить поиск',
+      hqTitle: 'Головное предприятие и приём граждан',
+      hqRequisites: 'ОАО «Молочный Мир» · УНП 500040357 · 230005, Республика Беларусь, г. Гродно, ул. Гаспадарчая, 28',
+      citizenHours: 'Приём граждан генеральным директором (Аникеева М.Е.): Среда, 17:00 – 20:00',
       sentTitle: 'Сообщение отправлено',
       sentDesc: 'Благодарим за обращение. Специалист свяжется с вами в рабочее время.',
       sendAnother: 'Отправить ещё одно сообщение',
@@ -8065,22 +10037,58 @@ export const Contacts: React.FC = () => {
         nameLabel: 'Имя / Организация *',
         deptLabel: 'Подразделение',
         deptOptions: {
-          sales: 'Отдел оптовых продаж',
-          export: 'Отдел экспорта (ВЭД)',
-          quality: 'Служба качества',
-          press: 'Пресс-служба',
+          sales: 'Отдел логистики и продаж (sales@milk.by)',
+          export: 'Отдел ВЭД / Экспорт (ved@milk.by)',
+          orders: 'Заявки на продукцию / воду 19 л (olip@milk.by)',
+          quality: 'Отдел качества и лаборатория (kis@milk.by)',
+          hr: 'Отдел кадров (kadry@milk.by)',
+          press: 'Приёмная / Сектор маркетинга (info@milk.by)',
         },
         msgLabel: 'Сообщение *',
+        consentLabel: 'Согласен(на) на обработку персональных данных для ответа на обращение',
         submit: 'Отправить сообщение',
     },
     be: {
-      seoDesc: 'Кантакты ААТ «Малочны Мір»: прыёмная, аддзел аптовых продажаў, аддзел экспарту і прэс-служба.',
-      depts: [
-        { title: 'Аддзел аптовых продажаў (РБ / HoReCa)', phone: '+375 (152) 44-55-01', email: 'sales@milk.by' },
-        { title: 'Аддзел знешнеэканамічнай дзейнасці (Экспарт)', phone: '+375 (152) 44-55-12', email: 'export@milk.by' },
-        { title: 'Прыёмная і прэс-служба', phone: '+375 (152) 44-55-00', email: 'info@milk.by' },
+      seoDesc:
+      'Афіцыйныя кантакты ААТ «Малочны Мір» (milk.by/kontakty): прыёмная, кіраўніцтва, аддзел лагістыкі і продажаў, ЗЭД/экспарт, заяўкі і філіялы.',
+      h1: 'Кантакты ААТ «Малочны Мір»',
+      lead: '230005, Рэспубліка Беларусь, г. Гродна, вул. Гаспадарчая, 28 · УНП 500040357',
+      schedule: 'Пн–Пт: 08:00 – 17:00 (абед: 13:00 – 14:00) · Сб–Нд: выхадны',
+      topCards: [
+        {
+          title: 'Прыёмная і канцылярыя',
+          subtitle: 'Жарнікава Алеся Аляксандраўна · Агульныя пытанні',
+          phones: ['+375 (152) 43-01-72', '+375 (152) 45-39-25', '+375 (152) 45-39-69'],
+          email: 'info@milk.by',
+        },
+        {
+          title: 'Аддзел лагістыкі і продажаў (РБ)',
+          subtitle: 'Сідо Наталля Станіславаўна · Заяўкі: olip@milk.by',
+          phones: ['+375 (152) 45-39-42', '+375 (152) 45-39-01'],
+          email: 'sales@milk.by',
+        },
+        {
+          title: 'Аддзел знешнеэканамічнай дзейнасці',
+          subtitle: 'Мялешка Святлана Іванаўна · Міжнародны экспарт',
+          phones: ['+375 (152) 60-07-52', '+375 (152) 45-39-65', '+375 (152) 48-06-53'],
+          email: 'ved@milk.by',
+        },
       ],
-      hq: 'Адрас галаўнога прадпрыемства',
+      dirTitle: 'Даведнік падраздзяленняў, філіялаў і дылераў',
+      dirSubtitle: 'Актуальныя кантакты аддзелаў, прыёму заявак і вытворчых пляцовак.',
+      searchPlaceholder: 'Пошук па аддзеле, прозвішчы, тэлефоне або горадзе…',
+      searchActiveHint: (n: number) => `Знойдзена па запыце ва ўсіх раздзелах: ${n}`,
+      tabs: {
+        sales: 'Продажы, заяўкі і дылеры',
+        management: 'Кіраўніцтва',
+        departments: 'Аддзелы і службы',
+        branches: 'Філіялы, гаспадаркі і холдынг',
+      },
+      emptyDir: 'Па вашым запыце кантакты не знойдзены.',
+      resetSearch: 'Скінуць пошук',
+      hqTitle: 'Галаўное прадпрыемства і прыём грамадзян',
+      hqRequisites: 'ААТ «Малочны Мір» · УНП 500040357 · 230005, Рэспубліка Беларусь, г. Гродна, вул. Гаспадарчая, 28',
+      citizenHours: 'Прыём грамадзян генеральным дырэктарам (Анікеева М.Я.): Серада, 17:00 – 20:00',
       sentTitle: 'Паведамленне адпраўлена',
       sentDesc: 'Дзякуй за зварот. Спецыяліст звяжацца з вамі ў працоўны час.',
       sendAnother: 'Адправіць яшчэ адно паведамленне',
@@ -8088,45 +10096,117 @@ export const Contacts: React.FC = () => {
         nameLabel: 'Імя / Арганізацыя *',
         deptLabel: 'Падраздзяленне',
         deptOptions: {
-          sales: 'Аддзел аптовых продажаў',
-          export: 'Аддзел экспарту (ЗЭД)',
-          quality: 'Служба якасці',
-          press: 'Прэс-служба',
+          sales: 'Аддзел лагістыкі і продажаў (sales@milk.by)',
+          export: 'Аддзел ЗЭД / Экспарт (ved@milk.by)',
+          orders: 'Заяўкі на прадукцыю / ваду 19 л (olip@milk.by)',
+          quality: 'Аддзел якасці і лабараторыя (kis@milk.by)',
+          hr: 'Аддзел кадраў (kadry@milk.by)',
+          press: 'Прыёмная / Маркетынг (info@milk.by)',
         },
         msgLabel: 'Паведамленне *',
+        consentLabel: 'Згодны(а) на апрацоўку персанальных даных для адказу на зварот',
         submit: 'Адправіць паведамленне',
     },
     en: {
-      seoDesc: 'Contacts of Molochny Mir JSC: reception, wholesale sales, international export department, and press office.',
-      depts: [
-        { title: 'Domestic Wholesale & HoReCa', phone: '+375 (152) 44-55-01', email: 'sales@milk.by' },
-        { title: 'International Export Department', phone: '+375 (152) 44-55-12', email: 'export@milk.by' },
-        { title: 'Corporate Office & Press', phone: '+375 (152) 44-55-00', email: 'info@milk.by' },
+      seoDesc:
+      'Official contacts of OJSC Molochny Mir (milk.by/kontakty): reception, executive leadership, domestic sales & logistics, export (ved@milk.by), branches, and official dealers.',
+      h1: 'Contacts — OJSC "Molochny Mir"',
+      lead: '28 Gaspadarchaya St, Grodno 230005, Republic of Belarus · UNP 500040357',
+      schedule: 'Mon–Fri: 08:00 – 17:00 (Break: 13:00 – 14:00) · Sat–Sun: Closed',
+      topCards: [
+        {
+          title: 'Reception & General Inquiries',
+          subtitle: 'Olesya Zharnikova · Corporate Front Desk',
+          phones: ['+375 (152) 43-01-72', '+375 (152) 45-39-25', '+375 (152) 45-39-69'],
+          email: 'info@milk.by',
+        },
+        {
+          title: 'Logistics & Domestic Sales',
+          subtitle: 'Natalia Sido · Orders: olip@milk.by',
+          phones: ['+375 (152) 45-39-42', '+375 (152) 45-39-01'],
+          email: 'sales@milk.by',
+        },
+        {
+          title: 'International Export (VED)',
+          subtitle: 'Svetlana Meleshko · Global Contracts',
+          phones: ['+375 (152) 60-07-52', '+375 (152) 45-39-65', '+375 (152) 48-06-53'],
+          email: 'ved@milk.by',
+        },
       ],
-      hq: 'Headquarters',
+      dirTitle: 'Directory of Departments, Plants & Official Dealers',
+      dirSubtitle: 'Direct lines for executive offices, order desks, regional branches, and labs.',
+      searchPlaceholder: 'Search by department, name, phone, or city (e.g. "export", "Shchuchin", "lab")…',
+      searchActiveHint: (n: number) => `Matches across all tabs: ${n}`,
+      tabs: {
+        sales: 'Sales, Orders & Dealers',
+        management: 'Executive Leadership',
+        departments: 'Departments & Labs',
+        branches: 'Branches, Farms & Holding',
+      },
+      emptyDir: 'No directory records match your search query.',
+      resetSearch: 'Reset search',
+      hqTitle: 'Headquarters & Reception Schedule',
+      hqRequisites: 'OJSC "Molochny Mir" · UNP 500040357 · 28 Gaspadarchaya St, Grodno 230005, Belarus',
+      citizenHours: 'Public reception with General Director M. Anikeeva: Wednesday, 17:00 – 20:00',
       sentTitle: 'Message Sent',
-      sentDesc: 'Thank you for reaching out. Our team will respond shortly.',
+      sentDesc: 'Thank you for reaching out. Our team will respond during business hours.',
       sendAnother: 'Send another message',
       formTitle: 'Direct Inquiry Form',
         nameLabel: 'Name / Company *',
         deptLabel: 'Department',
         deptOptions: {
-          sales: 'Wholesale Sales',
-          export: 'International Export',
-          quality: 'Quality Control',
-          press: 'Press & Media',
+          sales: 'Logistics & Wholesale Sales (sales@milk.by)',
+          export: 'International Export Dept (ved@milk.by)',
+          orders: 'Order Desk / 19L Water (olip@milk.by)',
+          quality: 'Quality Control & Lab (kis@milk.by)',
+          hr: 'Human Resources (kadry@milk.by)',
+          press: 'Reception & Marketing (info@milk.by)',
         },
         msgLabel: 'Message *',
+        consentLabel: 'I consent to the processing of my personal data to reply to this inquiry',
         submit: 'Send Message',
     },
     zh: {
-      seoDesc: '联系 Molochny Mir 股份公司：总机、大宗批发部、国际出口外贸部及新闻媒体部门。',
-      depts: [
-        { title: '国内批发与餐饮销售部 (HoReCa)', phone: '+375 (152) 44-55-01', email: 'sales@milk.by' },
-        { title: '国际外贸出口部门', phone: '+375 (152) 44-55-12', email: 'export@milk.by' },
-        { title: '总部办公室与媒体公关', phone: '+375 (152) 44-55-00', email: 'info@milk.by' },
+      seoDesc:
+      '白俄罗斯 Molochny Mir 乳业股份公司官方联系方式：总部前台、高管团队、国内销售部、国际出口外贸部 (ved@milk.by)、分公司及官方经销商。',
+      h1: '联系 Molochny Mir 股份公司',
+      lead: '白俄罗斯格罗德诺市 Gaspadarchaya 街 28 号 (230005) · 税号 UNP 500040357',
+      schedule: '周一至周五: 08:00 – 17:00（午休: 13:00 – 14:00）· 周末休息',
+      topCards: [
+        {
+          title: '总部前台与综合事务',
+          subtitle: 'Olesya Zharnikova · 综合咨询',
+          phones: ['+375 (152) 43-01-72', '+375 (152) 45-39-25', '+375 (152) 45-39-69'],
+          email: 'info@milk.by',
+        },
+        {
+          title: '物流与国内销售部',
+          subtitle: 'Natalia Sido · 订单邮箱: olip@milk.by',
+          phones: ['+375 (152) 45-39-42', '+375 (152) 45-39-01'],
+          email: 'sales@milk.by',
+        },
+        {
+          title: '国际外贸出口部门 (VED)',
+          subtitle: 'Svetlana Meleshko · 国际业务专线',
+          phones: ['+375 (152) 60-07-52', '+375 (152) 45-39-65', '+375 (152) 48-06-53'],
+          email: 'ved@milk.by',
+        },
       ],
-      hq: '企业总部地址',
+      dirTitle: '各部门、分公司与官方经销商通讯录',
+      dirSubtitle: '直通管理层、订单中心、检测实验室、分厂及合作牧场。',
+      searchPlaceholder: '搜索部门名称、负责人、电话或城市（如“出口”、“休钦”、“实验室”）…',
+      searchActiveHint: (n: number) => `跨分类匹配结果数: ${n}`,
+      tabs: {
+        sales: '销售、订单与经销商',
+        management: '公司管理层',
+        departments: '职能部门与实验室',
+        branches: '分公司、牧场与控股集团',
+      },
+      emptyDir: '未找到匹配的联系信息，请尝试其他关键词。',
+      resetSearch: '重置搜索',
+      hqTitle: '总部地址与接待时间',
+      hqRequisites: 'Molochny Mir 股份公司 · UNP 500040357 · 白俄罗斯格罗德诺市 Gaspadarchaya 街 28 号',
+      citizenHours: '总经理 Marina Anikeeva 公众接待日: 每周三 17:00 – 20:00',
       sentTitle: '信息已发送',
       sentDesc: '感谢您的留言，我们的工作人员将在工作时间内尽快与您联系。',
       sendAnother: '再发送一条消息',
@@ -8134,61 +10214,298 @@ export const Contacts: React.FC = () => {
         nameLabel: '姓名 / 公司名称 *',
         deptLabel: '联系部门',
         deptOptions: {
-          sales: '大宗批发销售部',
-          export: '国际出口贸易部',
-          quality: '质量控制中心',
-          press: '新闻与媒体部',
+          sales: '大宗批发与物流销售部 (sales@milk.by)',
+          export: '国际外贸出口部 (ved@milk.by)',
+          orders: '产品与 19L 桶装水订单中心 (olip@milk.by)',
+          quality: '质量控制与中心实验室 (kis@milk.by)',
+          hr: '人力资源部 (kadry@milk.by)',
+          press: '总部前台与市场部 (info@milk.by)',
         },
         msgLabel: '留言内容 *',
+        consentLabel: '同意处理个人联系信息以便回复本次咨询',
         submit: '提交信息',
     },
   }[language];
 
+  const tabMeta: { id: DirectoryTab; icon: React.FC<{ className?: string }> }[] = [
+    { id: 'sales', icon: Truck },
+    { id: 'management', icon: Users },
+    { id: 'departments', icon: Briefcase },
+    { id: 'branches', icon: Building2 },
+  ];
+
+  const displayedEntries = useMemo(() => {
+    const q = directoryQuery.trim().toLowerCase();
+    if (!q) {
+      return DIRECTORY_ENTRIES.filter((item) => item.group === activeTab);
+    }
+
+    return DIRECTORY_ENTRIES.filter((item) => {
+      const searchable = [
+        item.title.ru,
+        item.title.be,
+        item.title.en,
+        item.title.zh,
+        item.person?.ru,
+        item.person?.be,
+        item.person?.en,
+        item.address?.ru,
+        item.address?.en,
+        item.note?.ru,
+        ...item.phones.map((p) => `${p.label?.[language] || ''} ${p.number}`),
+                                    ...(item.emails?.map((e) => e.address) || []),
+                                    item.website,
+      ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+      return searchable.includes(q);
+    });
+  }, [activeTab, directoryQuery, language]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.includes('@') || !message.trim()) return;
+    if (!name.trim() || !email.includes('@') || !message.trim() || !consent) return;
     setSent(true);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
     <SeoHead
-    title={`${t('ctaContact')} — ${t('brandName')}`}
+    title={`${t('navContacts')} — ${t('brandName')} (milk.by)`}
     description={copy.seoDesc}
     canonicalHash="/contacts"
     />
 
-    <div className="space-y-3">
-    <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">
-    {t('ctaContact')}
-    </h1>
-    <p className="text-sm sm:text-base text-slate-600 max-w-2xl">{t('footerLegal')}</p>
+    {/* 1. Header & Working Hours */}
+    <div className="space-y-3 border-b border-slate-200 pb-6">
+    <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900">{copy.h1}</h1>
+    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
+    <span className="inline-flex items-center gap-2">
+    <MapPin className="w-4 h-4 text-[#0057B8] shrink-0" />
+    <span>{copy.lead}</span>
+    </span>
+    <span className="inline-flex items-center gap-2 tabular-nums">
+    <Clock className="w-4 h-4 text-[#0057B8] shrink-0" />
+    <span>{copy.schedule}</span>
+    </span>
+    </div>
     </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-    <div className="lg:col-span-5 space-y-4">
-    {copy.depts.map((dept) => (
-      <div key={dept.email} className="border border-slate-200 rounded-xl p-5 space-y-2 bg-slate-50/60">
-      <h2 className="font-display text-base font-semibold text-slate-900">{dept.title}</h2>
-      <div className="text-sm text-slate-600 space-y-1 font-mono tabular-nums">
-      <div className="flex items-center gap-2">
-      <Phone className="w-3.5 h-3.5 text-[#0057B8]" />
-      <span>{dept.phone}</span>
+    {/* 2. Top 3 Primary Channels */}
+    <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+    {copy.topCards.map((card, idx) => (
+      <div
+      key={card.email}
+      className="border border-slate-200 rounded-2xl p-6 bg-slate-50/70 flex flex-col justify-between space-y-4"
+      >
+      <div className="space-y-1.5">
+      <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#0057B8]">
+      {idx === 2 ? <Globe2 className="w-4 h-4" /> : <Phone className="w-4 h-4" />}
+      <span>milk.by</span>
       </div>
-      <div className="flex items-center gap-2">
-      <Mail className="w-3.5 h-3.5 text-[#0057B8]" />
-      <span>{dept.email}</span>
+      <h2 className="font-display text-lg font-bold text-slate-900">{card.title}</h2>
+      <p className="text-xs text-slate-500">{card.subtitle}</p>
+      </div>
+
+      <div className="space-y-1.5 font-mono text-sm tabular-nums text-slate-700 pt-2 border-t border-slate-200/80">
+      {card.phones.map((phone) => (
+        <div key={phone} className="flex items-center gap-2">
+        <Phone className="w-3.5 h-3.5 text-[#0057B8] shrink-0" />
+        <a
+        href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+        className="hover:text-[#0057B8] transition-colors"
+        >
+        {phone}
+        </a>
+        </div>
+      ))}
+      <div className="flex items-center gap-2 pt-0.5">
+      <Mail className="w-3.5 h-3.5 text-[#0057B8] shrink-0" />
+      <a
+      href={`mailto:${card.email}`}
+      className="text-[#0057B8] font-semibold hover:underline"
+      >
+      {card.email}
+      </a>
       </div>
       </div>
       </div>
     ))}
+    </section>
 
-    <div className="border border-slate-200 rounded-xl p-5 space-y-1.5 text-sm text-slate-600">
-    <div className="flex items-center gap-2 font-semibold text-slate-900">
-    <MapPin className="w-4 h-4 text-[#0057B8]" />
-    <span>{copy.hq}</span>
+    {/* 3. Complete Interactive Contact Directory (milk.by/kontakty) */}
+    <section className="space-y-6">
+    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+    <div className="space-y-1">
+    <h2 className="font-display text-2xl font-bold text-slate-900">{copy.dirTitle}</h2>
+    <p className="text-sm text-slate-600">{copy.dirSubtitle}</p>
     </div>
-    <p>{t('footerLegal')}</p>
+
+    <div className="relative w-full lg:w-96">
+    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+    <input
+    type="text"
+    value={directoryQuery}
+    onChange={(e) => setDirectoryQuery(e.target.value)}
+    placeholder={copy.searchPlaceholder}
+    className="w-full h-10 pl-10 pr-9 text-base sm:text-sm bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0057B8] focus:ring-2 focus:ring-[#0057B8]/15"
+    />
+    {directoryQuery && (
+      <button
+      type="button"
+      onClick={() => setDirectoryQuery('')}
+      aria-label="Clear search"
+      className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+      >
+      <X className="w-4 h-4" />
+      </button>
+    )}
+    </div>
+    </div>
+
+    {/* Category Tabs */}
+    <div className="flex overflow-x-auto no-scrollbar gap-2 pb-1">
+    {tabMeta.map(({ id, icon: Icon }) => {
+      const active = activeTab === id && !directoryQuery.trim();
+      return (
+        <button
+        key={id}
+        type="button"
+        onClick={() => {
+          setDirectoryQuery('');
+          setActiveTab(id);
+        }}
+        className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 transition-colors ${
+          active
+          ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
+          : 'bg-white text-slate-700 border-slate-200 hover:border-[#0057B8]/40 hover:text-[#0057B8]'
+        }`}
+        >
+        <Icon className="w-4 h-4 shrink-0" />
+        <span>{copy.tabs[id]}</span>
+        </button>
+      );
+    })}
+    </div>
+
+    {directoryQuery.trim() && (
+      <div className="text-xs font-medium text-[#0057B8] bg-blue-50/70 border border-blue-200/70 rounded-xl px-4 py-2 tabular-nums">
+      {copy.searchActiveHint(displayedEntries.length)}
+      </div>
+    )}
+
+    {displayedEntries.length === 0 ? (
+      <div className="border border-slate-200 rounded-2xl bg-slate-50/70 p-8 text-center space-y-3">
+      <p className="text-sm text-slate-600">{copy.emptyDir}</p>
+      <button
+      type="button"
+      onClick={() => setDirectoryQuery('')}
+      className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+      >
+      {copy.resetSearch}
+      </button>
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {displayedEntries.map((entry) => (
+        <article
+        key={entry.id}
+        className="border border-slate-200 rounded-2xl p-5 bg-white flex flex-col justify-between gap-3.5 hover:border-[#0057B8]/40 transition-colors"
+        >
+        <div className="space-y-1.5">
+        <h3 className="font-display text-sm sm:text-base font-bold text-slate-900 leading-snug">
+        {entry.title[language]}
+        </h3>
+        {entry.person && (
+          <p className="text-xs font-medium text-slate-700">{entry.person[language]}</p>
+        )}
+        {entry.address && (
+          <p className="text-xs text-slate-500 flex items-start gap-1.5 pt-0.5">
+          <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-slate-400" />
+          <span>{entry.address[language]}</span>
+          </p>
+        )}
+        {entry.note && (
+          <p className="text-xs text-[#0057B8] font-medium pt-0.5">
+          {entry.note[language]}
+          </p>
+        )}
+        </div>
+
+        <div className="pt-3 border-t border-slate-100 space-y-1.5 text-xs font-mono tabular-nums text-slate-700">
+        {entry.phones.map((phone, i) => (
+          <div key={`${entry.id}-ph-${i}`} className="flex items-center gap-2">
+          <Phone className="w-3.5 h-3.5 text-[#0057B8] shrink-0" />
+          {phone.label && (
+            <span className="font-sans text-[11px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+            {phone.label[language]}
+            </span>
+          )}
+          <a
+          href={`tel:${phone.number.replace(/[^+\d]/g, '')}`}
+          className="hover:text-[#0057B8] transition-colors"
+          >
+          {phone.number}
+          </a>
+          </div>
+        ))}
+
+        {entry.emails?.map((em) => (
+          <div key={em.address} className="flex items-center gap-2">
+          <Mail className="w-3.5 h-3.5 text-[#0057B8] shrink-0" />
+          {em.label && (
+            <span className="font-sans text-[11px] text-slate-500">{em.label}:</span>
+          )}
+          <a
+          href={`mailto:${em.address}`}
+          className="text-[#0057B8] hover:underline truncate"
+          >
+          {em.address}
+          </a>
+          </div>
+        ))}
+
+        {entry.website && (
+          <div className="flex items-center gap-2 pt-0.5">
+          <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <a
+          href={entry.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-slate-600 hover:text-[#0057B8] hover:underline truncate"
+          >
+          {entry.website.replace(/^https?:\/\//, '')}
+          </a>
+          </div>
+        )}
+        </div>
+        </article>
+      ))}
+      </div>
+    )}
+    </section>
+
+    {/* 4. HQ Requisites + Direct Feedback Form */}
+    <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-2">
+    <div className="lg:col-span-5 space-y-4">
+    <div className="border border-slate-200 rounded-2xl p-6 bg-slate-50/70 space-y-3">
+    <div className="flex items-center gap-2 font-display text-base font-bold text-slate-900">
+    <MapPin className="w-4 h-4 text-[#0057B8] shrink-0" />
+    <span>{copy.hqTitle}</span>
+    </div>
+    <p className="text-sm text-slate-700 leading-relaxed">{copy.hqRequisites}</p>
+    <div className="pt-2 border-t border-slate-200 text-xs text-slate-600 space-y-1.5">
+    <div className="flex items-start gap-2">
+    <Clock className="w-3.5 h-3.5 text-[#0057B8] shrink-0 mt-0.5" />
+    <span>{copy.schedule}</span>
+    </div>
+    <div className="flex items-start gap-2">
+    <Users className="w-3.5 h-3.5 text-[#0057B8] shrink-0 mt-0.5" />
+    <span>{copy.citizenHours}</span>
+    </div>
+    </div>
     </div>
     </div>
 
@@ -8196,7 +10513,9 @@ export const Contacts: React.FC = () => {
     {sent ? (
       <div className="py-10 text-center space-y-3">
       <CheckCircle2 className="w-10 h-10 text-[#0057B8] mx-auto" />
-      <h2 className="font-display text-xl font-semibold text-slate-900">{copy.sentTitle}</h2>
+      <h2 className="font-display text-xl font-semibold text-slate-900">
+      {copy.sentTitle}
+      </h2>
       <p className="text-sm text-slate-600">{copy.sentDesc}</p>
       <button
       type="button"
@@ -8211,7 +10530,9 @@ export const Contacts: React.FC = () => {
       </div>
     ) : (
       <form onSubmit={handleSubmit} className="space-y-4">
-      <h2 className="font-display text-xl font-semibold text-slate-900">{copy.formTitle}</h2>
+      <h2 className="font-display text-xl font-semibold text-slate-900">
+      {copy.formTitle}
+      </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
@@ -8249,7 +10570,9 @@ export const Contacts: React.FC = () => {
       >
       <option value="sales">{copy.deptOptions.sales}</option>
       <option value="export">{copy.deptOptions.export}</option>
+      <option value="orders">{copy.deptOptions.orders}</option>
       <option value="quality">{copy.deptOptions.quality}</option>
+      <option value="hr">{copy.deptOptions.hr}</option>
       <option value="press">{copy.deptOptions.press}</option>
       </select>
       </div>
@@ -8267,6 +10590,17 @@ export const Contacts: React.FC = () => {
       />
       </div>
 
+      <label className="flex items-start gap-2.5 text-xs text-slate-600 cursor-pointer select-none">
+      <input
+      type="checkbox"
+      required
+      checked={consent}
+      onChange={(e) => setConsent(e.target.checked)}
+      className="mt-0.5 w-4 h-4 rounded border-slate-300 text-[#0057B8] focus:ring-[#0057B8]"
+      />
+      <span>{copy.consentLabel}</span>
+      </label>
+
       <button
       type="submit"
       className="w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors"
@@ -8276,7 +10610,7 @@ export const Contacts: React.FC = () => {
       </form>
     )}
     </div>
-    </div>
+    </section>
     </div>
   );
 };
@@ -8875,7 +11209,7 @@ export const Export: React.FC = () => {
 ```
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
 import { ASSETS } from '../data/assets';
@@ -8885,10 +11219,14 @@ import { ImageWithFallback } from '../components/ImageWithFallback';
 import { ProductGrid } from '../components/ProductGrid';
 import { SmartFinder } from '../components/SmartFinder';
 import { B2BInquiryModal } from '../components/B2BInquiryModal';
+import { CategoryIcon } from '../components/CategoryIcon';
 import { HomeHeroSection } from '../components/home/HomeHeroSection';
 import { HomeAboutSection } from '../components/home/HomeAboutSection';
 import { HomeTeamSlider } from '../components/home/HomeTeamSlider';
 import { HomeLocationsSection } from '../components/home/HomeLocationsSection';
+import { Product } from '../types';
+
+const FLAGSHIP_ORDER = ['mozzarella-pizza', 'goroden-aged', 'milk-lactose-free', 'butter-825'];
 
 export const Home: React.FC = () => {
   const { t, language, localize } = useLanguage();
@@ -8899,16 +11237,23 @@ export const Home: React.FC = () => {
     'wholesale'
   );
 
-  const visibleProducts = useMemo(
-    () => products.filter((p) => p.visible),
-                                  [products]
-  );
+  const visibleProducts = useMemo(() => products.filter((p) => p.visible), [products]);
 
   const displayedProducts = useMemo(() => {
     if (activeCategoryId === 'all') {
-      return visibleProducts.filter((p) => p.featured).slice(0, 6);
+      const featuredList = visibleProducts.filter((p) => p.featured);
+      const customFeatured = featuredList.filter(
+        (p) => !FLAGSHIP_ORDER.includes(p.id) && p.id.startsWith('custom-')
+      );
+      const prioritized = FLAGSHIP_ORDER.map((id) => featuredList.find((p) => p.id === id)).filter(
+        (p): p is Product => Boolean(p)
+      );
+      const restFeatured = featuredList.filter(
+        (p) => !FLAGSHIP_ORDER.includes(p.id) && !p.id.startsWith('custom-')
+      );
+      return [...customFeatured, ...prioritized, ...restFeatured].slice(0, 4);
     }
-    return visibleProducts.filter((p) => p.category === activeCategoryId).slice(0, 6);
+    return visibleProducts.filter((p) => p.category === activeCategoryId).slice(0, 4);
   }, [visibleProducts, activeCategoryId]);
 
   const activeCategory = categories.find((c) => c.id === activeCategoryId);
@@ -8926,14 +11271,36 @@ export const Home: React.FC = () => {
 
   const seoDesc = t('heroSubtitle');
 
-  const allTabLabel =
-  language === 'ru'
-  ? 'Хиты ассортимента'
-  : language === 'be'
-  ? 'Хіты асартыменту'
-  : language === 'zh'
-  ? '精选热销'
-  : 'Top Highlights';
+  const promoCopy = {
+    ru: {
+      badge: 'ХИТЫ ПРОДАЖ · СОРТ «ЭКСТРА»',
+      extra: 'ЛИНЕЙКА «ГОРОДЕНЪ» И ACTIVE LIFE',
+      lead: 'От тягучей моцареллы HoReCa и выдержанных сыров до безлактозного молока и масла 82,5% — натуральный вкус, подтверждённый наградами.',
+      lineCta: 'Линейка «ГороденЪ»',
+      allTab: 'Хиты ассортимента',
+    },
+    be: {
+      badge: 'ХІТЫ ПРОДАЖАЎ · ГАТУНАК «ЭКСТРА»',
+      extra: 'ЛІНЕЙКА «ГОРАДЗЕНЪ» І ACTIVE LIFE',
+      lead: 'Ад цягучай мацарэлы HoReCa і вытрыманых сыроў да безлактознага малака і масла 82,5% — натуральны смак, пацверджаны ўзнагародамі.',
+      lineCta: 'Лінейка «ГорадзенЪ»',
+      allTab: 'Хіты асартыменту',
+    },
+    en: {
+      badge: 'BESTSELLERS · EXTRA-GRADE MILK',
+      extra: 'GORODEN & ACTIVE LIFE RANGES',
+      lead: 'From stretchy HoReCa mozzarella and aged reserve cheeses to lactose-free milk and 82.5% sweet cream butter — award-winning daily quality.',
+      lineCta: 'Goroden Series',
+      allTab: 'Top Highlights',
+    },
+    zh: {
+      badge: '热销口碑 · 特级生牛乳',
+      extra: 'GORODEN 与 ACTIVE LIFE 旗舰系列',
+      lead: '从餐饮拉丝披萨马苏里拉奶酪、陈年干酪到零乳糖牛奶与82.5%纯脂黄油——屡获殊荣的白俄罗斯纯正乳品风味。',
+      lineCta: 'Goroden 臻选',
+      allTab: '精选热销',
+    },
+  }[language];
 
   const openCategoryText = activeCategory
   ? `${t('allProductsLink')}: ${localize(activeCategory.name)}`
@@ -8945,39 +11312,62 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div className="space-y-12 sm:space-y-24">
+    <div className="space-y-12 sm:space-y-20">
     <SeoHead title={seoTitle} description={seoDesc} canonicalHash="/" />
 
     {/* 1. Full-bleed Hero + Live Smart Search */}
     <HomeHeroSection />
 
-    {/* 2. Immediate Product Showcase + Interactive Category Filter Tabs + Smart Finder */}
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-8">
-    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-slate-200 pb-4">
-    <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+    {/* 2. Compact Promotional Product Showcase + Category Filter Tabs + Smart Finder */}
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-5">
+    <div className="rounded-2xl bg-gradient-to-r from-[#0057B8] via-[#0a65c2] to-[#0284c7] text-white p-4 sm:px-6 sm:py-4.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 shadow-sm">
+    <div className="space-y-1 min-w-0">
+    <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-blue-100">
+    <span className="inline-flex items-center gap-1">
+    <Sparkles className="w-3 h-3 shrink-0" />
+    {promoCopy.badge}
+    </span>
+    <span aria-hidden="true">·</span>
+    <span>{promoCopy.extra}</span>
+    </div>
+    <h2 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
     {t('featuredHeading')}
     </h2>
-    <Link
-    to={activeCategory ? `/catalog/${activeCategory.slug}` : '/catalog'}
-    className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#0057B8] hover:text-[#004494] transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
-    >
-    <span>{openCategoryText}</span>
-    <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-    </Link>
+    <p className="text-xs sm:text-sm text-blue-50/95 max-w-2xl leading-snug">
+    {promoCopy.lead}
+    </p>
     </div>
 
-    {/* Single-row scrollable category pills on mobile, wrapping grid on sm+ */}
+    <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+    <Link
+    to="/catalog/cheese"
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-xs font-semibold text-white transition-colors whitespace-nowrap"
+    >
+    <span>{promoCopy.lineCta}</span>
+    </Link>
+    <Link
+    to={activeCategory ? `/catalog/${activeCategory.slug}` : '/catalog'}
+    className="group inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-[#0057B8] hover:bg-blue-50 text-xs font-bold transition-colors whitespace-nowrap shadow-xs"
+    >
+    <span>{openCategoryText}</span>
+    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+    </Link>
+    </div>
+    </div>
+
+    {/* Category pills with compact milk.by-inspired icons */}
     <div className="flex flex-nowrap sm:flex-wrap gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 scroll-px-4 sm:mx-0 sm:px-0 sm:scroll-px-0 pb-1 sm:pb-0">
     <button
     type="button"
     onClick={() => setActiveCategoryId('all')}
-    className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
+    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
       activeCategoryId === 'all'
       ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
       : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
     }`}
     >
-    {allTabLabel}
+    <CategoryIcon categoryId="all" className="w-4 h-4 shrink-0" />
+    <span>{promoCopy.allTab}</span>
     </button>
     {categories.map((cat) => {
       const active = activeCategoryId === cat.id;
@@ -8986,13 +11376,14 @@ export const Home: React.FC = () => {
         key={cat.id}
         type="button"
         onClick={() => setActiveCategoryId(cat.id)}
-        className={`px-3.5 py-2 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
+        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-all duration-200 whitespace-nowrap shrink-0 ${
           active
           ? 'bg-[#0057B8] text-white border-[#0057B8] shadow-xs'
           : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-[#0057B8]/50 hover:text-[#0057B8]'
         }`}
         >
-        {localize(cat.name)}
+        <CategoryIcon categoryId={cat.id} className="w-4 h-4 shrink-0" />
+        <span>{localize(cat.name)}</span>
         </button>
       );
     })}
@@ -9001,6 +11392,8 @@ export const Home: React.FC = () => {
     <ProductGrid
     products={displayedProducts}
     mobileCarousel
+    variant="promo"
+    desktopCols={4}
     scrollResetKey={activeCategoryId}
     />
 
@@ -11926,8 +14319,8 @@ export function downloadProductB2BSpec(
     ),
     '',
     'EXPORT & WHOLESALE CONTACT:',
-    '  Export Dept: export@milk.by | +375 (152) 44-55-12',
-    '  Domestic Sales: sales@milk.by | +375 (152) 44-55-01',
+    '  Export Dept: ved@milk.by | +375 (152) 60-07-52',
+    '  Domestic Sales: sales@milk.by | +375 (152) 45-39-42',
     `  Generated: ${new Date().toISOString().slice(0, 10)}`,
   ];
 

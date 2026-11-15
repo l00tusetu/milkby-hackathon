@@ -6,6 +6,7 @@
 import React, { useEffect, useRef } from 'react';
 import { HashRouter, Routes, Route, Link, useLocation, useParams } from 'react-router-dom';
 import { LanguageProvider, useLanguage } from './hooks/useLanguage';
+import { AuthProvider } from './hooks/useAuth';
 import { CatalogStoreProvider } from './hooks/useCatalogStore';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -125,6 +126,7 @@ const LanguageScopedRoutes: React.FC = () => {
 export default function App() {
   return (
     <LanguageProvider>
+    <AuthProvider>
     <CatalogStoreProvider>
     <HashRouter>
     <ScrollToTop />
@@ -152,6 +154,7 @@ export default function App() {
     </div>
     </HashRouter>
     </CatalogStoreProvider>
+    </AuthProvider>
     </LanguageProvider>
   );
 }

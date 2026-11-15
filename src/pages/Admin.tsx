@@ -1,10 +1,25 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Eye, EyeOff, Trash2, RotateCcw, Edit3, Check, Upload, Download } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import {
+  Plus,
+  Eye,
+  EyeOff,
+  Trash2,
+  RotateCcw,
+  Edit3,
+  Check,
+  Upload,
+  Download,
+  Globe2,
+  LogOut,
+} from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
+import { useAuth } from '../hooks/useAuth';
 import { ASSETS } from '../data/assets';
 import { Category, Language, NewsArticle, PackageVariant, Product, RedirectRule } from '../types';
 import { SeoHead } from '../components/SeoHead';
+import { StaffAuthGate } from '../components/StaffAuth';
 
 const LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
 
@@ -19,8 +34,9 @@ const parseWeightGrams = (label: string): number => {
 
 const emptyLocalized = (ruValue = '') => ({ ru: ruValue, be: '', en: '', zh: '' });
 
-export const Admin: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const { language, localize, t, translations, updateTranslation, resetTranslations } = useLanguage();
+  const { user, logout } = useAuth();
   const {
     products,
     categories,
@@ -98,8 +114,11 @@ export const Admin: React.FC = () => {
 
   const copy = {
     ru: {
-      subtitle: 'Управление каталогом, фасовками, категориями, 301-редиректами, SEO-тегами, новостями и 4 языковыми версиями.',
+      subtitle:
+      'Управление каталогом, фасовками, категориями, 301-редиректами, SEO-тегами, новостями и 4 языковыми версиями.',
+      seoSitemap: 'SEO и карта сайта',
       reset: 'Сбросить демо-данные',
+      logout: 'Выйти',
       tabProducts: `Продукция (${products.length})`,
       tabCategories: `Категории (${categories.length})`,
       tabNews: `Новости (${news.length})`,
@@ -125,8 +144,11 @@ export const Admin: React.FC = () => {
       cancelBtn: 'Отмена',
     },
     be: {
-      subtitle: 'Кіраванне каталогам, фасоўкамі, катэгорыямі, 301-рэдырэктамі, SEO-тэгамі, навінамі і 4 моўнымі версіямі.',
+      subtitle:
+      'Кіраванне каталогам, фасоўкамі, катэгорыямі, 301-рэдырэктамі, SEO-тэгамі, навінамі і 4 моўнымі версіямі.',
+      seoSitemap: 'SEO і карта сайта',
       reset: 'Скінуць дэма-даныя',
+      logout: 'Выйсці',
       tabProducts: `Прадукцыя (${products.length})`,
       tabCategories: `Катэгорыі (${categories.length})`,
       tabNews: `Навіны (${news.length})`,
@@ -152,8 +174,11 @@ export const Admin: React.FC = () => {
       cancelBtn: 'Адмена',
     },
     en: {
-      subtitle: 'No-code management for products, packaging variants, category schemas, 301 redirects, SEO, news, and 4-language translations.',
+      subtitle:
+      'No-code management for products, packaging variants, category schemas, 301 redirects, SEO, news, and 4-language translations.',
+      seoSitemap: 'SEO & Sitemap',
       reset: 'Reset Demo Data',
+      logout: 'Log out',
       tabProducts: `Products (${products.length})`,
       tabCategories: `Categories (${categories.length})`,
       tabNews: `News (${news.length})`,
@@ -180,7 +205,9 @@ export const Admin: React.FC = () => {
     },
     zh: {
       subtitle: '免代码管理产品目录、包装规格、分类属性模板、301重定向、SEO标签、新闻资讯及四语翻译。',
+      seoSitemap: 'SEO 与站点地图',
       reset: '重置演示数据',
+      logout: '退出登录',
       tabProducts: `产品目录 (${products.length})`,
       tabCategories: `产品分类 (${categories.length})`,
       tabNews: `新闻动态 (${news.length})`,
@@ -344,7 +371,12 @@ export const Admin: React.FC = () => {
       weight: pkgWeight.trim(),
       weightGrams: parseWeightGrams(pkgWeight),
       shelfLife: { ru: pkgShelf.trim(), be: '', en: '', zh: '' },
-      storage: { ru: pkgStorage.trim(), be: pkgStorage.trim(), en: pkgStorage.trim(), zh: pkgStorage.trim() },
+      storage: {
+        ru: pkgStorage.trim(),
+        be: pkgStorage.trim(),
+        en: pkgStorage.trim(),
+        zh: pkgStorage.trim(),
+      },
       packagingType: { ru: pkgType.trim(), be: '', en: '', zh: '' },
       unitsPerBox: Number(pkgBox) || 1,
       gtin: pkgGtin.trim() || '4810268000000',
@@ -372,7 +404,10 @@ export const Admin: React.FC = () => {
           }
         } else {
           // Simple CSV import: id;category;name_ru;name_en;fat;protein;weight;shelfLife
-          const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+          const lines = text
+          .split(/\r?\n/)
+          .map((l) => l.trim())
+          .filter(Boolean);
           const dataLines = lines.slice(lines[0]?.toLowerCase().includes('name') ? 1 : 0);
           const imported: Product[] = [];
           for (const line of dataLines) {
@@ -401,7 +436,12 @@ export const Admin: React.FC = () => {
                               weight: w,
                               weightGrams: parseWeightGrams(w),
                           shelfLife: emptyLocalized(shelf || '30 суток'),
-                          storage: { ru: '+2…+6 °C', be: '+2…+6 °C', en: '+2…+6 °C', zh: '+2…+6 °C' },
+                          storage: {
+                            ru: '+2…+6 °C',
+                            be: '+2…+6 °C',
+                            en: '+2…+6 °C',
+                            zh: '+2…+6 °C',
+                          },
                           packagingType: emptyLocalized('Стандартная упаковка'),
                           unitsPerBox: 12,
                           gtin: '4810268000001',
@@ -433,7 +473,9 @@ export const Admin: React.FC = () => {
   };
 
   const handleExportJson = () => {
-    const blob = new Blob([JSON.stringify(products, null, 2)], { type: 'application/json;charset=utf-8' });
+    const blob = new Blob([JSON.stringify(products, null, 2)], {
+      type: 'application/json;charset=utf-8',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -456,14 +498,24 @@ export const Admin: React.FC = () => {
       year: new Date().getFullYear(),
             categoryId: newsCat,
             title: { ru: newsTitleRu.trim(), be: '', en: newsTitleEn.trim(), zh: '' },
-            excerpt: { ru: newsExcerptRu.trim() || 'Оперативное сообщение пресс-службы ОАО «Молочный Мир».', be: '', en: '', zh: '' },
+            excerpt: {
+              ru: newsExcerptRu.trim() || 'Оперативное сообщение пресс-службы ОАО «Молочный Мир».',
+            be: '',
+            en: '',
+            zh: '',
+            },
             content: { ru: newsExcerptRu.trim() || newsTitleRu.trim(), be: '', en: '', zh: '' },
             image: ASSETS.newsDairyFacility,
             published: true,
             relatedIds: [],
             seo: {
-              title: { ru: `${newsTitleRu.trim()} — Новости Молочный Мир`, be: '', en: newsTitleEn.trim() ? `${newsTitleEn.trim()} — News` : '', zh: '' },
-            description: { ru: newsExcerptRu.trim() || newsTitleRu.trim(), be: '', en: '', zh: '' },
+              title: {
+                ru: `${newsTitleRu.trim()} — Новости Молочный Мир`,
+            be: '',
+            en: newsTitleEn.trim() ? `${newsTitleEn.trim()} — News` : '',
+            zh: '',
+              },
+              description: { ru: newsExcerptRu.trim() || newsTitleRu.trim(), be: '', en: '', zh: '' },
             },
     });
     setNewsTitleRu('');
@@ -475,7 +527,9 @@ export const Admin: React.FC = () => {
   const handleCreateCategory = (e: React.FormEvent) => {
     e.preventDefault();
     if (!catNameRu.trim()) return;
-    const slug = (catSlug.trim() || `cat-${Date.now().toString(36)}`).toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    const slug = (catSlug.trim() || `cat-${Date.now().toString(36)}`)
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-');
     const schema = catSchemaInput
     .split(',')
     .map((pair) => pair.trim())
@@ -492,7 +546,9 @@ export const Admin: React.FC = () => {
       slug,
       name: { ru: catNameRu.trim(), be: '', en: catNameEn.trim(), zh: '' },
                 description: { ru: catDescRu.trim(), be: '', en: '', zh: '' },
-                subcategories: [{ id: 'default', name: { ru: 'Основная серия', be: '', en: 'Main line', zh: '' } }],
+                subcategories: [
+                  { id: 'default', name: { ru: 'Основная серия', be: '', en: 'Main line', zh: '' } },
+                ],
                 filterKeys: ['fat', 'exportReady'],
                 characteristicSchema: schema,
                 seo: {
@@ -522,7 +578,9 @@ export const Admin: React.FC = () => {
   };
 
   const translationEntries = Object.entries(translations);
-  const visibleTranslations = showAllTranslations ? translationEntries : translationEntries.slice(0, 12);
+  const visibleTranslations = showAllTranslations
+  ? translationEntries
+  : translationEntries.slice(0, 12);
   const editingCategoryObj = editingProduct
   ? categories.find((c) => c.id === editingProduct.category)
   : undefined;
@@ -533,13 +591,32 @@ export const Admin: React.FC = () => {
     title={`${t('adminTitle')} — ${t('brandName')}`}
     description={copy.subtitle}
     canonicalHash="/admin"
+    noIndex
     />
 
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
     <div>
-    <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">{t('adminTitle')}</h1>
+    <div className="flex flex-wrap items-center gap-2.5">
+    <h1 className="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+    {t('adminTitle')}
+    </h1>
+    {user && (
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-[#0057B8] border border-blue-200/80">
+      {user.username} · {user.role[language]}
+      </span>
+    )}
+    </div>
     <p className="text-sm text-slate-600 mt-1">{copy.subtitle}</p>
     </div>
+
+    <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
+    <Link
+    to="/sitemap"
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-[#0057B8] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors whitespace-nowrap"
+    >
+    <Globe2 className="w-3.5 h-3.5" />
+    <span>{copy.seoSitemap}</span>
+    </Link>
 
     <button
     type="button"
@@ -547,11 +624,21 @@ export const Admin: React.FC = () => {
       resetDemoData();
       resetTranslations();
     }}
-    className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
+    className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
     >
     <RotateCcw className="w-3.5 h-3.5" />
     <span>{copy.reset}</span>
     </button>
+
+    <button
+    type="button"
+    onClick={logout}
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap"
+    >
+    <LogOut className="w-3.5 h-3.5" />
+    <span>{copy.logout}</span>
+    </button>
+    </div>
     </div>
 
     {/* Tabs */}
@@ -571,7 +658,9 @@ export const Admin: React.FC = () => {
       type="button"
       onClick={() => setActiveTab(tabKey)}
       className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
-        activeTab === tabKey ? 'bg-white text-[#0057B8] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+        activeTab === tabKey
+        ? 'bg-white text-[#0057B8] shadow-xs'
+        : 'text-slate-600 hover:text-slate-900'
       }`}
       >
       {label}
@@ -584,7 +673,9 @@ export const Admin: React.FC = () => {
     {activeTab === 'products' && (
       <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center gap-3">
-      <h2 className="font-display text-lg font-semibold text-slate-900">{copy.catalogItems}</h2>
+      <h2 className="font-display text-lg font-semibold text-slate-900">
+      {copy.catalogItems}
+      </h2>
       <div className="flex flex-wrap items-center gap-2">
       {importStatus && (
         <span className="text-xs font-mono text-[#0057B8] bg-blue-50 px-2.5 py-1 rounded">
@@ -594,7 +685,12 @@ export const Admin: React.FC = () => {
       <label className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
       <Upload className="w-3.5 h-3.5" />
       <span>{copy.importBtn}</span>
-      <input type="file" accept=".json,.csv" onChange={handleImportCatalogFile} className="hidden" />
+      <input
+      type="file"
+      accept=".json,.csv"
+      onChange={handleImportCatalogFile}
+      className="hidden"
+      />
       </label>
       <button
       type="button"
@@ -616,60 +712,144 @@ export const Admin: React.FC = () => {
       </div>
 
       {showAddProduct && (
-        <form onSubmit={handleCreateProduct} className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4">
-        <h3 className="font-display text-base font-semibold text-slate-900">{copy.addProduct}</h3>
+        <form
+        onSubmit={handleCreateProduct}
+        className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+        >
+        <h3 className="font-display text-base font-semibold text-slate-900">
+        {copy.addProduct}
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Название (RU) *</label>
-        <input type="text" required value={newNameRu} onChange={(e) => setNewNameRu(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Название (RU) *
+        </label>
+        <input
+        type="text"
+        required
+        value={newNameRu}
+        onChange={(e) => setNewNameRu(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Назва (BE)</label>
-        <input type="text" value={newNameBe} onChange={(e) => setNewNameBe(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Назва (BE)
+        </label>
+        <input
+        type="text"
+        value={newNameBe}
+        onChange={(e) => setNewNameBe(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Name (EN)</label>
-        <input type="text" value={newNameEn} onChange={(e) => setNewNameEn(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Name (EN)
+        </label>
+        <input
+        type="text"
+        value={newNameEn}
+        onChange={(e) => setNewNameEn(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">名称 (ZH)</label>
-        <input type="text" value={newNameZh} onChange={(e) => setNewNameZh(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        名称 (ZH)
+        </label>
+        <input
+        type="text"
+        value={newNameZh}
+        onChange={(e) => setNewNameZh(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">{copy.colCategory}</label>
-        <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg">
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.colCategory}
+        </label>
+        <select
+        value={newCategory}
+        onChange={(e) => setNewCategory(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        >
         {categories.map((c) => (
-          <option key={c.id} value={c.id}>{localize(c.name)}</option>
+          <option key={c.id} value={c.id}>
+          {localize(c.name)}
+          </option>
         ))}
         </select>
         </div>
         <div>
         <label className="block text-xs font-medium text-slate-700 mb-1">Fat (%)</label>
-        <input type="number" step="0.1" value={newFat} onChange={(e) => setNewFat(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <input
+        type="number"
+        step="0.1"
+        value={newFat}
+        onChange={(e) => setNewFat(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Protein (g/100g)</label>
-        <input type="number" step="0.1" value={newProtein} onChange={(e) => setNewProtein(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Protein (g/100g)
+        </label>
+        <input
+        type="number"
+        step="0.1"
+        value={newProtein}
+        onChange={(e) => setNewProtein(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Pack / Shelf life</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Pack / Shelf life
+        </label>
         <div className="flex gap-2">
-        <input type="text" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={newShelfLife} onChange={(e) => setNewShelfLife(e.target.value)} className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <input
+        type="text"
+        value={newWeight}
+        onChange={(e) => setNewWeight(e.target.value)}
+        className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={newShelfLife}
+        onChange={(e) => setNewShelfLife(e.target.value)}
+        className="w-1/2 h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Description (RU)</label>
-        <input type="text" value={newDescRu} onChange={(e) => setNewDescRu(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Description (RU)
+        </label>
+        <input
+        type="text"
+        value={newDescRu}
+        onChange={(e) => setNewDescRu(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO Title (RU)</label>
-        <input type="text" value={newSeoTitle} onChange={(e) => setNewSeoTitle(e.target.value)} className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Title (RU)
+        </label>
+        <input
+        type="text"
+        value={newSeoTitle}
+        onChange={(e) => setNewSeoTitle(e.target.value)}
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Photo Upload</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Photo Upload
+        </label>
         <input
         type="file"
         accept="image/*"
@@ -679,10 +859,17 @@ export const Admin: React.FC = () => {
         </div>
         </div>
         <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setShowAddProduct(false)} className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg">
+        <button
+        type="button"
+        onClick={() => setShowAddProduct(false)}
+        className="px-4 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg"
+        >
         {copy.cancelBtn}
         </button>
-        <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+        <button
+        type="submit"
+        className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
         {copy.saveBtn}
         </button>
         </div>
@@ -690,7 +877,10 @@ export const Admin: React.FC = () => {
       )}
 
       {editingProduct && (
-        <form onSubmit={handleSaveEditProduct} className="border border-[#0057B8]/40 rounded-xl p-5 bg-blue-50/40 space-y-5">
+        <form
+        onSubmit={handleSaveEditProduct}
+        className="border border-[#0057B8]/40 rounded-xl p-5 bg-blue-50/40 space-y-5"
+        >
         <div className="flex flex-wrap justify-between items-center gap-3">
         <h3 className="font-display text-base font-semibold text-slate-900">
         {localize(editingProduct.name)}
@@ -710,7 +900,11 @@ export const Admin: React.FC = () => {
           </button>
         ))}
         </div>
-        <button type="button" onClick={() => setEditingProduct(null)} className="text-xs text-slate-500 hover:text-slate-900 px-2">
+        <button
+        type="button"
+        onClick={() => setEditingProduct(null)}
+        className="text-xs text-slate-500 hover:text-slate-900 px-2"
+        >
         ✕
         </button>
         </div>
@@ -718,7 +912,9 @@ export const Admin: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Name ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Name ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.name[editLang] || ''}
@@ -732,7 +928,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">{copy.colCategory}</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.colCategory}
+        </label>
         <select
         value={editingProduct.category}
         onChange={(e) => {
@@ -746,7 +944,9 @@ export const Admin: React.FC = () => {
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         >
         {categories.map((c) => (
-          <option key={c.id} value={c.id}>{localize(c.name)}</option>
+          <option key={c.id} value={c.id}>
+          {localize(c.name)}
+          </option>
         ))}
         </select>
         </div>
@@ -756,17 +956,26 @@ export const Admin: React.FC = () => {
         type="number"
         step="0.1"
         value={editingProduct.fatContent ?? 0}
-        onChange={(e) => setEditingProduct({ ...editingProduct, fatContent: Number(e.target.value) })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, fatContent: Number(e.target.value) })
+        }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Protein (g/100g)</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Protein (g/100g)
+        </label>
         <input
         type="number"
         step="0.1"
         value={editingProduct.proteinContent ?? 0}
-        onChange={(e) => setEditingProduct({ ...editingProduct, proteinContent: Number(e.target.value) })}
+        onChange={(e) =>
+          setEditingProduct({
+            ...editingProduct,
+            proteinContent: Number(e.target.value),
+          })
+        }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
@@ -777,7 +986,9 @@ export const Admin: React.FC = () => {
         <input
         type="checkbox"
         checked={editingProduct.lactoseFree}
-        onChange={(e) => setEditingProduct({ ...editingProduct, lactoseFree: e.target.checked })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, lactoseFree: e.target.checked })
+        }
         />
         <span>Lactose-Free</span>
         </label>
@@ -785,7 +996,9 @@ export const Admin: React.FC = () => {
         <input
         type="checkbox"
         checked={editingProduct.exportReady}
-        onChange={(e) => setEditingProduct({ ...editingProduct, exportReady: e.target.checked })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, exportReady: e.target.checked })
+        }
         />
         <span>Export B2B</span>
         </label>
@@ -793,7 +1006,9 @@ export const Admin: React.FC = () => {
         <input
         type="checkbox"
         checked={editingProduct.featured}
-        onChange={(e) => setEditingProduct({ ...editingProduct, featured: e.target.checked })}
+        onChange={(e) =>
+          setEditingProduct({ ...editingProduct, featured: e.target.checked })
+        }
         />
         <span>Featured</span>
         </label>
@@ -814,35 +1029,47 @@ export const Admin: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO H1 ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO H1 ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.seo.h1[editLang] || ''}
         onChange={(e) =>
           setEditingProduct({
             ...editingProduct,
-            seo: { ...editingProduct.seo, h1: { ...editingProduct.seo.h1, [editLang]: e.target.value } },
+            seo: {
+              ...editingProduct.seo,
+              h1: { ...editingProduct.seo.h1, [editLang]: e.target.value },
+            },
           })
         }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO Title ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Title ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.seo.title[editLang] || ''}
         onChange={(e) =>
           setEditingProduct({
             ...editingProduct,
-            seo: { ...editingProduct.seo, title: { ...editingProduct.seo.title, [editLang]: e.target.value } },
+            seo: {
+              ...editingProduct.seo,
+              title: { ...editingProduct.seo.title, [editLang]: e.target.value },
+            },
           })
         }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">SEO Description ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Description ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.seo.description[editLang] || ''}
@@ -851,7 +1078,10 @@ export const Admin: React.FC = () => {
             ...editingProduct,
             seo: {
               ...editingProduct.seo,
-              description: { ...editingProduct.seo.description, [editLang]: e.target.value },
+              description: {
+                ...editingProduct.seo.description,
+                [editLang]: e.target.value,
+              },
             },
           })
         }
@@ -859,7 +1089,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Description ({editLang.toUpperCase()})</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Description ({editLang.toUpperCase()})
+        </label>
         <input
         type="text"
         value={editingProduct.description[editLang] || ''}
@@ -882,10 +1114,13 @@ export const Admin: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {editingCategoryObj.characteristicSchema.map((field) => {
-            const currentVal = editingProduct.characteristics[field.key] || emptyLocalized('');
+            const currentVal =
+            editingProduct.characteristics[field.key] || emptyLocalized('');
             return (
               <div key={field.key}>
-              <label className="block text-xs text-slate-600 mb-1">{localize(field.label)}</label>
+              <label className="block text-xs text-slate-600 mb-1">
+              {localize(field.label)}
+              </label>
               <input
               type="text"
               value={currentVal[editLang] || ''}
@@ -909,12 +1144,19 @@ export const Admin: React.FC = () => {
 
         {/* Packages Editor */}
         <div className="pt-3 border-t border-slate-200 space-y-3">
-        <div className="text-xs font-semibold text-slate-700">{copy.colPacks} ({editingProduct.packages.length})</div>
+        <div className="text-xs font-semibold text-slate-700">
+        {copy.colPacks} ({editingProduct.packages.length})
+        </div>
         <div className="flex flex-wrap gap-2">
         {editingProduct.packages.map((pkg) => (
-          <div key={pkg.id} className="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs">
+          <div
+          key={pkg.id}
+          className="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs"
+          >
           <span className="font-semibold">{pkg.weight}</span>
-          <span className="text-slate-500">{localize(pkg.shelfLife)} · GTIN {pkg.gtin}</span>
+          <span className="text-slate-500">
+          {localize(pkg.shelfLife)} · GTIN {pkg.gtin}
+          </span>
           <button
           type="button"
           onClick={() =>
@@ -931,11 +1173,41 @@ export const Admin: React.FC = () => {
         ))}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 items-end">
-        <input type="text" value={pkgWeight} onChange={(e) => setPkgWeight(e.target.value)} placeholder="500 г" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgShelf} onChange={(e) => setPkgShelf(e.target.value)} placeholder="45 суток" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgStorage} onChange={(e) => setPkgStorage(e.target.value)} placeholder="+2…+6 °C" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgType} onChange={(e) => setPkgType(e.target.value)} placeholder="Вакуум" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
-        <input type="text" value={pkgGtin} onChange={(e) => setPkgGtin(e.target.value)} placeholder="GTIN" className="h-8 px-2 text-xs bg-white border border-slate-200 rounded" />
+        <input
+        type="text"
+        value={pkgWeight}
+        onChange={(e) => setPkgWeight(e.target.value)}
+        placeholder="500 г"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgShelf}
+        onChange={(e) => setPkgShelf(e.target.value)}
+        placeholder="45 суток"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgStorage}
+        onChange={(e) => setPkgStorage(e.target.value)}
+        placeholder="+2…+6 °C"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgType}
+        onChange={(e) => setPkgType(e.target.value)}
+        placeholder="Вакуум"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
+        <input
+        type="text"
+        value={pkgGtin}
+        onChange={(e) => setPkgGtin(e.target.value)}
+        placeholder="GTIN"
+        className="h-8 px-2 text-xs bg-white border border-slate-200 rounded"
+        />
         <button
         type="button"
         onClick={handleAddPackageToEditing}
@@ -947,7 +1219,10 @@ export const Admin: React.FC = () => {
         </div>
 
         <div className="flex justify-end gap-2">
-        <button type="submit" className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+        <button
+        type="submit"
+        className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
         <Check className="w-3.5 h-3.5" />
         <span>{copy.saveBtn}</span>
         </button>
@@ -975,22 +1250,46 @@ export const Admin: React.FC = () => {
           <div className="font-medium text-slate-900">{localize(prod.name)}</div>
           <div className="text-xs text-slate-500 font-mono">/{prod.slug}</div>
           </td>
-          <td className="py-3 px-4 text-slate-600">{cat ? localize(cat.name) : prod.category}</td>
-          <td className="py-3 px-4 text-slate-600 text-xs">{prod.packages.map((p) => p.weight).join(', ')}</td>
+          <td className="py-3 px-4 text-slate-600">
+          {cat ? localize(cat.name) : prod.category}
+          </td>
+          <td className="py-3 px-4 text-slate-600 text-xs">
+          {prod.packages.map((p) => p.weight).join(', ')}
+          </td>
           <td className="py-3 px-4">
-          <span className={`text-xs font-medium ${prod.visible ? 'text-[#0057B8]' : 'text-slate-400'}`}>
+          <span
+          className={`text-xs font-medium ${
+            prod.visible ? 'text-[#0057B8]' : 'text-slate-400'
+          }`}
+          >
           {prod.visible ? copy.published : copy.hidden}
           </span>
           </td>
           <td className="py-3 px-4 text-right">
           <div className="inline-flex items-center gap-1.5">
-          <button type="button" onClick={() => setEditingProduct(prod)} className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 hover:text-[#0057B8]">
+          <button
+          type="button"
+          onClick={() => setEditingProduct(prod)}
+          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 hover:text-[#0057B8]"
+          >
           <Edit3 className="w-4 h-4" />
           </button>
-          <button type="button" onClick={() => toggleProductVisibility(prod.id)} className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100">
-          {prod.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+          <button
+          type="button"
+          onClick={() => toggleProductVisibility(prod.id)}
+          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100"
+          >
+          {prod.visible ? (
+            <Eye className="w-4 h-4" />
+          ) : (
+            <EyeOff className="w-4 h-4" />
+          )}
           </button>
-          <button type="button" onClick={() => deleteProduct(prod.id)} className="p-1.5 rounded-md text-slate-500 hover:bg-red-50 hover:text-red-600">
+          <button
+          type="button"
+          onClick={() => deleteProduct(prod.id)}
+          className="p-1.5 rounded-md text-slate-500 hover:bg-red-50 hover:text-red-600"
+          >
           <Trash2 className="w-4 h-4" />
           </button>
           </div>
@@ -1008,7 +1307,9 @@ export const Admin: React.FC = () => {
     {activeTab === 'categories' && (
       <div className="space-y-6">
       <div className="flex justify-between items-center">
-      <h2 className="font-display text-lg font-semibold text-slate-900">{copy.tabCategories}</h2>
+      <h2 className="font-display text-lg font-semibold text-slate-900">
+      {copy.tabCategories}
+      </h2>
       <button
       type="button"
       onClick={() => setShowAddCategory((v) => !v)}
@@ -1020,17 +1321,62 @@ export const Admin: React.FC = () => {
       </div>
 
       {showAddCategory && (
-        <form onSubmit={handleCreateCategory} className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4">
+        <form
+        onSubmit={handleCreateCategory}
+        className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+        >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <input type="text" required value={catNameRu} onChange={(e) => setCatNameRu(e.target.value)} placeholder="Название (RU) *" className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={catNameEn} onChange={(e) => setCatNameEn(e.target.value)} placeholder="Name (EN)" className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={catSlug} onChange={(e) => setCatSlug(e.target.value)} placeholder="slug (e.g. drinks)" className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
+        <input
+        type="text"
+        required
+        value={catNameRu}
+        onChange={(e) => setCatNameRu(e.target.value)}
+        placeholder="Название (RU) *"
+        className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={catNameEn}
+        onChange={(e) => setCatNameEn(e.target.value)}
+        placeholder="Name (EN)"
+        className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={catSlug}
+        onChange={(e) => setCatSlug(e.target.value)}
+        placeholder="slug (e.g. drinks)"
+        className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
         </div>
-        <input type="text" value={catDescRu} onChange={(e) => setCatDescRu(e.target.value)} placeholder="Описание (RU)" className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg" />
-        <input type="text" value={catSchemaInput} onChange={(e) => setCatSchemaInput(e.target.value)} placeholder="Schema key:Label" className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono" />
+        <input
+        type="text"
+        value={catDescRu}
+        onChange={(e) => setCatDescRu(e.target.value)}
+        placeholder="Описание (RU)"
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        <input
+        type="text"
+        value={catSchemaInput}
+        onChange={(e) => setCatSchemaInput(e.target.value)}
+        placeholder="Schema key:Label"
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono"
+        />
         <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setShowAddCategory(false)} className="px-4 py-2 text-xs bg-white border border-slate-200 rounded-lg">{copy.cancelBtn}</button>
-        <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">{copy.saveBtn}</button>
+        <button
+        type="button"
+        onClick={() => setShowAddCategory(false)}
+        className="px-4 py-2 text-xs bg-white border border-slate-200 rounded-lg"
+        >
+        {copy.cancelBtn}
+        </button>
+        <button
+        type="submit"
+        className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
+        {copy.saveBtn}
+        </button>
         </div>
         </form>
       )}
@@ -1048,7 +1394,14 @@ export const Admin: React.FC = () => {
         <h3 className="font-semibold text-sm">{localize(editingCategory.name)}</h3>
         <div className="inline-flex bg-white border border-slate-200 rounded-lg p-0.5">
         {LANGS.map((l) => (
-          <button key={l} type="button" onClick={() => setEditLang(l)} className={`px-2 py-0.5 text-xs font-semibold rounded ${editLang === l ? 'bg-[#0057B8] text-white' : 'text-slate-600'}`}>
+          <button
+          key={l}
+          type="button"
+          onClick={() => setEditLang(l)}
+          className={`px-2 py-0.5 text-xs font-semibold rounded ${
+            editLang === l ? 'bg-[#0057B8] text-white' : 'text-slate-600'
+          }`}
+          >
           {l.toUpperCase()}
           </button>
         ))}
@@ -1072,15 +1425,29 @@ export const Admin: React.FC = () => {
         onChange={(e) =>
           setEditingCategory({
             ...editingCategory,
-            description: { ...editingCategory.description, [editLang]: e.target.value },
+            description: {
+              ...editingCategory.description,
+              [editLang]: e.target.value,
+            },
           })
         }
         className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
         <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setEditingCategory(null)} className="px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg">{copy.cancelBtn}</button>
-        <button type="submit" className="px-4 py-1.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">{copy.saveBtn}</button>
+        <button
+        type="button"
+        onClick={() => setEditingCategory(null)}
+        className="px-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg"
+        >
+        {copy.cancelBtn}
+        </button>
+        <button
+        type="submit"
+        className="px-4 py-1.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
+        {copy.saveBtn}
+        </button>
         </div>
         </form>
       )}
@@ -1145,10 +1512,15 @@ export const Admin: React.FC = () => {
       </div>
 
       {showAddNews && (
-        <form onSubmit={handleCreateNews} className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4">
+        <form
+        onSubmit={handleCreateNews}
+        className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
+        >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Title (RU) *</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Title (RU) *
+        </label>
         <input
         type="text"
         required
@@ -1158,7 +1530,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Title (EN)</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Title (EN)
+        </label>
         <input
         type="text"
         value={newsTitleEn}
@@ -1167,7 +1541,9 @@ export const Admin: React.FC = () => {
         />
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">{copy.colCategory}</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        {copy.colCategory}
+        </label>
         <select
         value={newsCat}
         onChange={(e) => setNewsCat(e.target.value as NewsArticle['categoryId'])}
@@ -1181,7 +1557,9 @@ export const Admin: React.FC = () => {
         </div>
         </div>
         <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">Excerpt / Content (RU)</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Excerpt / Content (RU)
+        </label>
         <textarea
         rows={2}
         value={newsExcerptRu}
@@ -1197,7 +1575,10 @@ export const Admin: React.FC = () => {
         >
         {copy.cancelBtn}
         </button>
-        <button type="submit" className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+        <button
+        type="submit"
+        className="px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+        >
         {copy.saveBtn}
         </button>
         </div>
@@ -1214,7 +1595,9 @@ export const Admin: React.FC = () => {
         className="border border-[#0057B8]/40 rounded-xl p-5 bg-blue-50/40 space-y-4"
         >
         <div className="flex flex-wrap justify-between items-center gap-3">
-        <h3 className="font-semibold text-sm text-slate-900">{localize(editingNews.title)}</h3>
+        <h3 className="font-semibold text-sm text-slate-900">
+        {localize(editingNews.title)}
+        </h3>
         <div className="inline-flex bg-white border border-slate-200 rounded-lg p-0.5">
         {LANGS.map((l) => (
           <button
@@ -1345,7 +1728,9 @@ export const Admin: React.FC = () => {
         <td className="py-3 px-4 font-medium text-slate-900">{localize(item.title)}</td>
         <td className="py-3 px-4 text-xs font-mono text-slate-500">{item.date}</td>
         <td className="py-3 px-4 text-xs">
-        <span className={item.published ? 'text-[#0057B8] font-medium' : 'text-slate-400'}>
+        <span
+        className={item.published ? 'text-[#0057B8] font-medium' : 'text-slate-400'}
+        >
         {item.published ? copy.newsPub : copy.newsHidden}
         </span>
         </td>
@@ -1363,7 +1748,11 @@ export const Admin: React.FC = () => {
         onClick={() => toggleNewsPublished(item.id)}
         className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100"
         >
-        {item.published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+        {item.published ? (
+          <Eye className="w-4 h-4" />
+        ) : (
+          <EyeOff className="w-4 h-4" />
+        )}
         </button>
         <button
         type="button"
@@ -1385,7 +1774,10 @@ export const Admin: React.FC = () => {
     {/* TAB 4: 301 REDIRECTS */}
     {activeTab === 'redirects' && (
       <div className="space-y-6">
-      <form onSubmit={handleCreateRedirect} className="border border-slate-200 rounded-xl p-5 bg-slate-50 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+      <form
+      onSubmit={handleCreateRedirect}
+      className="border border-slate-200 rounded-xl p-5 bg-slate-50 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end"
+      >
       <div>
       <label className="block text-xs font-medium text-slate-700 mb-1">From URL *</label>
       <input
@@ -1418,7 +1810,10 @@ export const Admin: React.FC = () => {
       className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
       />
       </div>
-      <button type="submit" className="h-9 px-4 text-xs font-semibold text-white bg-[#0057B8] rounded-lg">
+      <button
+      type="submit"
+      className="h-9 px-4 text-xs font-semibold text-white bg-[#0057B8] rounded-lg"
+      >
       + 301 Rule
       </button>
       </form>
@@ -1438,7 +1833,9 @@ export const Admin: React.FC = () => {
       {redirects.map((rule, idx) => (
         <tr key={`${rule.from}-${idx}`}>
         <td className="py-2.5 px-4 font-mono text-slate-700">{rule.from}</td>
-        <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">{rule.code}</td>
+        <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">
+        {rule.code}
+        </td>
         <td className="py-2.5 px-4 font-mono text-slate-700">{rule.to}</td>
         <td className="py-2.5 px-4 text-slate-600">{rule.note}</td>
         <td className="py-2.5 px-4 text-right">
@@ -1463,7 +1860,10 @@ export const Admin: React.FC = () => {
       <div className="space-y-6">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
       {completenessStats.map((stat) => (
-        <div key={stat.lang} className="border border-slate-200 rounded-xl p-4 bg-white space-y-2">
+        <div
+        key={stat.lang}
+        className="border border-slate-200 rounded-xl p-4 bg-white space-y-2"
+        >
         <div className="flex items-center justify-between text-xs font-semibold text-slate-900">
         <span>{stat.lang.toUpperCase()}</span>
         <span className="font-mono text-[#0057B8] tabular-nums">{stat.pct}%</span>
@@ -1523,5 +1923,13 @@ export const Admin: React.FC = () => {
       </div>
     )}
     </div>
+  );
+};
+
+export const Admin: React.FC = () => {
+  return (
+    <StaffAuthGate>
+    <AdminDashboard />
+    </StaffAuthGate>
   );
 };

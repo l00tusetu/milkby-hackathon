@@ -1,20 +1,26 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Download, CheckCircle2 } from 'lucide-react';
+import { Download, CheckCircle2, ArrowLeft, LogOut } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useCatalogStore } from '../hooks/useCatalogStore';
+import { useAuth } from '../hooks/useAuth';
 import { generateXmlSitemap } from '../utils/specExport';
 import { SeoHead } from '../components/SeoHead';
+import { StaffAuthGate } from '../components/StaffAuth';
 
-export const SitemapPage: React.FC = () => {
+const SitemapPageContent: React.FC = () => {
   const { language, t } = useLanguage();
   const { products, categories, news, redirects } = useCatalogStore();
+  const { logout } = useAuth();
 
   const copy = {
     ru: {
-      seoDesc: 'Автоматически обновляемый sitemap.xml, hreflang-связи 4 языковых версий и таблица 301-редиректов со старых URL milk.by.',
+      seoDesc:
+      'Автоматически обновляемый sitemap.xml, hreflang-связи 4 языковых версий и таблица 301-редиректов со старых URL milk.by.',
       h1: 'XML-карта сайта, SEO-аудит и 301-редиректы',
       lead: 'Автоматическая генерация ЧПУ-структуры с поддержкой hreflang (RU / BE / EN / ZH) и отсутствием дублей.',
+      backToCms: 'Панель управления CMS',
+      logout: 'Выйти',
       downloadXml: 'Скачать sitemap.xml',
       uniqTitle: 'Уникальность SEO Title',
       noDupes: '(Без дублей)',
@@ -28,9 +34,12 @@ export const SitemapPage: React.FC = () => {
       colNote: 'Примечание',
     },
     be: {
-      seoDesc: 'Аўтаматычна абнаўляемы sitemap.xml, hreflang-сувязі 4 моўных версій і табліца 301-рэдырэктаў са старых URL milk.by.',
+      seoDesc:
+      'Аўтаматычна абнаўляемы sitemap.xml, hreflang-сувязі 4 моўных версій і табліца 301-рэдырэктаў са старых URL milk.by.',
       h1: 'XML-карта сайта, SEO-аўдыт і 301-рэдырэкты',
       lead: 'Аўтаматычная генерацыя ЧПУ-структуры з падтрымкай hreflang (RU / BE / EN / ZH) і адсутнасцю дубляў.',
+      backToCms: 'Панэль кіравання CMS',
+      logout: 'Выйсці',
       downloadXml: 'Спампаваць sitemap.xml',
       uniqTitle: 'Унікальнасць SEO Title',
       noDupes: '(Без дубляў)',
@@ -44,9 +53,12 @@ export const SitemapPage: React.FC = () => {
       colNote: 'Заўвага',
     },
     en: {
-      seoDesc: 'Auto-generated sitemap.xml, 4-language hreflang links, and 301 redirect rules from legacy milk.by URLs.',
+      seoDesc:
+      'Auto-generated sitemap.xml, 4-language hreflang links, and 301 redirect rules from legacy milk.by URLs.',
       h1: 'XML Sitemap, SEO Audit & 301 Redirects',
       lead: 'Auto-generated clean URL sitemap with 4-language hreflang links and legacy 301 redirects.',
+      backToCms: 'CMS Panel',
+      logout: 'Log out',
       downloadXml: 'Download sitemap.xml',
       uniqTitle: 'Unique SEO Titles',
       noDupes: '(No duplicates)',
@@ -60,9 +72,12 @@ export const SitemapPage: React.FC = () => {
       colNote: 'Note',
     },
     zh: {
-      seoDesc: '自动更新的 sitemap.xml、四种语言 hreflang 关联及 milk.by 旧版链接 301 重定向映射表。',
+      seoDesc:
+      '自动更新的 sitemap.xml、四种语言 hreflang 关联及 milk.by 旧版链接 301 重定向映射表。',
       h1: 'XML 站点地图、SEO 审计与 301 重定向',
       lead: '自动生成支持四种语言 hreflang (RU / BE / EN / ZH) 且无重复标题的规范化 URL 站点地图。',
+      backToCms: '返回管理后台',
+      logout: '退出登录',
       downloadXml: '下载 sitemap.xml',
       uniqTitle: 'SEO 标题唯一性',
       noDupes: '（无重复）',
@@ -111,6 +126,7 @@ export const SitemapPage: React.FC = () => {
     title={`XML Sitemap & SEO Audit — ${t('brandName')}`}
     description={copy.seoDesc}
     canonicalHash="/sitemap"
+    noIndex
     />
 
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
@@ -119,14 +135,33 @@ export const SitemapPage: React.FC = () => {
     <p className="text-sm text-slate-600 mt-1">{copy.lead}</p>
     </div>
 
+    <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
+    <Link
+    to="/admin"
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors whitespace-nowrap"
+    >
+    <ArrowLeft className="w-3.5 h-3.5" />
+    <span>{copy.backToCms}</span>
+    </Link>
+
     <button
     type="button"
     onClick={handleDownloadXml}
-    className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
+    className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-[#0057B8] rounded-lg hover:bg-[#004494] transition-colors whitespace-nowrap"
     >
     <Download className="w-4 h-4" />
     <span>{copy.downloadXml}</span>
     </button>
+
+    <button
+    type="button"
+    onClick={logout}
+    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap"
+    >
+    <LogOut className="w-3.5 h-3.5" />
+    <span>{copy.logout}</span>
+    </button>
+    </div>
     </div>
 
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 tabular-nums">
@@ -174,7 +209,9 @@ export const SitemapPage: React.FC = () => {
     return (
       <tr key={rule.from}>
       <td className="py-2.5 px-4 font-mono text-slate-600">{rule.from}</td>
-      <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">{rule.code}</td>
+      <td className="py-2.5 px-4 font-mono font-semibold text-[#0057B8]">
+      {rule.code}
+      </td>
       <td className="py-2.5 px-4 font-mono">
       <Link to={targetPath} className="text-[#0057B8] hover:underline">
       {rule.to}
@@ -198,5 +235,13 @@ export const SitemapPage: React.FC = () => {
     </pre>
     </section>
     </div>
+  );
+};
+
+export const SitemapPage: React.FC = () => {
+  return (
+    <StaffAuthGate>
+    <SitemapPageContent />
+    </StaffAuthGate>
   );
 };
