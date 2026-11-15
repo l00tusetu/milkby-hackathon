@@ -27,6 +27,7 @@ export interface Product {
   name: LocalizedText;
   description: LocalizedText;
   image: string;
+  gallery?: string[];
   fatContent?: number;
   proteinContent?: number;
   lactoseFree?: boolean;
@@ -55,6 +56,7 @@ export interface Category {
   slug: string;
   name: LocalizedText;
   description: LocalizedText;
+  image?: string;
   subcategories: CategorySubcategory[];
   filterKeys: ('fat' | 'lactoseFree' | 'highProtein' | 'exportReady')[];
   characteristicSchema: CharacteristicField[];
@@ -102,4 +104,113 @@ export interface B2BInquiry {
   volume: string;
   message: string;
   channel: 'export' | 'wholesale' | 'general';
+}
+
+export interface TeamMember {
+  id: string;
+  initials: string;
+  accentClass: string;
+  photo?: string;
+  channel: 'export' | 'wholesale' | 'general';
+  email: string;
+  phone: string;
+  visible: boolean;
+  name: LocalizedText;
+  role: LocalizedText;
+  bio: LocalizedText;
+}
+
+export type DirectoryGroup = 'sales' | 'management' | 'departments' | 'branches';
+
+export interface DirectoryPhone {
+  label?: LocalizedText;
+  number: string;
+}
+
+export interface DirectoryEntry {
+  id: string;
+  group: DirectoryGroup;
+  visible: boolean;
+  title: LocalizedText;
+  person?: LocalizedText;
+  address?: LocalizedText;
+  note?: LocalizedText;
+  phones: DirectoryPhone[];
+  emails?: { label?: string; address: string }[];
+  website?: string;
+}
+
+export interface PlantLocation {
+  id: string;
+  xPercent: number;
+  yPercent: number;
+  coords: string;
+  phone: string;
+  visible: boolean;
+  city: LocalizedText;
+  address: LocalizedText;
+  focus: LocalizedText;
+  hours: LocalizedText;
+}
+
+export type PromoBannerTheme = 'brand' | 'slate' | 'light';
+
+export interface SiteSettings {
+  homeHero: {
+    title: LocalizedText;
+    subtitle: LocalizedText;
+    primaryCta: LocalizedText;
+    secondaryCta: LocalizedText;
+    image: string;
+    seoTitle: LocalizedText;
+    seoDescription: LocalizedText;
+  };
+  promoBanner: {
+    enabled: boolean;
+    theme: PromoBannerTheme;
+    badge: LocalizedText;
+    extra: LocalizedText;
+    title: LocalizedText;
+    lead: LocalizedText;
+    secondaryCtaLabel: LocalizedText;
+    secondaryCtaTo: string;
+    primaryCtaLabel: LocalizedText;
+    primaryCtaTo: string;
+  };
+  teamSection: {
+    enabled: boolean;
+    eyebrow: LocalizedText;
+    title: LocalizedText;
+    subtitle: LocalizedText;
+  };
+  contactMeta: {
+    hqAddress: LocalizedText;
+    unp: string;
+    schedule: LocalizedText;
+    citizenHours: LocalizedText;
+    receptionPhone: string;
+    receptionEmail: string;
+    receptionTitle: LocalizedText;
+    receptionSubtitle: LocalizedText;
+    salesPhone: string;
+    salesEmail: string;
+    salesOrdersEmail: string;
+    salesTitle: LocalizedText;
+    salesSubtitle: LocalizedText;
+    exportPhone: string;
+    exportPhoneAlt: string;
+    exportEmail: string;
+    exportTitle: LocalizedText;
+    exportSubtitle: LocalizedText;
+  };
+  footer: {
+    brandDesc: LocalizedText;
+    address: LocalizedText;
+    copyright: LocalizedText;
+    heritage: LocalizedText;
+    ctaLabel: LocalizedText;
+    showProductsColumn: boolean;
+    showCompanyColumn: boolean;
+    showContactsColumn: boolean;
+  };
 }

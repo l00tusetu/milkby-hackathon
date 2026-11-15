@@ -1,13 +1,19 @@
-import { Category, Language, NewsArticle, Product } from '../types';
+import { Category, Language, NewsArticle, Product, SiteSettings } from '../types';
 
 export function downloadProductB2BSpec(
   product: Product,
   category: Category | undefined,
-  language: Language
+  language: Language,
+  contactMeta?: SiteSettings['contactMeta']
 ): void {
   const name = product.name[language] || product.name.ru;
   const desc = product.description[language] || product.description.ru;
   const catName = category ? category.name[language] || category.name.ru : product.category;
+
+  const exportEmail = contactMeta?.exportEmail || 'ved@milk.by';
+  const exportPhone = contactMeta?.exportPhone || '+375 (152) 60-07-52';
+  const salesEmail = contactMeta?.salesEmail || 'sales@milk.by';
+  const salesPhone = contactMeta?.salesPhone || '+375 (152) 45-39-42';
 
   const lines: string[] = [
     '============================================================',
@@ -37,16 +43,16 @@ export function downloadProductB2BSpec(
     'AVAILABLE PACKAGING & LOGISTICS VARIANTS:',
     ...product.packages.map(
       (pkg, idx) =>
-        `  ${idx + 1}. Weight: ${pkg.weight} | Shelf Life: ${pkg.shelfLife[language] || pkg.shelfLife.ru} | Storage: ${
-          pkg.storage[language] || pkg.storage.ru
-        } | Packaging: ${pkg.packagingType[language] || pkg.packagingType.ru} | Units/Box: ${
-          pkg.unitsPerBox
-        } | GTIN: ${pkg.gtin}`
+      `  ${idx + 1}. Weight: ${pkg.weight} | Shelf Life: ${pkg.shelfLife[language] || pkg.shelfLife.ru} | Storage: ${
+        pkg.storage[language] || pkg.storage.ru
+      } | Packaging: ${pkg.packagingType[language] || pkg.packagingType.ru} | Units/Box: ${
+        pkg.unitsPerBox
+      } | GTIN: ${pkg.gtin}`
     ),
     '',
     'EXPORT & WHOLESALE CONTACT:',
-    '  Export Dept: ved@milk.by | +375 (152) 60-07-52',
-    '  Domestic Sales: sales@milk.by | +375 (152) 45-39-42',
+    `  Export Dept: ${exportEmail} | ${exportPhone}`,
+    `  Domestic Sales: ${salesEmail} | ${salesPhone}`,
     `  Generated: ${new Date().toISOString().slice(0, 10)}`,
   ];
 

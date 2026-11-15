@@ -20,8 +20,24 @@ import { ASSETS } from '../data/assets';
 import { Category, Language, NewsArticle, PackageVariant, Product, RedirectRule } from '../types';
 import { SeoHead } from '../components/SeoHead';
 import { StaffAuthGate } from '../components/StaffAuth';
+import { ImagePickerField } from '../components/admin/ImagePickerField';
+import { AdminHomeTab } from '../components/admin/AdminHomeTab';
+import { AdminTeamTab } from '../components/admin/AdminTeamTab';
+import { AdminContactsTab } from '../components/admin/AdminContactsTab';
+import { AdminFooterTab } from '../components/admin/AdminFooterTab';
 
 const LANGS: Language[] = ['ru', 'be', 'en', 'zh'];
+
+type AdminTab =
+| 'home'
+| 'team'
+| 'products'
+| 'categories'
+| 'news'
+| 'contacts'
+| 'footer'
+| 'redirects'
+| 'translations';
 
 const parseWeightGrams = (label: string): number => {
   const num = parseFloat(label.replace(',', '.'));
@@ -42,6 +58,9 @@ const AdminDashboard: React.FC = () => {
     categories,
     news,
     redirects,
+    siteSettings,
+    teamMembers,
+    directoryEntries,
     addProduct,
     updateProduct,
     importProducts,
@@ -59,9 +78,7 @@ const AdminDashboard: React.FC = () => {
     resetDemoData,
   } = useCatalogStore();
 
-  const [activeTab, setActiveTab] = useState<
-  'products' | 'categories' | 'news' | 'redirects' | 'translations'
-  >('products');
+  const [activeTab, setActiveTab] = useState<AdminTab>('home');
   const [editLang, setEditLang] = useState<Language>(language);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editingNews, setEditingNews] = useState<NewsArticle | null>(null);
@@ -72,7 +89,7 @@ const AdminDashboard: React.FC = () => {
   const [showAllTranslations, setShowAllTranslations] = useState(false);
   const [importStatus, setImportStatus] = useState<string>('');
 
-  // Add Product Form State (does not silently copy RU into BE/EN/ZH)
+  // Add Product Form State
   const [newNameRu, setNewNameRu] = useState('');
   const [newNameBe, setNewNameBe] = useState('');
   const [newNameEn, setNewNameEn] = useState('');
@@ -85,6 +102,7 @@ const AdminDashboard: React.FC = () => {
   const [newWeight, setNewWeight] = useState('250 г');
   const [newShelfLife, setNewShelfLife] = useState('30 суток');
   const [newSeoTitle, setNewSeoTitle] = useState('');
+  const [newGalleryDraft, setNewGalleryDraft] = useState<string>(ASSETS.productMozzarella);
 
   // Add Package inside Editing Product
   const [pkgWeight, setPkgWeight] = useState('500 г');
@@ -99,13 +117,17 @@ const AdminDashboard: React.FC = () => {
   const [catNameRu, setCatNameRu] = useState('');
   const [catNameEn, setCatNameEn] = useState('');
   const [catDescRu, setCatDescRu] = useState('');
+  const [catImage, setCatImage] = useState('');
   const [catSchemaInput, setCatSchemaInput] = useState('composition:Состав, origin:Происхождение');
 
   // Add News Form State
   const [newsTitleRu, setNewsTitleRu] = useState('');
   const [newsTitleEn, setNewsTitleEn] = useState('');
   const [newsExcerptRu, setNewsExcerptRu] = useState('');
+  const [newsContentRu, setNewsContentRu] = useState('');
+  const [newsDate, setNewsDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [newsCat, setNewsCat] = useState<NewsArticle['categoryId']>('company');
+  const [newsImage, setNewsImage] = useState<string>(ASSETS.newsDairyFacility);
 
   // Add Redirect Form State
   const [redirFrom, setRedirFrom] = useState('');
@@ -115,13 +137,17 @@ const AdminDashboard: React.FC = () => {
   const copy = {
     ru: {
       subtitle:
-      'Управление каталогом, фасовками, категориями, 301-редиректами, SEO-тегами, новостями и 4 языковыми версиями.',
+      'Управление главной страницей, командой, каталогом, картинками, контактами, футером, новостями, 301-редиректами и переводами.',
       seoSitemap: 'SEO и карта сайта',
       reset: 'Сбросить демо-данные',
       logout: 'Выйти',
+      tabHome: 'Главная и плашка',
+      tabTeam: `Команда (${teamMembers.length})`,
       tabProducts: `Продукция (${products.length})`,
       tabCategories: `Категории (${categories.length})`,
       tabNews: `Новости (${news.length})`,
+      tabContacts: `Контакты (${directoryEntries.length})`,
+      tabFooter: 'Футер',
       tabRedirects: `301-редиректы (${redirects.length})`,
       tabTranslations: 'Языки и переводы',
       catalogItems: 'Позиции каталога',
@@ -145,13 +171,17 @@ const AdminDashboard: React.FC = () => {
     },
     be: {
       subtitle:
-      'Кіраванне каталогам, фасоўкамі, катэгорыямі, 301-рэдырэктамі, SEO-тэгамі, навінамі і 4 моўнымі версіямі.',
+      'Кіраванне галоўнай старонкай, камандай, каталогам, выявамі, кантактамі, футэрам, навінамі, 301-рэдырэктамі і перакладамі.',
       seoSitemap: 'SEO і карта сайта',
       reset: 'Скінуць дэма-даныя',
       logout: 'Выйсці',
+      tabHome: 'Галоўная і плашка',
+      tabTeam: `Каманда (${teamMembers.length})`,
       tabProducts: `Прадукцыя (${products.length})`,
       tabCategories: `Катэгорыі (${categories.length})`,
       tabNews: `Навіны (${news.length})`,
+      tabContacts: `Кантакты (${directoryEntries.length})`,
+      tabFooter: 'Футэр',
       tabRedirects: `301-рэдырэкты (${redirects.length})`,
       tabTranslations: 'Мовы і пераклады',
       catalogItems: 'Пазіцыі каталога',
@@ -175,13 +205,17 @@ const AdminDashboard: React.FC = () => {
     },
     en: {
       subtitle:
-      'No-code management for products, packaging variants, category schemas, 301 redirects, SEO, news, and 4-language translations.',
+      'No-code CMS for homepage banners, leadership team, products, images, contacts, footer, news, 301 redirects, and 4 languages.',
       seoSitemap: 'SEO & Sitemap',
       reset: 'Reset Demo Data',
       logout: 'Log out',
+      tabHome: 'Homepage & Plaque',
+      tabTeam: `Team (${teamMembers.length})`,
       tabProducts: `Products (${products.length})`,
       tabCategories: `Categories (${categories.length})`,
       tabNews: `News (${news.length})`,
+      tabContacts: `Contacts (${directoryEntries.length})`,
+      tabFooter: 'Footer',
       tabRedirects: `301 Redirects (${redirects.length})`,
       tabTranslations: 'Languages & Translations',
       catalogItems: 'Catalog Items',
@@ -204,15 +238,20 @@ const AdminDashboard: React.FC = () => {
       cancelBtn: 'Cancel',
     },
     zh: {
-      subtitle: '免代码管理产品目录、包装规格、分类属性模板、301重定向、SEO标签、新闻资讯及四语翻译。',
+      subtitle:
+      '免代码管理首页横幅、专家团队、产品目录、图片媒体、联系方式、页脚、新闻资讯、301重定向及四语翻译。',
       seoSitemap: 'SEO 与站点地图',
       reset: '重置演示数据',
       logout: '退出登录',
+      tabHome: '首页与横幅',
+      tabTeam: `专家团队 (${teamMembers.length})`,
       tabProducts: `产品目录 (${products.length})`,
       tabCategories: `产品分类 (${categories.length})`,
       tabNews: `新闻动态 (${news.length})`,
+      tabContacts: `联系方式 (${directoryEntries.length})`,
+      tabFooter: '页脚设置',
       tabRedirects: `301 重定向 (${redirects.length})`,
-      tabTranslations: '语言与翻译审计',
+      tabTranslations: '语言与翻译',
       catalogItems: '目录产品列表',
       addProduct: '新增产品',
       importBtn: '导入 CSV / JSON',
@@ -234,7 +273,7 @@ const AdminDashboard: React.FC = () => {
     },
   }[language];
 
-  // True translation completeness audit (does not count untranslated empty fields)
+  // Translation completeness audit across catalog, news, UI keys, team & site settings
   const completenessStats = useMemo(() => {
     return LANGS.map((lang) => {
       let total = 0;
@@ -260,6 +299,24 @@ const AdminDashboard: React.FC = () => {
         if (n.seo.title[lang]?.trim()) filled++;
         if (n.seo.description[lang]?.trim()) filled++;
       }
+      for (const m of teamMembers) {
+        total += 3;
+        if (m.name[lang]?.trim()) filled++;
+        if (m.role[lang]?.trim()) filled++;
+        if (m.bio[lang]?.trim()) filled++;
+      }
+      const siteFields = [
+        siteSettings.homeHero.title,
+        siteSettings.homeHero.subtitle,
+        siteSettings.promoBanner.title,
+        siteSettings.promoBanner.lead,
+        siteSettings.footer.brandDesc,
+        siteSettings.footer.copyright,
+      ];
+      for (const field of siteFields) {
+        total += 1;
+        if (field[lang]?.trim()) filled++;
+      }
       for (const key of Object.keys(translations)) {
         total += 1;
         if (translations[key]?.[lang]?.trim()) filled++;
@@ -267,18 +324,7 @@ const AdminDashboard: React.FC = () => {
       const pct = total > 0 ? Math.round((filled / total) * 100) : 100;
       return { lang, filled, total, pct };
     });
-  }, [products, categories, news, translations]);
-
-  const handleImageUpload = (file: File | undefined, onLoaded: (dataUrl: string) => void) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        onLoaded(reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
-  };
+  }, [products, categories, news, teamMembers, siteSettings, translations]);
 
   const handleCreateProduct = (e: React.FormEvent) => {
     e.preventDefault();
@@ -354,6 +400,7 @@ const AdminDashboard: React.FC = () => {
     setNewNameZh('');
     setNewDescRu('');
     setNewSeoTitle('');
+    setNewImage(ASSETS.productAgedCheese);
     setShowAddProduct(false);
   };
 
@@ -403,7 +450,6 @@ const AdminDashboard: React.FC = () => {
             return;
           }
         } else {
-          // Simple CSV import: id;category;name_ru;name_en;fat;protein;weight;shelfLife
           const lines = text
           .split(/\r?\n/)
           .map((l) => l.trim())
@@ -489,13 +535,13 @@ const AdminDashboard: React.FC = () => {
   const handleCreateNews = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsTitleRu.trim()) return;
-    const today = new Date().toISOString().slice(0, 10);
+    const dateVal = newsDate || new Date().toISOString().slice(0, 10);
     const id = `news-${Date.now().toString(36)}`;
     addNews({
       id,
       slug: id,
-      date: today,
-      year: new Date().getFullYear(),
+      date: dateVal,
+      year: Number(dateVal.slice(0, 4)) || new Date().getFullYear(),
             categoryId: newsCat,
             title: { ru: newsTitleRu.trim(), be: '', en: newsTitleEn.trim(), zh: '' },
             excerpt: {
@@ -504,8 +550,13 @@ const AdminDashboard: React.FC = () => {
             en: '',
             zh: '',
             },
-            content: { ru: newsExcerptRu.trim() || newsTitleRu.trim(), be: '', en: '', zh: '' },
-            image: ASSETS.newsDairyFacility,
+            content: {
+              ru: newsContentRu.trim() || newsExcerptRu.trim() || newsTitleRu.trim(),
+            be: '',
+            en: '',
+            zh: '',
+            },
+            image: newsImage || ASSETS.newsDairyFacility,
             published: true,
             relatedIds: [],
             seo: {
@@ -521,6 +572,8 @@ const AdminDashboard: React.FC = () => {
     setNewsTitleRu('');
     setNewsTitleEn('');
     setNewsExcerptRu('');
+    setNewsContentRu('');
+    setNewsImage(ASSETS.newsDairyFacility);
     setShowAddNews(false);
   };
 
@@ -544,6 +597,7 @@ const AdminDashboard: React.FC = () => {
     addCategory({
       id: slug,
       slug,
+      image: catImage || undefined,
       name: { ru: catNameRu.trim(), be: '', en: catNameEn.trim(), zh: '' },
                 description: { ru: catDescRu.trim(), be: '', en: '', zh: '' },
                 subcategories: [
@@ -560,6 +614,7 @@ const AdminDashboard: React.FC = () => {
     setCatNameRu('');
     setCatNameEn('');
     setCatDescRu('');
+    setCatImage('');
     setShowAddCategory(false);
   };
 
@@ -642,13 +697,17 @@ const AdminDashboard: React.FC = () => {
     </div>
 
     {/* Tabs */}
-    <div className="max-w-full overflow-x-auto">
+    <div className="max-w-full overflow-x-auto pb-1">
     <div className="inline-flex items-center gap-1 p-1 bg-slate-100 rounded-lg border border-slate-200">
     {(
       [
-        ['products', copy.tabProducts],
+        ['home', copy.tabHome],
+      ['team', copy.tabTeam],
+      ['products', copy.tabProducts],
       ['categories', copy.tabCategories],
       ['news', copy.tabNews],
+      ['contacts', copy.tabContacts],
+      ['footer', copy.tabFooter],
       ['redirects', copy.tabRedirects],
       ['translations', copy.tabTranslations],
       ] as const
@@ -657,7 +716,7 @@ const AdminDashboard: React.FC = () => {
       key={tabKey}
       type="button"
       onClick={() => setActiveTab(tabKey)}
-      className={`px-4 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
+      className={`px-3.5 py-2 text-xs font-semibold rounded-md transition-colors whitespace-nowrap ${
         activeTab === tabKey
         ? 'bg-white text-[#0057B8] shadow-xs'
         : 'text-slate-600 hover:text-slate-900'
@@ -669,7 +728,13 @@ const AdminDashboard: React.FC = () => {
     </div>
     </div>
 
-    {/* TAB 1: PRODUCTS CMS */}
+    {/* TAB: HOMEPAGE HERO & PROMO PLAQUE */}
+    {activeTab === 'home' && <AdminHomeTab />}
+
+    {/* TAB: HOMEPAGE EXPERT TEAM */}
+    {activeTab === 'team' && <AdminTeamTab />}
+
+    {/* TAB: PRODUCTS CMS */}
     {activeTab === 'products' && (
       <div className="space-y-6">
       <div className="flex flex-wrap justify-between items-center gap-3">
@@ -823,7 +888,8 @@ const AdminDashboard: React.FC = () => {
         </div>
         </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
         <label className="block text-xs font-medium text-slate-700 mb-1">
         Description (RU)
@@ -846,18 +912,14 @@ const AdminDashboard: React.FC = () => {
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
-        <div>
-        <label className="block text-xs font-medium text-slate-700 mb-1">
-        Photo Upload
-        </label>
-        <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => handleImageUpload(e.target.files?.[0], setNewImage)}
-        className="w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-blue-50 file:text-[#0057B8]"
+        </div>
+
+        <ImagePickerField
+        label="Фотография товара (загрузка, URL или из галереи)"
+        value={newImage}
+        onChange={setNewImage}
         />
-        </div>
-        </div>
+
         <div className="flex justify-end gap-2">
         <button
         type="button"
@@ -985,7 +1047,7 @@ const AdminDashboard: React.FC = () => {
         <label className="inline-flex items-center gap-2">
         <input
         type="checkbox"
-        checked={editingProduct.lactoseFree}
+        checked={Boolean(editingProduct.lactoseFree)}
         onChange={(e) =>
           setEditingProduct({ ...editingProduct, lactoseFree: e.target.checked })
         }
@@ -995,7 +1057,7 @@ const AdminDashboard: React.FC = () => {
         <label className="inline-flex items-center gap-2">
         <input
         type="checkbox"
-        checked={editingProduct.exportReady}
+        checked={Boolean(editingProduct.exportReady)}
         onChange={(e) =>
           setEditingProduct({ ...editingProduct, exportReady: e.target.checked })
         }
@@ -1005,26 +1067,73 @@ const AdminDashboard: React.FC = () => {
         <label className="inline-flex items-center gap-2">
         <input
         type="checkbox"
-        checked={editingProduct.featured}
+        checked={Boolean(editingProduct.featured)}
         onChange={(e) =>
           setEditingProduct({ ...editingProduct, featured: e.target.checked })
         }
         />
         <span>Featured</span>
         </label>
-        <label className="inline-flex items-center gap-2">
-        <span>Photo:</span>
-        <input
-        type="file"
-        accept="image/*"
-        onChange={(e) =>
-          handleImageUpload(e.target.files?.[0], (url) =>
-          setEditingProduct({ ...editingProduct, image: url })
-          )
-        }
-        className="text-xs"
+        </div>
+
+        {/* Primary photo & optional extra gallery */}
+        <ImagePickerField
+        label="Основное изображение карточки товара"
+        value={editingProduct.image}
+        onChange={(url) => setEditingProduct({ ...editingProduct, image: url })}
         />
-        </label>
+
+        <div className="pt-2 border-t border-slate-200 space-y-2.5">
+        <div className="text-xs font-semibold text-slate-700">
+        Дополнительные фото в галерее карточки ({editingProduct.gallery?.length || 0})
+        </div>
+        {(editingProduct.gallery?.length || 0) > 0 && (
+          <div className="flex flex-wrap gap-2">
+          {editingProduct.gallery?.map((gUrl, idx) => (
+            <div
+            key={`${gUrl}-${idx}`}
+            className="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-200 bg-white group"
+            >
+            <img src={gUrl} alt="" className="w-full h-full object-cover" />
+            <button
+            type="button"
+            onClick={() =>
+              setEditingProduct({
+                ...editingProduct,
+                gallery: editingProduct.gallery?.filter((_, i) => i !== idx),
+              })
+            }
+            aria-label="Remove gallery photo"
+            className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-slate-900/75 text-white text-[10px] flex items-center justify-center hover:bg-red-600"
+            >
+            ✕
+            </button>
+            </div>
+          ))}
+          </div>
+        )}
+        <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
+        <div className="flex-1">
+        <ImagePickerField
+        label="Добавить фото в галерею товара"
+        value={newGalleryDraft}
+        onChange={setNewGalleryDraft}
+        />
+        </div>
+        <button
+        type="button"
+        onClick={() => {
+          if (!newGalleryDraft.trim()) return;
+          setEditingProduct({
+            ...editingProduct,
+            gallery: [...(editingProduct.gallery || []), newGalleryDraft.trim()],
+          });
+        }}
+        className="h-9 px-3.5 text-xs font-semibold text-[#0057B8] bg-white border border-[#0057B8]/40 rounded-lg hover:bg-blue-50 whitespace-nowrap"
+        >
+        + В галерею
+        </button>
+        </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1098,7 +1207,10 @@ const AdminDashboard: React.FC = () => {
         onChange={(e) =>
           setEditingProduct({
             ...editingProduct,
-            description: { ...editingProduct.description, [editLang]: e.target.value },
+            description: {
+              ...editingProduct.description,
+              [editLang]: e.target.value,
+            },
           })
         }
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
@@ -1106,7 +1218,6 @@ const AdminDashboard: React.FC = () => {
         </div>
         </div>
 
-        {/* Dynamic characteristics by category schema */}
         {editingCategoryObj && editingCategoryObj.characteristicSchema.length > 0 && (
           <div className="pt-3 border-t border-slate-200 space-y-2">
           <div className="text-xs font-semibold text-slate-700">
@@ -1247,8 +1358,17 @@ const AdminDashboard: React.FC = () => {
         return (
           <tr key={prod.id} className="hover:bg-slate-50/70">
           <td className="py-3 px-4">
+          <div className="flex items-center gap-3">
+          <img
+          src={prod.image}
+          alt=""
+          className="w-10 h-10 rounded-lg object-cover border border-slate-200 bg-slate-50 shrink-0"
+          />
+          <div>
           <div className="font-medium text-slate-900">{localize(prod.name)}</div>
           <div className="text-xs text-slate-500 font-mono">/{prod.slug}</div>
+          </div>
+          </div>
           </td>
           <td className="py-3 px-4 text-slate-600">
           {cat ? localize(cat.name) : prod.category}
@@ -1303,7 +1423,7 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB 2: CATEGORIES & SCHEMAS */}
+    {/* TAB: CATEGORIES & SCHEMAS */}
     {activeTab === 'categories' && (
       <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -1362,6 +1482,12 @@ const AdminDashboard: React.FC = () => {
         onChange={(e) => setCatSchemaInput(e.target.value)}
         placeholder="Schema key:Label"
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg font-mono"
+        />
+        <ImagePickerField
+        label="Обложка категории (необязательно)"
+        value={catImage}
+        allowClear
+        onChange={setCatImage}
         />
         <div className="flex justify-end gap-2">
         <button
@@ -1434,6 +1560,14 @@ const AdminDashboard: React.FC = () => {
         className="h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
+        <ImagePickerField
+        label="Изображение категории (необязательно)"
+        value={editingCategory.image || ''}
+        allowClear
+        onChange={(url) =>
+          setEditingCategory({ ...editingCategory, image: url || undefined })
+        }
+        />
         <div className="flex justify-end gap-2">
         <button
         type="button"
@@ -1465,7 +1599,18 @@ const AdminDashboard: React.FC = () => {
       <tbody className="divide-y divide-slate-200">
       {categories.map((cat) => (
         <tr key={cat.id} className="hover:bg-slate-50/70">
-        <td className="py-3 px-4 font-medium text-slate-900">{localize(cat.name)}</td>
+        <td className="py-3 px-4 font-medium text-slate-900">
+        <div className="flex items-center gap-2.5">
+        {cat.image && (
+          <img
+          src={cat.image}
+          alt=""
+          className="w-8 h-8 rounded object-cover border border-slate-200 shrink-0"
+          />
+        )}
+        <span>{localize(cat.name)}</span>
+        </div>
+        </td>
         <td className="py-3 px-4 font-mono text-xs text-slate-500">/{cat.slug}</td>
         <td className="py-3 px-4 text-xs text-slate-600">
         {cat.characteristicSchema.map((f) => localize(f.label)).join(', ') || '—'}
@@ -1496,7 +1641,7 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB 3: NEWS CMS */}
+    {/* TAB: NEWS CMS */}
     {activeTab === 'news' && (
       <div className="space-y-6">
       <div className="flex justify-between items-center gap-3">
@@ -1516,8 +1661,8 @@ const AdminDashboard: React.FC = () => {
         onSubmit={handleCreateNews}
         className="border border-slate-200 rounded-xl p-5 bg-slate-50 space-y-4"
         >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div className="sm:col-span-2">
         <label className="block text-xs font-medium text-slate-700 mb-1">
         Title (RU) *
         </label>
@@ -1540,6 +1685,7 @@ const AdminDashboard: React.FC = () => {
         className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
+        <div className="grid grid-cols-2 gap-2">
         <div>
         <label className="block text-xs font-medium text-slate-700 mb-1">
         {copy.colCategory}
@@ -1547,7 +1693,7 @@ const AdminDashboard: React.FC = () => {
         <select
         value={newsCat}
         onChange={(e) => setNewsCat(e.target.value as NewsArticle['categoryId'])}
-        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        className="w-full h-9 px-2 text-xs bg-white border border-slate-200 rounded-lg"
         >
         <option value="company">Company</option>
         <option value="export">Export</option>
@@ -1555,18 +1701,48 @@ const AdminDashboard: React.FC = () => {
         <option value="awards">Awards</option>
         </select>
         </div>
+        <div>
+        <label className="block text-xs font-medium text-slate-700 mb-1">Date</label>
+        <input
+        type="date"
+        value={newsDate}
+        onChange={(e) => setNewsDate(e.target.value)}
+        className="w-full h-9 px-2 text-xs bg-white border border-slate-200 rounded-lg"
+        />
         </div>
+        </div>
+        </div>
+
         <div>
         <label className="block text-xs font-medium text-slate-700 mb-1">
-        Excerpt / Content (RU)
+        Excerpt / Анонс (RU)
         </label>
         <textarea
         rows={2}
         value={newsExcerptRu}
         onChange={(e) => setNewsExcerptRu(e.target.value)}
-        className="w-full p-3 text-sm bg-white border border-slate-200 rounded-lg"
+        className="w-full p-2.5 text-sm bg-white border border-slate-200 rounded-lg"
         />
         </div>
+
+        <div>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        Content / Полный текст статьи (RU)
+        </label>
+        <textarea
+        rows={3}
+        value={newsContentRu}
+        onChange={(e) => setNewsContentRu(e.target.value)}
+        className="w-full p-2.5 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        </div>
+
+        <ImagePickerField
+        label="Обложка новости (загрузка, URL или из галереи)"
+        value={newsImage}
+        onChange={setNewsImage}
+        />
+
         <div className="flex justify-end gap-2">
         <button
         type="button"
@@ -1682,18 +1858,57 @@ const AdminDashboard: React.FC = () => {
         />
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Title ({editLang.toUpperCase()})
+        </label>
         <input
-        type="file"
-        accept="image/*"
+        type="text"
+        value={editingNews.seo.title[editLang] || ''}
         onChange={(e) =>
-          handleImageUpload(e.target.files?.[0], (url) =>
-          setEditingNews({ ...editingNews, image: url })
-          )
+          setEditingNews({
+            ...editingNews,
+            seo: {
+              ...editingNews.seo,
+              title: { ...editingNews.seo.title, [editLang]: e.target.value },
+            },
+          })
         }
-        className="text-xs"
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
         />
-        <div className="flex gap-2">
+        </div>
+        <div>
+        <label className="block text-xs font-medium text-slate-700 mb-1">
+        SEO Description ({editLang.toUpperCase()})
+        </label>
+        <input
+        type="text"
+        value={editingNews.seo.description[editLang] || ''}
+        onChange={(e) =>
+          setEditingNews({
+            ...editingNews,
+            seo: {
+              ...editingNews.seo,
+              description: {
+                ...editingNews.seo.description,
+                [editLang]: e.target.value,
+              },
+            },
+          })
+        }
+        className="w-full h-9 px-3 text-sm bg-white border border-slate-200 rounded-lg"
+        />
+        </div>
+        </div>
+
+        <ImagePickerField
+        label="Обложка новости"
+        value={editingNews.image}
+        onChange={(url) => setEditingNews({ ...editingNews, image: url })}
+        />
+
+        <div className="flex justify-end gap-2">
         <button
         type="button"
         onClick={() => setEditingNews(null)}
@@ -1707,7 +1922,6 @@ const AdminDashboard: React.FC = () => {
         >
         {copy.saveBtn}
         </button>
-        </div>
         </div>
         </form>
       )}
@@ -1725,7 +1939,16 @@ const AdminDashboard: React.FC = () => {
       <tbody className="divide-y divide-slate-200 tabular-nums">
       {news.map((item) => (
         <tr key={item.id} className="hover:bg-slate-50/70">
-        <td className="py-3 px-4 font-medium text-slate-900">{localize(item.title)}</td>
+        <td className="py-3 px-4">
+        <div className="flex items-center gap-3">
+        <img
+        src={item.image}
+        alt=""
+        className="w-12 h-8 rounded object-cover border border-slate-200 bg-slate-50 shrink-0"
+        />
+        <span className="font-medium text-slate-900">{localize(item.title)}</span>
+        </div>
+        </td>
         <td className="py-3 px-4 text-xs font-mono text-slate-500">{item.date}</td>
         <td className="py-3 px-4 text-xs">
         <span
@@ -1771,7 +1994,15 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB 4: 301 REDIRECTS */}
+    {/* TAB: CONTACTS & MAP LOCATIONS */}
+    {activeTab === 'contacts' && <AdminContactsTab />}
+
+    {/* TAB: FOOTER */}
+    {activeTab === 'footer' && (
+      <AdminFooterTab onJumpToContacts={() => setActiveTab('contacts')} />
+    )}
+
+    {/* TAB: 301 REDIRECTS */}
     {activeTab === 'redirects' && (
       <div className="space-y-6">
       <form
@@ -1855,7 +2086,7 @@ const AdminDashboard: React.FC = () => {
       </div>
     )}
 
-    {/* TAB 5: TRANSLATIONS & LANGUAGE COMPLETENESS */}
+    {/* TAB: TRANSLATIONS & LANGUAGE COMPLETENESS */}
     {activeTab === 'translations' && (
       <div className="space-y-6">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

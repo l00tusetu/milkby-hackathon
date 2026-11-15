@@ -2,29 +2,34 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../hooks/useLanguage';
-import { ASSETS } from '../../data/assets';
+import { useCatalogStore } from '../../hooks/useCatalogStore';
 import { ImageWithFallback } from '../ImageWithFallback';
 import { SearchBar } from '../SearchBar';
 
 export const HomeHeroSection: React.FC = () => {
-    const { t } = useLanguage();
+    const { t, localize } = useLanguage();
+    const { siteSettings } = useCatalogStore();
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
+
+    const { homeHero } = siteSettings;
+    const heroTitle = localize(homeHero.title) || t('heroTitle');
+    const heroSubtitle = localize(homeHero.subtitle) || t('heroSubtitle');
+    const primaryCta = localize(homeHero.primaryCta) || t('heroPrimaryCta');
+    const secondaryCta = localize(homeHero.secondaryCta) || t('heroSecondaryCta');
 
     return (
         <section className="relative z-20">
         <div className="relative min-h-[470px] sm:min-h-[540px] lg:min-h-[600px] flex items-center justify-center bg-neutral-900">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <ImageWithFallback
-        src={ASSETS.heroDairyShowcase}
+        src={homeHero.image}
         alt={t('brandName')}
         className="w-full h-full object-cover"
         />
 
-        {/* Лёгкое общее затемнение для верхнего меню и нижней кромки */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-neutral-950/65" />
 
-        {/* Радиальный блюр по центру за заголовком и подзаголовком */}
         <div
         aria-hidden="true"
         className="absolute inset-0 backdrop-blur-[12px]"
@@ -36,7 +41,6 @@ export const HomeHeroSection: React.FC = () => {
         }}
         />
 
-        {/* Очень прозрачная радиальная тень в центре для контраста подтекста */}
         <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -50,10 +54,10 @@ export const HomeHeroSection: React.FC = () => {
         <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24 text-center space-y-6 sm:space-y-7">
         <div className="space-y-3 sm:space-y-4">
         <h1 className="font-display text-3xl sm:text-5xl lg:text-[3.25rem] font-bold text-white tracking-tight leading-[1.12] drop-shadow-[0_2px_14px_rgba(0,0,0,0.35)]">
-        {t('heroTitle')}
+        {heroTitle}
         </h1>
         <p className="text-sm sm:text-lg text-white/95 max-w-2xl mx-auto leading-relaxed drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]">
-        {t('heroSubtitle')}
+        {heroSubtitle}
         </p>
         </div>
 
@@ -72,14 +76,14 @@ export const HomeHeroSection: React.FC = () => {
         to="/catalog"
         className="group inline-flex items-center gap-2 px-5 sm:px-6 py-3 text-sm font-semibold text-white bg-[#0057B8] rounded-xl hover:bg-[#004494] hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200 whitespace-nowrap shrink-0"
         >
-        <span>{t('heroPrimaryCta')}</span>
+        <span>{primaryCta}</span>
         <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
         </Link>
         <Link
         to="/export"
         className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 text-sm font-semibold text-slate-900 bg-white/95 rounded-xl hover:bg-white hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200 whitespace-nowrap shrink-0"
         >
-        <span>{t('heroSecondaryCta')}</span>
+        <span>{secondaryCta}</span>
         </Link>
         </div>
         </div>
